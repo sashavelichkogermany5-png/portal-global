@@ -1,0 +1,880 @@
+<!-- FILE: portal_global_master.html -->
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PORTAL Global — Полная мастер-версия</title>
+  <style>
+    :root{
+      --bg:#0b0f19; --card:#11182a; --text:#e8eefc; --muted:#a9b4d0;
+      --line:#23304b; --link:#8ab4ff; --code:#0a1224;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial; background:var(--bg); color:var(--text)}
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 18px 60px}
+    header{background:linear-gradient(180deg, rgba(138,180,255,.12), rgba(17,24,42,0)); border:1px solid var(--line); border-radius:16px; padding:18px 18px}
+    header h1{margin:0 0 6px; font-size:28px}
+    header .meta{color:var(--muted); font-size:14px}
+    .grid{display:grid; grid-template-columns: 340px 1fr; gap:18px; margin-top:18px}
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr} }
+    nav{position:sticky; top:16px; align-self:start; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 14px}
+    nav h2{margin:0 0 10px; font-size:16px; color:var(--muted)}
+    nav ol{margin:0; padding-left:18px}
+    nav li{margin:6px 0}
+    main{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px}
+    h2{margin:26px 0 10px; font-size:22px}
+    h3{margin:18px 0 8px; font-size:18px}
+    hr{border:0; border-top:1px solid var(--line); margin:18px 0}
+    ul{margin:8px 0 8px 20px}
+    ol{margin:8px 0 8px 22px}
+    .note{color:var(--muted)}
+    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    pre{background:var(--code); border:1px solid var(--line); border-radius:12px; padding:12px; overflow:auto; margin:10px 0}
+    table{width:100%; border-collapse:collapse; margin:10px 0}
+    th,td{border:1px solid var(--line); padding:10px; vertical-align:top}
+    th{background:#0f1730; text-align:left}
+    .pill{display:inline-block; padding:2px 10px; border:1px solid var(--line); border-radius:999px; font-size:12px; color:var(--muted)}
+    .impressum{background:#0f1730; border:1px solid var(--line); border-radius:12px; padding:12px; margin:10px 0}
+    footer{margin-top:16px; color:var(--muted); font-size:13px; text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>PORTAL Global — Полная мастер-версия</h1>
+      <div class="meta">
+        <div><strong>Версия документа:</strong> {DOC_VERSION}</div>
+        <div><strong>Последнее обновление:</strong> 01.03.2026</div>
+        <div><strong>Контакт:</strong> {FOUNDER_EMAIL}</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <nav aria-label="Содержание">
+        <h2>Содержание</h2>
+        <ol>
+          <li><a href="#1-о-проекте">О проекте</a>
+            <ol>
+              <li><a href="#11-миссия-видение-ценности">Миссия, видение, ценности</a></li>
+              <li><a href="#12-проблема-и-решение">Проблема и решение</a></li>
+              <li><a href="#13-ключевые-возможности">Ключевые возможности</a></li>
+              <li><a href="#14-текущий-статус-project-snapshot">Текущий статус (Project Snapshot)</a></li>
+              <li><a href="#15-ограничения-текущей-версии">Ограничения текущей версии</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#2-юридическая-база-германия">Юридическая база (Германия)</a>
+            <ol>
+              <li><a href="#21-impressum">Impressum</a></li>
+              <li><a href="#22-политика-конфиденциальности-datenschutzerklaerung">Политика конфиденциальности (Datenschutzerklaerung)</a></li>
+              <li><a href="#23-условия-использования-agb---terms-of-service">Условия использования (AGB - Terms of Service)</a></li>
+              <li><a href="#24-договор-обработки-данных-dpa">Договор обработки данных (DPA)</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#3-техническая-архитектура-и-безопасность">Техническая архитектура и безопасность</a>
+            <ol>
+              <li><a href="#31-production-архитектура">Production-архитектура</a></li>
+              <li><a href="#32-multi-tenancy-изоляция-данных">Multi-tenancy: изоляция данных</a></li>
+              <li><a href="#33-api-версионирование-и-документация">API: версионирование и документация</a></li>
+              <li><a href="#34-rate-limiting">Rate limiting</a></li>
+              <li><a href="#35-безопасность-чек-лист">Безопасность: чек-лист</a></li>
+              <li><a href="#36-резервное-копирование-иммутабельные-бэкапы">Резервное копирование (иммутабельные бэкапы)</a></li>
+              <li><a href="#37-мониторинг-и-оповещение">Мониторинг и оповещение</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#4-монетизация-и-биллинг">Монетизация и биллинг</a>
+            <ol>
+              <li><a href="#41-модель-монетизации">Модель монетизации</a></li>
+              <li><a href="#42-структура-тарифов">Структура тарифов</a></li>
+              <li><a href="#43-выбор-платежного-провайдера">Выбор платежного провайдера</a></li>
+              <li><a href="#44-процесс-подписки">Процесс подписки</a></li>
+              <li><a href="#45-партнерская-программа">Партнерская программа</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#5-маркетинг-и-привлечение-клиентов">Маркетинг и привлечение клиентов</a>
+            <ol>
+              <li><a href="#51-сайт-лендинг---структура">Сайт (лендинг) - структура</a></li>
+              <li><a href="#52-контент-маркетинг-блог">Контент-маркетинг (блог)</a></li>
+              <li><a href="#53-linkedin-стратегия">LinkedIn-стратегия</a></li>
+              <li><a href="#54-партнерства-с-интеграторами">Партнерства с интеграторами</a></li>
+              <li><a href="#55-пилотная-программа-early-adopters">Пилотная программа (Early Adopters)</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#6-операционные-процессы">Операционные процессы</a>
+            <ol>
+              <li><a href="#61-поддержка-клиентов">Поддержка клиентов</a></li>
+              <li><a href="#62-онбординг-клиентов">Онбординг клиентов</a></li>
+              <li><a href="#63-сбор-обратной-связи">Сбор обратной связи</a></li>
+              <li><a href="#64-безопасность-и-соответствие---операционные-процедуры">Безопасность и соответствие - операционные процедуры</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#7-дорожная-карта-к-15-марта-2026">Дорожная карта к 15 марта 2026</a></li>
+
+          <li><a href="#8-приложения-готовые-шаблоны-документов">Приложения: готовые шаблоны документов</a>
+            <ol>
+              <li><a href="#81-impressum-html-блок">Impressum (HTML-блок)</a></li>
+              <li><a href="#82-datenschutzerklaerung---структура">Datenschutzerklaerung - структура</a></li>
+              <li><a href="#83-dpa-краткая-форма-для-онлайн-акцепта">DPA (краткая форма для онлайн-акцепта)</a></li>
+              <li><a href="#84-шаблон-приветственного-письма-онбординг">Шаблон приветственного письма (онбординг)</a></li>
+              <li><a href="#85-чек-лист-предзапуска">Чек-лист предзапуска</a></li>
+              <li><a href="#86-легальные-плейсхолдеры-единый-стандарт-и-соответствия">Легальные плейсхолдеры (единый стандарт и соответствия)</a></li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+
+      <main>
+        <div class="pill">PORTAL_Global_Master.md</div>
+
+        <h2 id="1-о-проекте">1. О проекте</h2>
+
+        <h3 id="11-миссия-видение-ценности">1.1. Миссия, видение, ценности</h3>
+        <p><strong>Миссия</strong><br>
+          Предоставить компаниям единый операционный хаб, который централизует управление проектами, доступом и интеграциями, обеспечивая бесшовную совместную работу и полный контроль.
+        </p>
+        <p><strong>Видение</strong><br>
+          Стать стандартной операционной системой для B2B-компаний по всему миру, где каждая команда, проект и интеграция живут в безопасной среде с API-first подходом.
+        </p>
+        <p><strong>Ценности</strong></p>
+        <ul>
+          <li>Безопасность прежде всего: мультитенантная архитектура с изоляцией данных и встроенным соответствием DSGVO.</li>
+          <li>API-управляемость: каждая функция доступна через API для автоматизации и интеграций.</li>
+          <li>Клиентоцентричность: развитие продукта на основе обратной связи.</li>
+          <li>Прозрачность: понятные цены, открытая коммуникация и ясные правила обработки данных.</li>
+        </ul>
+
+        <h3 id="12-проблема-и-решение">1.2. Проблема и решение</h3>
+        <p><strong>Проблема</strong><br>
+          Компании используют множество разрозненных инструментов (Jira, Trello, Slack, базы знаний, кастомные решения), что ведет к потере контекста, дублированию данных, сложностям с разграничением доступа и высокой стоимости поддержки интеграций.
+        </p>
+        <p><strong>Решение</strong><br>
+          PORTAL Global - B2B-платформа, объединяющая управление проектами, ролями и тенантами, аналитическую панель и REST API для интеграций. Мультитенантная архитектура позволяет безопасно работать с несколькими организациями из одного аккаунта. Встроенные rate limiting и версионирование API повышают стабильность при росте нагрузки.
+        </p>
+
+        <h3 id="13-ключевые-возможности">1.3. Ключевые возможности</h3>
+        <ul>
+          <li>Проекты и рабочие пространства</li>
+          <li>Роли и тенанты (multi-tenancy)</li>
+          <li>Панель управления (dashboard) с метриками</li>
+          <li>REST API первого класса</li>
+          <li>Интеграции с внешними сервисами через API</li>
+          <li>Enterprise-ready принципы (изоляция данных, аудит, SSO - по плану)</li>
+        </ul>
+
+        <h3 id="14-текущий-статус-project-snapshot">1.4. Текущий статус (Project Snapshot)</h3>
+        <ul>
+          <li>Статус разработки: рабочий прототип, доступный для внешнего тестирования.</li>
+          <li>Режим: community mode (без автопилота, с ограничениями).</li>
+          <li>Архитектура прототипа: единый сервер на порту <code>:3000</code> (landing + login + app + REST API).</li>
+          <li>Что уже реализовано: проекты, роли, тенанты, dashboard, rate limiting, REST API.</li>
+          <li>Публичный запуск: <strong>15 марта 2026 (обновлено 01.03.2026). Причина: завершение billing + security hardening + финальная проверка legal страниц.</strong></li>
+        </ul>
+
+        <h3 id="15-ограничения-текущей-версии">1.5. Ограничения текущей версии</h3>
+        <ul>
+          <li>Единый сервер (монолит) без разделения статики и API.</li>
+          <li>Отсутствие автопилота и автоматического масштабирования.</li>
+          <li>Rate limit включен, но еще не дифференцирован по тарифам.</li>
+          <li>Нет интеграции с платежными системами (в процессе).</li>
+          <li>Юридические документы в шаблонном состоянии (требуется заполнение и проверка).</li>
+          <li>На 01.03.2026 production-нагрузка ограничена; идет подготовка к пилотам/платежам.</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="2-юридическая-база-германия">2. Юридическая база (Германия)</h2>
+
+        <h3 id="21-impressum">2.1. Impressum</h3>
+        <p class="note">(Обязательно для коммерческого сайта в Германии. Разместить в подвале каждой страницы.)</p>
+
+        <!-- ORIGINAL HTML BLOCK (kept) -->
+        <div class="impressum">
+          <h1>Impressum</h1>
+          <p><strong>Angaben gemäß § 5 TMG</strong></p>
+          <p>
+            {OWNER_FULL_NAME}<br>
+            {OWNER_STREET_ADDRESS}<br>
+            {OWNER_POSTAL_CODE_CITY}<br>
+            {OWNER_COUNTRY}
+          </p>
+          <p>
+            <strong>Kontakt:</strong><br>
+            E-Mail: {CONTACT_EMAIL}<br>
+            Telefon: {CONTACT_PHONE}
+          </p>
+          <p>
+            <strong>Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV:</strong><br>
+            {OWNER_FULL_NAME}, {OWNER_STREET_ADDRESS}, {OWNER_POSTAL_CODE_CITY}, {OWNER_COUNTRY}
+          </p>
+          <p>
+            <strong>Haftungshinweis:</strong> Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
+          </p>
+        </div>
+
+        <h3 id="22-политика-конфиденциальности-datenschutzerklaerung">2.2. Политика конфиденциальности (Datenschutzerklaerung)</h3>
+        <p><strong>Обязательные разделы</strong></p>
+        <ul>
+          <li>Verantwortliche Stelle</li>
+          <li>Welche Daten wir verarbeiten</li>
+          <li>Zwecke der Verarbeitung</li>
+          <li>Rechtsgrundlagen (Art. 6 DSGVO)</li>
+          <li>Empfänger der Daten (Auftragsverarbeiter)</li>
+          <li>Dauer der Speicherung</li>
+          <li>Ihre Rechte (Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch)</li>
+          <li>Beschwerderecht bei der Aufsichtsbehörde</li>
+          <li>Cookies und ähnliche Technologien</li>
+          <li>Änderungen dieser Datenschutzerklärung</li>
+        </ul>
+        <p><strong>Минимальные обязательные доп.строки</strong></p>
+        <ul>
+          <li>Cookie Banner / Consent Tool: {CONSENT_TOOL_NAME} используется для управления согласиями (если есть аналитика/маркетинг cookies).</li>
+          <li>Hosting Provider + AVV (Auftragsverarbeitung): {HOSTING_PROVIDER} обрабатывает данные по договору AVV; серверы: {HOSTING_REGION}.</li>
+          <li>Server Logs + Retention: технические логи (IP, user agent, timestamp, URL, status) для безопасности и стабильности; хранение: {LOG_RETENTION_DAYS} дней.</li>
+          <li>При аналитике/US-передаче: указать механизм (SCC/DPF) и контекст передачи.</li>
+        </ul>
+
+        <h3 id="23-условия-использования-agb---terms-of-service">2.3. Условия использования (AGB - Terms of Service)</h3>
+        <p><strong>Ключевые разделы</strong></p>
+        <ul>
+          <li>Предмет договора (описание функционала PORTAL Global).</li>
+          <li>Регистрация и учетные записи (multi-tenancy, роли, ответственность клиента за действия пользователей).</li>
+          <li>Тарифы и оплата (подписка, пробный период, отказ от услуг, возвраты).</li>
+          <li>Интеллектуальная собственность.</li>
+          <li>Конфиденциальность и безопасность.</li>
+          <li>Ответственность (ограничение ответственности, форс-мажор).</li>
+          <li>Срок действия и расторжение.</li>
+          <li>Применимое право и разрешение споров (рекомендуется право Германии).</li>
+        </ul>
+
+        <h3 id="24-договор-обработки-данных-dpa">2.4. Договор обработки данных (DPA)</h3>
+        <p><strong>Data Processing Agreement (Short Form)</strong></p>
+        <p><strong>Between</strong><br>
+          - {CUSTOMER_NAME} (Controller)<br>
+          - {OPERATOR_LEGAL_NAME} (Processor)
+        </p>
+        <p><strong>Subject Matter</strong><br>
+          Processing of personal data in connection with the use of PORTAL Global platform.
+        </p>
+        <p><strong>Duration</strong><br>
+          Term of the main agreement.
+        </p>
+        <p><strong>Nature and Purpose</strong><br>
+          Provision of project management and operational hub services.
+        </p>
+        <p><strong>Categories of Data</strong></p>
+        <ul>
+          <li>Name</li>
+          <li>Email</li>
+          <li>Job title (optional)</li>
+          <li>IP address (logs)</li>
+          <li>Usage data</li>
+        </ul>
+        <p><strong>Categories of Data Subjects</strong></p>
+        <ul>
+          <li>Customer’s employees, contractors, clients</li>
+        </ul>
+        <p><strong>Obligations of Processor</strong></p>
+        <ul>
+          <li>Process only on documented instructions.</li>
+          <li>Ensure confidentiality.</li>
+          <li>Implement appropriate technical and organizational measures.</li>
+          <li>Assist Controller where applicable.</li>
+          <li>Notify of data breaches.</li>
+          <li>Return or delete data after termination.</li>
+        </ul>
+        <p><strong>TOMs (Technical and Organisational Measures - кратко)</strong></p>
+        <ul>
+          <li>Access control (RBAC, least privilege)</li>
+          <li>Encryption in transit (TLS), secure cookies</li>
+          <li>Logging and audit of critical actions</li>
+          <li>Backups with restricted access and restore testing</li>
+          <li>Incident response procedure and breach notification flow</li>
+        </ul>
+        <p><strong>Subprocessors</strong><br>
+          {SUBPROCESSORS_URL}
+        </p>
+        <p><strong>Governing Law</strong><br>
+          Germany.
+        </p>
+        <p>By using the Service, you agree to this DPA.</p>
+
+        <hr>
+
+        <h2 id="3-техническая-архитектура-и-безопасность">3. Техническая архитектура и безопасность</h2>
+
+        <h3 id="31-production-архитектура">3.1. Production-архитектура</h3>
+        <p class="note">Примечание: текущая версия (MVP) работает как монолит на одном сервере (:3000).<br>
+          Production-архитектура ниже - целевое состояние (Target Architecture) для масштабирования и enterprise-нагрузок.
+        </p>
+
+        <pre><code>[CDN для статики (Cloudflare / Fastly)]
+        |
+        v
+ [Балансировщик / API Gateway (Kong / Traefik / NGINX)]
+        |
+        v
+ [Сервер(ы) приложений (Node.js/Python/Go)]
+        |
+        v
+ (опционально) Очереди (RabbitMQ / Redis)
+        |
+        v
+ (опционально) Кеш (Redis)
+        |
+        v
+ [База данных (PostgreSQL + модель multi-tenancy)]</code></pre>
+
+        <p><strong>API Gateway берет на себя</strong></p>
+        <ul>
+          <li>Rate limiting (на уровне IP, API-ключа, пользователя)</li>
+          <li>Аутентификацию и валидацию JWT</li>
+          <li>Маршрутизацию к разным сервисам</li>
+          <li>Сбор метрик (Prometheus)</li>
+          <li>Логирование запросов</li>
+        </ul>
+
+        <h3 id="32-multi-tenancy-изоляция-данных">3.2. Multi-tenancy: изоляция данных</h3>
+        <p><strong>Выбранный подход</strong></p>
+        <ul>
+          <li>Отдельные схемы в одной БД (PostgreSQL)</li>
+          <li>Каждый тенант получает свою схему (например, tenant_123)</li>
+          <li>При подключении middleware устанавливает search_path на схему текущего тенанта</li>
+          <li>Таблицы с одинаковой структурой во всех схемах</li>
+          <li>Суперадмин имеет доступ ко всем схемам через отдельный интерфейс</li>
+        </ul>
+
+        <p><strong>Пример middleware (Node.js/Sequelize)</strong></p>
+        <pre><code>// set schema for current tenant
+await db.query(`SET search_path TO ${tenantSchema};`);</code></pre>
+
+        <p><strong>Ограничения подхода schema-per-tenant</strong></p>
+        <ul>
+          <li>Миграции и обслуживание усложняются при росте числа тенантов.</li>
+          <li>Нужна автоматизация миграций и контроль версий схем для каждого тенанта.</li>
+        </ul>
+        <p><strong>План</strong><br>
+          При масштабировании возможен переход к tenant_id + RLS или hybrid-модели.
+        </p>
+
+        <h3 id="33-api-версионирование-и-документация">3.3. API: версионирование и документация</h3>
+        <ul>
+          <li>Версионирование через URL: <code>/api/v1/projects</code>, <code>/api/v2/projects</code></li>
+          <li>OpenAPI (Swagger) спецификация, доступна по <code>/api/docs</code></li>
+          <li>Политика поддержки старых версий: минимум 6 месяцев после выхода новой</li>
+          <li>Changelog публикуется в документации</li>
+        </ul>
+
+        <h3 id="34-rate-limiting">3.4. Rate limiting</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Эндпоинт</th>
+              <th>Лимит (запросов/мин)</th>
+              <th>Ключ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GET /api/v1/* (публичные)</td>
+              <td style="text-align:right">1000</td>
+              <td>IP + API-ключ</td>
+            </tr>
+            <tr>
+              <td>POST /api/v1/* (создание)</td>
+              <td style="text-align:right">100</td>
+              <td>API-ключ</td>
+            </tr>
+            <tr>
+              <td>/auth/login</td>
+              <td style="text-align:right">5</td>
+              <td>IP</td>
+            </tr>
+            <tr>
+              <td>/auth/register</td>
+              <td style="text-align:right">3</td>
+              <td>IP</td>
+            </tr>
+            <tr>
+              <td>Дашборды/графики</td>
+              <td style="text-align:right">60</td>
+              <td>Пользователь</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Правила обработки 429 (Too Many Requests)</strong></p>
+        <ul>
+          <li>Клиент обязан использовать exponential backoff (например: 1s -&gt; 2s -&gt; 4s -&gt; 8s, max 30s).</li>
+          <li>Запрещены бесконечные ретраи без верхнего лимита (max_attempts: {MAX_RETRY_ATTEMPTS}).</li>
+          <li>Для /auth/* и /api/me: при 401/403 ретраи прекращаются до действия пользователя (login).</li>
+        </ul>
+
+        <h3 id="35-безопасность-чек-лист">3.5. Безопасность: чек-лист</h3>
+        <ul>
+          <li>TLS 1.3 на всех поддоменах, HSTS (max-age=31536000; includeSubDomains; preload)</li>
+          <li>Заголовки безопасности: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy</li>
+          <li>Защита от брутфорса: задержки, капча после 5 неудачных попыток</li>
+          <li>Аудит действий: логирование всех критических операций в таблицу audit_log</li>
+          <li>Регулярное сканирование уязвимостей: интеграция OWASP ZAP в CI/CD</li>
+          <li>Пентест перед релизом</li>
+          <li>Управление зависимостями: Dependabot, еженедельные обновления</li>
+          <li>Изоляция тенантов на уровне кода: обязательная проверка принадлежности данных</li>
+        </ul>
+
+        <h3 id="36-резервное-копирование-иммутабельные-бэкапы">3.6. Резервное копирование (иммутабельные бэкапы)</h3>
+        <p><strong>Инструменты</strong></p>
+        <ul>
+          <li>pg_dump (PostgreSQL) + restic для файлов</li>
+        </ul>
+
+        <p><strong>Расписание</strong></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Тип бэкапа</th>
+              <th>Частота</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Полный бэкап БД</td><td>каждые 6 часов</td></tr>
+            <tr><td>Инкрементальные бэкапы файлов</td><td>ежечасно</td></tr>
+            <tr><td>WAL-архивация PostgreSQL</td><td>непрерывно</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Хранение</strong></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Тип бэкапа</th>
+              <th>Срок хранения</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Ежедневные</td><td>30 дней</td></tr>
+            <tr><td>Еженедельные</td><td>12 месяцев</td></tr>
+            <tr><td>Ежемесячные</td><td>3 года</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Иммутабельность</strong><br>
+          Объектное хранилище с защитой от удаления (S3 Object Lock или аналог).
+        </p>
+        <p><strong>Тестирование восстановления</strong><br>
+          Раз в месяц на отдельном окружении.
+        </p>
+
+        <h3 id="37-мониторинг-и-оповещение">3.7. Мониторинг и оповещение</h3>
+        <ul>
+          <li>Метрики: Prometheus + Grafana (CPU, RAM, диски, запросы, ошибки, задержки)</li>
+          <li>Логи: ELK или Loki + Grafana</li>
+          <li>Трассировка: Jaeger (если микросервисы)</li>
+          <li>Внешний мониторинг: UptimeRobot / Pingdom (каждые 5 минут из разных регионов)</li>
+          <li>Алерты: PagerDuty / Telegram-бот (критические: недоступность &gt;2 мин, 5xx &gt;5%, диск &gt;80%)</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="4-монетизация-и-биллинг">4. Монетизация и биллинг</h2>
+
+        <h3 id="41-модель-монетизации">4.1. Модель монетизации</h3>
+        <ul>
+          <li>Базовая модель: подписка (SaaS) с помесячной или годовой оплатой.</li>
+          <li>Метрики тарификации: активные пользователи, тенанты, объем API-запросов, интеграции.</li>
+          <li>Дополнительные доходы: Enterprise-поддержка, кастомизация, платные интеграции.</li>
+        </ul>
+        <p><strong>Почему клиенты платят (value drivers)</strong></p>
+        <ul>
+          <li>Контроль доступа и безопасность (тенанты/роли/аудит)</li>
+          <li>Надежность интеграций (API-first, версионирование, лимиты)</li>
+          <li>Операционная прозрачность (дашборды, метрики, SLA)</li>
+        </ul>
+
+        <h3 id="42-структура-тарифов">4.2. Структура тарифов</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Параметр</th>
+              <th>Start</th>
+              <th>Pro</th>
+              <th>Business</th>
+              <th>Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Цена (мес)</td><td style="text-align:right">€29</td><td style="text-align:right">€99</td><td style="text-align:right">€299</td><td>Индивидуально</td></tr>
+            <tr><td>Пользователи</td><td style="text-align:right">5</td><td style="text-align:right">20</td><td style="text-align:right">100</td><td>Неограниченно</td></tr>
+            <tr><td>Тенанты</td><td style="text-align:right">1</td><td style="text-align:right">5</td><td style="text-align:right">20</td><td>Неограниченно</td></tr>
+            <tr><td>API-запросов/день</td><td style="text-align:right">1 000</td><td style="text-align:right">10 000</td><td style="text-align:right">100 000</td><td>По согласованию</td></tr>
+            <tr><td>Интеграции</td><td style="text-align:right">2</td><td style="text-align:right">10</td><td>Неограниченно</td><td>Любые</td></tr>
+            <tr><td>Поддержка</td><td>Email (24ч)</td><td>Приоритет (8ч)</td><td>Priority + Chat</td><td>24/7 + менеджер</td></tr>
+            <tr><td>SLA</td><td style="text-align:right">99.5%</td><td style="text-align:right">99.7%</td><td style="text-align:right">99.9%</td><td style="text-align:right">99.95%</td></tr>
+            <tr><td>Перенос данных</td><td>Нет</td><td>CSV</td><td>API</td><td>Полный</td></tr>
+            <tr><td>Триал</td><td>14 дней</td><td>14 дней</td><td>По запросу</td><td>По запросу</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="43-выбор-платежного-провайдера">4.3. Выбор платежного провайдера</h3>
+        <p>Рекомендация: начать со Stripe + Stripe Billing (гибкость, прозрачность, EU-поддержка).<br>
+          По мере роста добавить Paddle как альтернативу для клиентов, которым нужны инвойсы от европейского юрлица.
+        </p>
+
+        <h3 id="44-процесс-подписки">4.4. Процесс подписки</h3>
+        <ul>
+          <li>Пользователь нажимает "Начать бесплатный триал" на лендинге.</li>
+          <li>Выбирает тариф (Start/Pro/Business).</li>
+          <li>Вводит email, пароль, название компании.</li>
+          <li>Переходит на страницу оплаты (карта / PayPal / SEPA).</li>
+          <li>После успешного платежа создается аккаунт администратора и первый тенант.</li>
+          <li>Отправляется приветственное письмо с документацией и приглашением на вебинар.</li>
+          <li>Биллинговая система автоматически выставляет счета каждый месяц.</li>
+        </ul>
+
+        <h3 id="45-партнерская-программа">4.5. Партнерская программа</h3>
+        <ul>
+          <li>Модель: реферер получает 20% от первых 12 месяцев платежей приведенного клиента.</li>
+          <li>Техническая реализация: Stripe Connect или PartnerStack.</li>
+          <li>Юридическое оформление: отдельный договор с партнером (типовой).</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="5-маркетинг-и-привлечение-клиентов">5. Маркетинг и привлечение клиентов</h2>
+
+        <h3 id="51-сайт-лендинг---структура">5.1. Сайт (лендинг) - структура</h3>
+        <ul>
+          <li>Главная</li>
+          <li>Возможности</li>
+          <li>Проекты и рабочие пространства</li>
+          <li>Роли и тенанты</li>
+          <li>Дашборды и аналитика</li>
+          <li>REST API и интеграции</li>
+          <li>Тарифы (таблица сравнения)</li>
+          <li>Документация API (Swagger)</li>
+          <li>Блог / Ресурсы (статьи, кейсы, вебинары)</li>
+          <li>О нас / Контакты (с Impressum)</li>
+          <li>Регистрация / Вход</li>
+        </ul>
+
+        <h3 id="52-контент-маркетинг-блог">5.2. Контент-маркетинг (блог)</h3>
+        <ul>
+          <li>"Как мультитенантная архитектура повышает безопасность B2B-софта"</li>
+          <li>"5 признаков, что вам нужен операционный хаб, а не очередной таск-трекер"</li>
+          <li>"Пошаговое руководство: интеграция вашей CRM с PORTAL Global через REST API"</li>
+          <li>"Управление доступом в SaaS: от простых ролей до сложных иерархий"</li>
+          <li>"Сравнение PORTAL Global с Jira, Asana и Trello: когда нужен API-first подход"</li>
+          <li>"Юридические аспекты B2B SaaS в Европе: что нужно знать CTO"</li>
+        </ul>
+        <p>Частота публикаций: 2 статьи в месяц.</p>
+
+        <h3 id="53-linkedin-стратегия">5.3. LinkedIn-стратегия</h3>
+        <ul>
+          <li>Страница компании: заполнить полностью, использовать ключевые слова.</li>
+          <li>Публикации: кейсы использования, анонсы функций, экспертные посты, репосты статей.</li>
+          <li>Таргетированная реклама: CEO, CTO, операционные директора; гео Европа/США/Канада/Австралия.</li>
+          <li>Форматы: спонсорские сообщения, лид-формы.</li>
+        </ul>
+
+        <h3 id="54-партнерства-с-интеграторами">5.4. Партнерства с интеграторами</h3>
+        <ul>
+          <li>Найти 10-20 компаний, внедряющих CRM/ERP/бизнес-системы.</li>
+          <li>Предложить бесплатное обучение сотрудников.</li>
+          <li>Совместные вебинары по автоматизации операций.</li>
+          <li>Комиссия за приведенных клиентов (партнерская программа).</li>
+          <li>Создать страницу "Для партнеров".</li>
+        </ul>
+
+        <h3 id="55-пилотная-программа-early-adopters">5.5. Пилотная программа (Early Adopters)</h3>
+        <ul>
+          <li>Цель: 10-20 платящих клиентов до официального запуска.</li>
+          <li>Условия: 3-6 месяцев бесплатного использования в обмен на отзыв и логотип.</li>
+          <li>Отбор: заявка на сайте + короткое интервью.</li>
+          <li>Результат: кейсы и отзывы к моменту запуска.</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="6-операционные-процессы">6. Операционные процессы</h2>
+
+        <h3 id="61-поддержка-клиентов">6.1. Поддержка клиентов</h3>
+        <ul>
+          <li>Email: support@yourdomain.com (Zendesk, Help Scout)</li>
+          <li>Чат на сайте: Intercom / Crisp / Tawk.to</li>
+          <li>База знаний: FAQ, статьи, видеоуроки</li>
+          <li>Телефон: для Enterprise (по запросу)</li>
+        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Тариф</th>
+              <th>Время первого ответа (раб. дни)</th>
+              <th>Решение критических проблем</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Start</td><td style="text-align:right">24 часа</td><td style="text-align:right">24 часа</td></tr>
+            <tr><td>Pro</td><td style="text-align:right">8 часов</td><td style="text-align:right">8 часов</td></tr>
+            <tr><td>Business</td><td style="text-align:right">4 часа</td><td style="text-align:right">4 часа</td></tr>
+            <tr><td>Enterprise</td><td style="text-align:right">1 час</td><td style="text-align:right">2 часа (24/7)</td></tr>
+          </tbody>
+        </table>
+        <p>Критические проблемы: полная недоступность сервиса, потеря данных, невозможность входа.</p>
+
+        <h3 id="62-онбординг-клиентов">6.2. Онбординг клиентов</h3>
+        <ul>
+          <li>День 0: "Добро пожаловать в PORTAL Global" + ссылки на документацию.</li>
+          <li>День 2: "Как настроить первый проект и пригласить команду".</li>
+          <li>День 5: "API Quick Start" + примеры кода.</li>
+          <li>День 10: "Советы по безопасности: роли и доступы".</li>
+          <li>День 13: "Триал заканчивается - выберите тариф".</li>
+          <li>После оплаты: "Спасибо за выбор PORTAL Global! Чем помочь?"</li>
+        </ul>
+
+        <h3 id="63-сбор-обратной-связи">6.3. Сбор обратной связи</h3>
+        <ul>
+          <li>NPS-опрос через 2 недели (Survicate, Typeform).</li>
+          <li>Интервью с ключевыми клиентами раз в квартал.</li>
+          <li>Ежемесячный анализ тикетов поддержки.</li>
+          <li>Система предложений (Canny.io).</li>
+        </ul>
+
+        <h3 id="64-безопасность-и-соответствие---операционные-процедуры">6.4. Безопасность и соответствие - операционные процедуры</h3>
+        <ul>
+          <li>Ежемесячное обновление зависимостей (Dependabot).</li>
+          <li>Ежеквартальное сканирование уязвимостей.</li>
+          <li>Раз в полгода пересмотр документов (privacy, DPA).</li>
+          <li>Ежегодный пентест (обязательно для Enterprise).</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="7-дорожная-карта-к-15-марта-2026">7. Дорожная карта к 15 марта 2026</h2>
+        <h3>Ноябрь 2025</h3>
+        <ul>
+          <li>Подготовка legal-документов (Impressum, Privacy, Terms, DPA) на DE/EN.</li>
+          <li>Выбор платежного провайдера (Stripe), тестовый биллинг.</li>
+          <li>Аудит безопасности прототипа.</li>
+          <li>Staging-окружение.</li>
+          <li>Структура базы знаний.</li>
+        </ul>
+
+        <h3>Декабрь 2025</h3>
+        <ul>
+          <li>Разделение монолита: статика на CDN, API через Gateway.</li>
+          <li>Внедрение API Gateway с rate limiting и логированием.</li>
+          <li>Настройка мониторинга и логирования.</li>
+          <li>Реализация тарифных планов в коде.</li>
+          <li>Интеграция платежной системы (test mode).</li>
+          <li>Страница партнерской программы.</li>
+        </ul>
+
+        <h3>Январь 2026</h3>
+        <ul>
+          <li>Запуск пилотной программы (10-20 компаний).</li>
+          <li>Сбор обратной связи и исправление ошибок.</li>
+          <li>Пентест (если бюджет позволяет).</li>
+          <li>Маркетинговые материалы (презентация, кейсы).</li>
+          <li>LinkedIn-кампания (органика + тестовая реклама).</li>
+        </ul>
+
+        <h3>Февраль 2026</h3>
+        <ul>
+          <li>Финальное тестирование production-среды (нагрузочное, отказоустойчивость).</li>
+          <li>Обучение поддержки (скрипты, FAQ).</li>
+          <li>Финальная проверка юридических документов (желательно немецкий юрист).</li>
+          <li>Дифференциация лимитов по тарифам + 429-handling правила в клиенте.</li>
+        </ul>
+
+        <h3>1-14 марта 2026</h3>
+        <ul>
+          <li>Перевод billing в live режим, тестовые оплаты end-to-end.</li>
+          <li>Финальные фиксы безопасности (headers, cookies, brute-force).</li>
+          <li>Маркетинговая подготовка: рассылка, демо-слоты, обновление лендинга.</li>
+          <li>Запуск рекламных кампаний (не раньше 15 марта 2026).</li>
+        </ul>
+
+        <h3>15 марта 2026</h3>
+        <ul>
+          <li>Публичный запуск.</li>
+          <li>Мониторинг в реальном времени.</li>
+          <li>Экстренная поддержка в первые 72 часа.</li>
+          <li>Пост-запуск: сбор метрик, анализ первых продаж.</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="8-приложения-готовые-шаблоны-документов">8. Приложения: готовые шаблоны документов</h2>
+
+        <h3 id="81-impressum-html-блок">8.1. Impressum (HTML-блок)</h3>
+        <!-- ORIGINAL HTML BLOCK (kept) -->
+        <div class="impressum">
+          <div class="impressum-footer" style="font-size: 12px; color: #a9b4d0; text-align: center; margin-top: 10px;">
+            <p>
+              <strong>PORTAL Global</strong><br>
+              Betreiber: {OWNER_FULL_NAME}<br>
+              {OWNER_STREET_ADDRESS} · {OWNER_POSTAL_CODE_CITY} · {OWNER_COUNTRY}<br>
+              E-Mail: {CONTACT_EMAIL} · Telefon: {CONTACT_PHONE}<br>
+              Verantwortlich gemäß § 18 Abs. 2 MStV: {OWNER_FULL_NAME}, {OWNER_STREET_ADDRESS}, {OWNER_POSTAL_CODE_CITY}, {OWNER_COUNTRY}<br>
+              <a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a> · <a href="/agb">AGB</a>
+            </p>
+          </div>
+        </div>
+
+        <h3 id="82-datenschutzerklaerung---структура">8.2. Datenschutzerklaerung - структура</h3>
+        <ol>
+          <li>Verantwortliche Stelle</li>
+          <li>Welche Daten wir verarbeiten</li>
+          <li>Zwecke der Verarbeitung</li>
+          <li>Rechtsgrundlagen (Art. 6 DSGVO)</li>
+          <li>Empfänger der Daten (Auftragsverarbeiter)</li>
+          <li>Dauer der Speicherung</li>
+          <li>Ihre Rechte</li>
+          <li>Beschwerderecht bei der Aufsichtsbehörde</li>
+          <li>Cookies und ähnliche Technologien</li>
+          <li>Änderungen dieser Datenschutzerklärung</li>
+        </ol>
+
+        <h3 id="83-dpa-краткая-форма-для-онлайн-акцепта">8.3. DPA (краткая форма для онлайн-акцепта)</h3>
+        <pre><code>Data Processing Agreement (Short Form)
+Controller: {CUSTOMER_NAME}
+Processor: {OPERATOR_LEGAL_NAME}
+Subject Matter: Processing of personal data in connection with PORTAL Global.
+Duration: Term of the main agreement.
+Nature and Purpose: Provision of project management and operational hub services.
+Categories of Data:
+- Name
+- Email
+- Job title (optional)
+- IP address (logs)
+- Usage data
+Categories of Data Subjects:
+- Customer's employees, contractors, clients
+Obligations of Processor:
+- Process only on documented instructions.
+- Ensure confidentiality.
+- Implement appropriate technical and organizational measures.
+- Assist Controller where applicable.
+- Notify of data breaches.
+- Return or delete data after termination.
+TOMs (Technical and Organisational Measures):
+- Access control (RBAC, least privilege)
+- Encryption in transit (TLS), secure cookies
+- Logging and audit of critical actions
+- Backups with restricted access and restore testing
+- Incident response procedure and breach notification flow
+Subprocessors: {SUBPROCESSORS_URL}
+Governing Law: Germany.
+By using the Service, you agree to this DPA.</code></pre>
+
+        <h3 id="84-шаблон-приветственного-письма-онбординг">8.4. Шаблон приветственного письма (онбординг)</h3>
+        <!-- ORIGINAL HTML EMAIL BODY (kept) -->
+        <div class="impressum">
+          <p>Здравствуйте, {USER_FIRST_NAME}!</p>
+          <p>Добро пожаловать в PORTAL Global! Мы рады, что вы выбрали наш хаб для управления проектами и интеграциями.</p>
+          <p><strong>Ваши первые шаги:</strong></p>
+          <ol>
+            <li><a href="{LINK_INTRO_VIDEO}">Посмотрите вводное видео</a> (3 минуты).</li>
+            <li><a href="{LINK_CREATE_PROJECT}">Создайте свой первый проект</a> и пригласите коллег.</li>
+            <li><a href="{LINK_API_DOCS}">Изучите документацию API</a>, если планируете интеграции.</li>
+          </ol>
+          <p>Вебинар: {WEBINAR_WEEKDAY} в {WEBINAR_TIME_CET}. <a href="{LINK_WEBINAR_SIGNUP}">Зарегистрироваться</a>.</p>
+          <p>Если у вас есть вопросы, просто ответьте на это письмо - мы на связи!</p>
+          <p>С наилучшими пожеланиями,<br>Команда PORTAL Global</p>
+        </div>
+
+        <h3 id="85-чек-лист-предзапуска">8.5. Чек-лист предзапуска</h3>
+        <ul>
+          <li><input type="checkbox" disabled> SSL активен на всех поддоменах</li>
+          <li><input type="checkbox" disabled> БД настроена, бэкапы работают</li>
+          <li><input type="checkbox" disabled> Мониторинг и алерты настроены</li>
+          <li><input type="checkbox" disabled> Billing live: тестовый платеж успешен end-to-end</li>
+          <li><input type="checkbox" disabled> Основные сценарии протестированы (регистрация, оплата, проект)</li>
+          <li><input type="checkbox" disabled> Legal страницы доступны (Impressum/Privacy/Terms/DPA)</li>
+          <li><input type="checkbox" disabled> Consent tool настроен (если есть cookies аналитики/маркетинга)</li>
+          <li><input type="checkbox" disabled> FAQ подготовлен</li>
+          <li><input type="checkbox" disabled> Реклама не раньше 15 марта 2026</li>
+        </ul>
+
+        <h3 id="86-легальные-плейсхолдеры-единый-стандарт-и-соответствия">8.6. Легальные плейсхолдеры (единый стандарт и соответствия)</h3>
+
+        <p><strong>Единый стандарт (source of truth)</strong></p>
+        <table>
+          <thead>
+            <tr><th>Placeholder</th><th>Значение</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>{DOC_VERSION}</td><td>Версия документа</td></tr>
+            <tr><td>{FOUNDER_EMAIL}</td><td>Email основателя</td></tr>
+            <tr><td>{FOUNDER_PROFILE_LINE}</td><td>Профиль основателя для Executive Summary</td></tr>
+            <tr><td>{OWNER_FULL_NAME}</td><td>Полное имя владельца</td></tr>
+            <tr><td>{OWNER_STREET_ADDRESS}</td><td>Улица, дом</td></tr>
+            <tr><td>{OWNER_POSTAL_CODE_CITY}</td><td>Индекс и город</td></tr>
+            <tr><td>{OWNER_COUNTRY}</td><td>Страна</td></tr>
+            <tr><td>{CONTACT_EMAIL}</td><td>Контактный email</td></tr>
+            <tr><td>{CONTACT_PHONE}</td><td>Телефон</td></tr>
+            <tr><td>{CUSTOMER_NAME}</td><td>Название клиента (Controller)</td></tr>
+            <tr><td>{OPERATOR_LEGAL_NAME}</td><td>Юр. лицо оператора (Processor)</td></tr>
+            <tr><td>{SUBPROCESSORS_URL}</td><td>URL списка subprocessors</td></tr>
+            <tr><td>{CONSENT_TOOL_NAME}</td><td>Название consent tool</td></tr>
+            <tr><td>{HOSTING_PROVIDER}</td><td>Хостинг-провайдер</td></tr>
+            <tr><td>{HOSTING_REGION}</td><td>Регион хостинга</td></tr>
+            <tr><td>{LOG_RETENTION_DAYS}</td><td>Срок хранения логов (дни)</td></tr>
+            <tr><td>{MAX_RETRY_ATTEMPTS}</td><td>Лимит ретраев для 429</td></tr>
+            <tr><td>{CTA_DEMO_URL}</td><td>URL для запроса демо</td></tr>
+            <tr><td>{PILOT_START_DATE}</td><td>Дата старта пилотов</td></tr>
+            <tr><td>{TESTERS_COUNT}</td><td>Кол-во тестеров</td></tr>
+            <tr><td>{PILOT_COMPANIES_COUNT}</td><td>Кол-во пилотных компаний</td></tr>
+            <tr><td>{MRR}</td><td>Текущий MRR</td></tr>
+            <tr><td>{NPS}</td><td>Текущий NPS</td></tr>
+            <tr><td>{DEMO_REQUESTS_PER_WEEK}</td><td>Заявки на демо в неделю</td></tr>
+            <tr><td>{USER_FIRST_NAME}</td><td>Имя пользователя</td></tr>
+            <tr><td>{LINK_INTRO_VIDEO}</td><td>Ссылка на intro видео</td></tr>
+            <tr><td>{LINK_CREATE_PROJECT}</td><td>Ссылка на создание проекта</td></tr>
+            <tr><td>{LINK_API_DOCS}</td><td>Ссылка на API документацию</td></tr>
+            <tr><td>{WEBINAR_WEEKDAY}</td><td>День вебинара</td></tr>
+            <tr><td>{WEBINAR_TIME_CET}</td><td>Время вебинара (CET)</td></tr>
+            <tr><td>{LINK_WEBINAR_SIGNUP}</td><td>Ссылка на регистрацию на вебинар</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Соответствия старых плейсхолдеров -&gt; новый стандарт</strong></p>
+        <table>
+          <thead>
+            <tr><th>Старый плейсхолдер</th><th>Новый плейсхолдер</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>{Ihr vollständiger Name}</td><td>{OWNER_FULL_NAME}</td></tr>
+            <tr><td>{Straße, Hausnummer}</td><td>{OWNER_STREET_ADDRESS}</td></tr>
+            <tr><td>{PLZ, Ort}</td><td>{OWNER_POSTAL_CODE_CITY}</td></tr>
+            <tr><td>{Deutschland}</td><td>{OWNER_COUNTRY}</td></tr>
+            <tr><td>{email@example.com}</td><td>{CONTACT_EMAIL}</td></tr>
+            <tr><td>{Telefon}</td><td>{CONTACT_PHONE}</td></tr>
+            <tr><td>{subprocessors_url}</td><td>{SUBPROCESSORS_URL}</td></tr>
+            <tr><td>{consent_tool_name}</td><td>{CONSENT_TOOL_NAME}</td></tr>
+            <tr><td>{log_retention_days}</td><td>{LOG_RETENTION_DAYS}</td></tr>
+            <tr><td>{cta_demo_url}</td><td>{CTA_DEMO_URL}</td></tr>
+            <tr><td>{link_intro_video}</td><td>{LINK_INTRO_VIDEO}</td></tr>
+            <tr><td>{link_create_project}</td><td>{LINK_CREATE_PROJECT}</td></tr>
+            <tr><td>{link_api_docs}</td><td>{LINK_API_DOCS}</td></tr>
+            <tr><td>{weekday}</td><td>{WEBINAR_WEEKDAY}</td></tr>
+            <tr><td>{time_cet}</td><td>{WEBINAR_TIME_CET}</td></tr>
+            <tr><td>{link_webinar_signup}</td><td>{LINK_WEBINAR_SIGNUP}</td></tr>
+          </tbody>
+        </table>
+
+        <footer>
+          PORTAL Global • Master HTML • Updated 01.03.2026
+        </footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
