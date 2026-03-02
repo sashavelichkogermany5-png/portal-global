@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global | Help</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <meta name="theme-color" content="#0b0f19">
+    <style>
+        :root {
+            --bg: #0b1112;
+            --bg-2: #0f1c1f;
+            --card: #121c1f;
+            --card-2: #0f171a;
+            --ink: #f3f7f5;
+            --muted: #9bb0b0;
+            --accent: #4fb3a5;
+            --accent-2: #f2c46d;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            background: radial-gradient(circle at 15% 10%, rgba(79, 179, 165, 0.22), transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(242, 196, 109, 0.15), transparent 45%),
+                linear-gradient(160deg, var(--bg), var(--bg-2));
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+        .top__inner{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+        .brand{color:#e9eefc;text-decoration:none;font-weight:700}
+        .nav{display:flex;gap:12px;flex-wrap:wrap}
+        .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
+        .nav a:hover{color:#e9eefc}
+        .auth-link{display:none}
+        .account{margin-left:auto;display:flex;align-items:center;gap:10px;color:#9fb0d0;font-size:13px}
+        .plan-badge{border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+        .plan-free{border:1px solid rgba(255,255,255,.18);color:#d7dde8;background:rgba(255,255,255,.08)}
+        .plan-pro{border:1px solid rgba(43,108,255,.6);color:#cfe0ff;background:rgba(43,108,255,.2)}
+        .plan-business{border:1px solid rgba(148,82,255,.5);color:#eadcff;background:rgba(148,82,255,.18)}
+        .account .upgrade{display:none;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(79,179,165,.6);color:#e9eefc;font-weight:600;font-size:12px;text-decoration:none}
+        .logout{background:#11182a;border:1px solid rgba(255,255,255,.08);color:#e9eefc;border-radius:10px;padding:8px 10px;cursor:pointer}
+        @media(max-width:560px){.account{margin-left:0}.logout{margin-left:0}}
+
+        .page { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
+        .hero { display: grid; gap: 10px; margin-bottom: 28px; }
+        .hero h1 { font-size: clamp(30px, 4vw, 44px); }
+        .hero p { color: var(--muted); line-height: 1.6; }
+        .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 12px;
+        }
+        .card h2 { font-size: 20px; }
+        .card p, .card li { color: var(--muted); font-size: 14px; line-height: 1.6; }
+        ul { padding-left: 18px; display: grid; gap: 8px; }
+        label { font-size: 13px; color: var(--muted); }
+        textarea { width: 100%; min-height: 120px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-2); color: var(--ink); padding: 10px 12px; }
+        .btn { border: 1px solid transparent; background: var(--accent); color: #072b28; padding: 10px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        .status { font-size: 13px; color: var(--muted); }
+        .status.error { color: #f3a6a6; }
+        .status.success { color: #a9f3d4; }
+    </style>
+</head>
+<body>
+    <header class="top">
+      <div class="top__inner">
+        <a class="brand" href="/">PORTAL</a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/app">Dashboard</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/docs">Docs</a>
+          <a href="/help">Help</a>
+          <a href="/cabinet" id="navAccount">Cabinet</a>
+          <a href="/admin" id="navAdmin" style="display:none">Admin</a>
+          <a href="/login" id="navLogin" class="auth-link">Login</a>
+          <a href="/register" id="navRegister" class="auth-link">Register</a>
+        </nav>
+        <div class="account" id="accountInfo">
+          <span id="accountEmail">Guest</span>
+          <span class="plan-badge plan-free" id="accountPlan">Free</span>
+          <a class="upgrade" id="upgradeLink" href="/pricing">Upgrade</a>
+        </div>
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <div class="page">
+        <section class="hero">
+            <h1>Help & Support</h1>
+            <p>Find quick answers or send feedback to improve the demo.</p>
+        </section>
+
+        <section class="grid">
+            <div class="card">
+                <h2>FAQ</h2>
+                <ul>
+                    <li>How do I upgrade a plan? Use Pricing or Cabinet.</li>
+                    <li>Why do I see limits? Free plan caps are enforced.</li>
+                    <li>Is this connected to payments? Not yet (demo only).</li>
+                    <li>Can I export data? Pro+ can export CSV.</li>
+                    <li>Where is my data stored? SQLite in database/portal.db.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h2>Support</h2>
+                <p>Email: support@portal.example (placeholder)</p>
+                <p>Response time: within 1 business day.</p>
+            </div>
+        </section>
+
+        <section class="card" style="margin-top:18px">
+            <h2>Send feedback</h2>
+            <p id="feedbackNote" class="status">Sign in to submit feedback.</p>
+            <div id="feedbackFormWrap" style="display:none">
+                <label for="feedbackMessage">Message</label>
+                <textarea id="feedbackMessage" placeholder="What should we improve?"></textarea>
+                <div style="margin-top:12px">
+                    <button class="btn" id="submitFeedback">Send feedback</button>
+                </div>
+            </div>
+            <div class="status" id="feedbackStatus"></div>
+            <div id="feedbackList"></div>
+        </section>
+    </div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        const accountEmail = $("accountEmail");
+        const accountPlan = $("accountPlan");
+        const upgradeLink = $("upgradeLink");
+        const navAccount = $("navAccount");
+        const navAdmin = $("navAdmin");
+        const navLogin = $("navLogin");
+        const navRegister = $("navRegister");
+        const feedbackNote = $("feedbackNote");
+        const feedbackFormWrap = $("feedbackFormWrap");
+        const feedbackMessage = $("feedbackMessage");
+        const feedbackStatus = $("feedbackStatus");
+        const feedbackList = $("feedbackList");
+        let tenantId = null;
+
+        const getTenantId = () => tenantId || localStorage.getItem("tenantId");
+
+        const trackEvent = (type, payload = {}) => {
+            const activeTenantId = getTenantId();
+            if (!activeTenantId || !type) return;
+            fetch("/api/events", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Tenant-Id": activeTenantId
+                },
+                body: JSON.stringify({ type, source: "ui", payload })
+            }).catch(() => {});
+        };
+
+        const setPlanBadge = (element, planCode, planName) => {
+            if (!element) return;
+            const code = String(planCode || "free").toLowerCase();
+            element.textContent = planName || code.toUpperCase();
+            element.classList.remove("plan-free", "plan-pro", "plan-business");
+            element.classList.add(`plan-${code}`);
+        };
+
+        const updateNavLinks = (loggedIn, isAdmin) => {
+            const returnUrl = encodeURIComponent(`${window.location.pathname}${window.location.search || ""}`);
+            if (navAccount) {
+                navAccount.href = loggedIn ? "/cabinet" : `/login?returnUrl=${encodeURIComponent("/cabinet")}`;
+            }
+            if (navAdmin) {
+                navAdmin.style.display = isAdmin ? "inline-flex" : "none";
+            }
+            if (navLogin) {
+                navLogin.href = `/login?returnUrl=${returnUrl}`;
+                navLogin.style.display = loggedIn ? "none" : "inline-flex";
+            }
+            if (navRegister) {
+                navRegister.href = `/register?returnUrl=${returnUrl}`;
+                navRegister.style.display = loggedIn ? "none" : "inline-flex";
+            }
+        };
+
+        const loadAccount = async () => {
+            try {
+                const response = await fetch("/api/auth/me", { credentials: "include" });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    if (accountEmail) accountEmail.textContent = "Guest";
+                    if (accountPlan) setPlanBadge(accountPlan, "free", "Free");
+                    if (upgradeLink) upgradeLink.style.display = "inline-flex";
+                    updateNavLinks(false, false);
+                    return null;
+                }
+                const user = body.data?.user || {};
+                const plan = body.data?.plan || {};
+                if (accountEmail) accountEmail.textContent = user.email || "Account";
+                if (accountPlan) setPlanBadge(accountPlan, plan.code || "free", plan.name || plan.code || "Free");
+                if (upgradeLink) upgradeLink.style.display = (plan.code || "free") === "free" ? "inline-flex" : "none";
+                updateNavLinks(true, user.role === "admin");
+                tenantId = body.data?.activeTenantId || null;
+                if (tenantId) {
+                    localStorage.setItem("tenantId", String(tenantId));
+                }
+                return user;
+            } catch (error) {
+                updateNavLinks(false, false);
+                return null;
+            }
+        };
+
+        const loadFeedback = async () => {
+            try {
+                const response = await fetch("/api/feedback/me", {
+                    credentials: "include",
+                    headers: getTenantId() ? { "X-Tenant-Id": getTenantId() } : {}
+                });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    return;
+                }
+                const items = body.data || [];
+                feedbackList.innerHTML = items.map((item) => {
+                    return `<div class="status">${item.created_at}: ${item.message}</div>`;
+                }).join("");
+            } catch (error) {
+                // ignore
+            }
+        };
+
+        const init = async () => {
+            const user = await loadAccount();
+            if (user) {
+                feedbackNote.textContent = "";
+                feedbackFormWrap.style.display = "block";
+                loadFeedback();
+                trackEvent("ui.page_view", {
+                    page: window.location.pathname,
+                    title: document.title
+                });
+            }
+        };
+
+        $("submitFeedback").addEventListener("click", async () => {
+            const message = feedbackMessage.value.trim();
+            if (!message) return;
+            feedbackStatus.textContent = "Sending...";
+            try {
+                const response = await fetch("/api/feedback", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...(getTenantId() ? { "X-Tenant-Id": getTenantId() } : {})
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ message, page: window.location.pathname })
+                });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Failed to send feedback");
+                }
+                feedbackMessage.value = "";
+                feedbackStatus.textContent = "Feedback sent.";
+                feedbackStatus.classList.remove("error");
+                feedbackStatus.classList.add("success");
+                trackEvent("support.requested", {
+                    subject: "Support request",
+                    message,
+                    page: window.location.pathname,
+                    priority: "normal"
+                });
+                loadFeedback();
+            } catch (error) {
+                feedbackStatus.textContent = error.message;
+                feedbackStatus.classList.add("error");
+            }
+        });
+
+        const logoutBtn = $("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                try {
+                    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+                } catch (error) {
+                    // ignore
+                }
+                localStorage.removeItem("tenantId");
+                window.location.href = "/login";
+            });
+        }
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(() => {});
+        }
+
+        init();
+    </script>
+</body>
+</html>

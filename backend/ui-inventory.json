@@ -1,0 +1,2009 @@
+[
+  {
+    "kind": "button",
+    "file": "index.html",
+    "selector": "button#uploadButton.btn",
+    "text": "Upload Files",
+    "attrs": {
+      "id": "uploadButton",
+      "class": "btn"
+    }
+  },
+  {
+    "kind": "link",
+    "file": "index.html",
+    "selector": "a.btn",
+    "text": "Go to PORTAL Orders Page",
+    "href": "http://localhost:3000/(portal)/orders",
+    "attrs": {
+      "class": "btn",
+      "href": "http://localhost:3000/(portal)/orders"
+    }
+  },
+  {
+    "kind": "input",
+    "file": "index.html",
+    "selector": "input#fileInput",
+    "text": "",
+    "attrs": {
+      "id": "fileInput",
+      "type": "file"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn.active",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012Z\u0013R\u00120 Dashboard",
+    "attrs": {
+      "class": "nav-btn active"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u001d\u0013^\u0012\u0002\u0012Y\u0013R\u0012W\u0013\u0018\u0012\u0018\u0013R\u0012\u000f Projects",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013\u001a\u0012О©╫\u0013^\u0012\u0002\u0012\u001c AI",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012Z\u0013\u001a\u0012О©╫ Orders",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\"\u0013\u001a\u0012О©╫ Pricing",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012О©╫\u0013\u0019\u0012R Clients",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\"\u0013\u0018\u0012О©╫ Providers",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013R\u0012\u0006\u0013\u0018\u0012\"\u0013^\u0012\u0002\u0012\u001c\u0013R\u0012W\u0013\u0018\u0012\u0018\u0013R\u0012\u000f Compliance",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012О©╫\u0013\u001a\u0012О©╫ Account",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u000e\u0013\u001a\u0012О©╫\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u000e\u0013\u0018\u0012\u001d Cabinet",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#refreshMetrics.px-4.py-2.bg-gradient-to-r",
+    "text": "Refresh",
+    "attrs": {
+      "id": "refreshMetrics",
+      "class": "px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.mt-4.w-full.md:w-auto",
+    "text": "Generate with AI",
+    "attrs": {
+      "class": "mt-4 w-full md:w-auto px-6 py-3 gradient-primary rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.bg-blue-600",
+    "text": "All Projects",
+    "attrs": {
+      "class": "px-4 py-2 bg-blue-600 rounded-lg"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.glass",
+    "text": "Technology",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.glass",
+    "text": "Business",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.glass",
+    "text": "Creative",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.gradient-primary.rounded-lg",
+    "text": "",
+    "attrs": {
+      "class": "p-3 gradient-primary rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.px-4.py-2.glass",
+    "text": "New Order",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift btn-ripple flex-1 sm:flex-none"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.px-4.py-2.glass",
+    "text": "Filter",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift btn-ripple flex-1 sm:flex-none"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.w-full.py-3.glass",
+    "text": "Start Free Trial",
+    "attrs": {
+      "class": "w-full py-3 glass rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.w-full.py-3.gradient-primary",
+    "text": "Start Free Trial",
+    "attrs": {
+      "class": "w-full py-3 gradient-primary rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.w-full.py-3.glass",
+    "text": "Contact Sales",
+    "attrs": {
+      "class": "w-full py-3 glass rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "textarea",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "textarea#projectIdea.w-full.h-32.bg-gray-800",
+    "text": "",
+    "attrs": {
+      "id": "projectIdea",
+      "class": "w-full h-32 bg-gray-800 rounded-lg p-4 text-white border border-gray-700 focus:border-blue-500 focus:outline-none",
+      "placeholder": "Example: Create a mobile app for food delivery..."
+    }
+  },
+  {
+    "kind": "input",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "input#chatInput.flex-1.bg-gray-800.rounded-lg",
+    "text": "",
+    "attrs": {
+      "id": "chatInput",
+      "class": "flex-1 bg-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none",
+      "type": "text",
+      "placeholder": "Type your message..."
+    }
+  },
+  {
+    "kind": "input",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "input#calcTeamSize.w-full.bg-gray-800.rounded-lg",
+    "text": "",
+    "attrs": {
+      "id": "calcTeamSize",
+      "class": "w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700",
+      "type": "number",
+      "value": "10"
+    }
+  },
+  {
+    "kind": "input",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "input#calcProjects.w-full.bg-gray-800.rounded-lg",
+    "text": "",
+    "attrs": {
+      "id": "calcProjects",
+      "class": "w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700",
+      "type": "number",
+      "value": "15"
+    }
+  },
+  {
+    "kind": "input",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "input#calcStorage.w-full.bg-gray-800.rounded-lg",
+    "text": "",
+    "attrs": {
+      "id": "calcStorage",
+      "class": "w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700",
+      "type": "number",
+      "value": "50"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn.active",
+    "onclick": "showSection('dashboard')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012Z\u0013R\u00120 Dashboard",
+    "attrs": {
+      "class": "nav-btn active"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('projects')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u001d\u0013^\u0012\u0002\u0012Y\u0013R\u0012W\u0013\u0018\u0012\u0018\u0013R\u0012\u000f Projects",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('ai')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013\u001a\u0012О©╫\u0013^\u0012\u0002\u0012\u001c AI",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('orders')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012Z\u0013\u001a\u0012О©╫ Orders",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('pricing')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\"\u0013\u001a\u0012О©╫ Pricing",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('clients')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012О©╫\u0013\u0019\u0012R Clients",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('providers')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\"\u0013\u0018\u0012О©╫ Providers",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('compliance')",
+    "text": "\u0013R\u0012\u0006\u0013\u0018\u0012\"\u0013^\u0012\u0002\u0012\u001c\u0013R\u0012W\u0013\u0018\u0012\u0018\u0013R\u0012\u000f Compliance",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('account')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012О©╫\u0013\u001a\u0012О©╫ Account",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "unified_portal.html",
+    "selector": "button.nav-btn",
+    "onclick": "showSection('cabinet')",
+    "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u000e\u0013\u001a\u0012О©╫\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u000e\u0013\u0018\u0012\u001d Cabinet",
+    "attrs": {
+      "class": "nav-btn"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.mt-4.w-full.md:w-auto",
+    "onclick": "generateAIProject()",
+    "text": "Generate with AI",
+    "attrs": {
+      "class": "mt-4 w-full md:w-auto px-6 py-3 gradient-primary rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.bg-blue-600",
+    "onclick": "filterProjects('all')",
+    "text": "All Projects",
+    "attrs": {
+      "class": "px-4 py-2 bg-blue-600 rounded-lg"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.glass",
+    "onclick": "filterProjects('tech')",
+    "text": "Technology",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.glass",
+    "onclick": "filterProjects('business')",
+    "text": "Business",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.px-4.py-2.glass",
+    "onclick": "filterProjects('creative')",
+    "text": "Creative",
+    "attrs": {
+      "class": "px-4 py-2 glass rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.gradient-primary.rounded-lg",
+    "onclick": "sendMessage()",
+    "text": "",
+    "attrs": {
+      "class": "p-3 gradient-primary rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷⌠┼ Dashboard",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "dashboard"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷≈┌О╦▐ Projects",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "projects"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷╓√ AI Assistant",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "ai"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷⌠╕ Orders",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "orders"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "Б ║ Automation",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "automation"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷▓╟ Pricing",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "pricing"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷▒╔ Clients",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "clients"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷╓² Providers",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "providers"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "Б √О╦▐ Compliance",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "compliance"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷▒╓ Account",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "account"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷┤╥П÷┤╨ Cabinet",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "cabinet"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.relative.p-2.glass",
+    "text": "",
+    "attrs": {
+      "class": "relative p-2 glass rounded-lg hover-lift mobile-hide"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button#themeToggle.p-2.glass.rounded-lg",
+    "text": "",
+    "attrs": {
+      "id": "themeToggle",
+      "class": "p-2 glass rounded-lg hover-lift mobile-hide"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.flex.items-center.space-x-2",
+    "text": "Ivan Petrov",
+    "attrs": {
+      "class": "flex items-center space-x-2 px-4 py-2 gradient-primary rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#createOrderDemo.px-4.py-2.glass",
+    "text": "Create order (demo)",
+    "attrs": {
+      "id": "createOrderDemo",
+      "class": "px-4 py-2 glass rounded-lg hover-lift btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#openOrderFilter.px-4.py-2.glass",
+    "text": "Filters (demo)",
+    "attrs": {
+      "id": "openOrderFilter",
+      "class": "px-4 py-2 glass rounded-lg hover-lift btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#automationDemo.px-4.py-2.bg-gradient-to-r",
+    "text": "Run demo workflow",
+    "attrs": {
+      "id": "automationDemo",
+      "class": "px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover-lift active:scale-95 btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#addClientBtn.px-4.py-2.bg-gradient-to-r",
+    "text": "Add Client",
+    "attrs": {
+      "id": "addClientBtn",
+      "class": "px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#addProviderBtn.px-4.py-2.bg-gradient-to-r",
+    "text": "Add Provider",
+    "attrs": {
+      "id": "addProviderBtn",
+      "class": "px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#openLegal.px-4.py-2.glass",
+    "text": "Open legal checklist",
+    "attrs": {
+      "id": "openLegal",
+      "class": "px-4 py-2 glass rounded-lg hover-lift btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#changePlan.px-4.py-2.glass",
+    "text": "Change plan",
+    "attrs": {
+      "id": "changePlan",
+      "class": "px-4 py-2 glass rounded-lg hover-lift btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#logoutBtn.px-4.py-2.glass",
+    "text": "Log out (demo)",
+    "attrs": {
+      "id": "logoutBtn",
+      "class": "px-4 py-2 glass rounded-lg hover-lift btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#exportData.glass.p-6.rounded-xl",
+    "text": "Export Data (JSON)",
+    "attrs": {
+      "id": "exportData",
+      "class": "glass p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#runReport.glass.p-6.rounded-xl",
+    "text": "Generate Report",
+    "attrs": {
+      "id": "runReport",
+      "class": "glass p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button#systemCheck.glass.p-6.rounded-xl",
+    "text": "System Health",
+    "attrs": {
+      "id": "systemCheck",
+      "class": "glass p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button#closeModal.p-2.hover:bg-gray-800.rounded-lg",
+    "text": "",
+    "attrs": {
+      "id": "closeModal",
+      "class": "p-2 hover:bg-gray-800 rounded-lg btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.hover:text-white.transition",
+    "text": "Dashboard",
+    "attrs": {
+      "class": "nav-btn hover:text-white transition text-left",
+      "data-section": "dashboard"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.hover:text-white.transition",
+    "text": "Orders",
+    "attrs": {
+      "class": "nav-btn hover:text-white transition text-left",
+      "data-section": "orders"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.hover:text-white.transition",
+    "text": "Automation",
+    "attrs": {
+      "class": "nav-btn hover:text-white transition text-left",
+      "data-section": "automation"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.hover:text-white.transition",
+    "text": "Pricing",
+    "attrs": {
+      "class": "nav-btn hover:text-white transition text-left",
+      "data-section": "pricing"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.modal-btn.hover:text-white.transition",
+    "text": "About",
+    "attrs": {
+      "class": "modal-btn hover:text-white transition text-left",
+      "data-modal": "about"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.modal-btn.hover:text-white.transition",
+    "text": "Blog",
+    "attrs": {
+      "class": "modal-btn hover:text-white transition text-left",
+      "data-modal": "blog"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.modal-btn.hover:text-white.transition",
+    "text": "Careers",
+    "attrs": {
+      "class": "modal-btn hover:text-white transition text-left",
+      "data-modal": "careers"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.nav-btn.hover:text-white.transition",
+    "text": "Б √О╦▐ Legal",
+    "attrs": {
+      "class": "nav-btn hover:text-white transition text-left",
+      "data-section": "compliance"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.social-btn.p-2.glass",
+    "text": "",
+    "attrs": {
+      "class": "social-btn p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple",
+      "data-platform": "github"
+    }
+  },
+  {
+    "kind": "link",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "a.text-2xl.font-bold.gradient-text",
+    "text": "PORTAL Global",
+    "href": "#",
+    "attrs": {
+      "class": "text-2xl font-bold gradient-text",
+      "href": "#"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.relative.p-2.glass",
+    "onclick": "toggleNotifications()",
+    "text": "",
+    "attrs": {
+      "class": "relative p-2 glass rounded-lg hover-lift mobile-hide"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_12faa6.html",
+    "selector": "button.flex.items-center.space-x-2",
+    "onclick": "openProfile()",
+    "text": "Ivan Petrov",
+    "attrs": {
+      "class": "flex items-center space-x-2 px-4 py-2 gradient-primary rounded-lg hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.glass.rounded-lg",
+    "text": "",
+    "attrs": {
+      "class": "p-3 glass rounded-lg"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "text": "Dashboard",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "dashboard"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "text": "Projects",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "projects"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "text": "AI Assistant",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "ai"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "text": "Orders",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "orders"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "text": "Pricing",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "pricing"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "text": "Clients",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "clients"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "text": "Client Portal",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "portal"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.glass.rounded-lg",
+    "text": "Profile",
+    "attrs": {
+      "class": "p-3 glass rounded-lg text-sm"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.glass.rounded-lg",
+    "text": "Logout",
+    "attrs": {
+      "class": "p-3 glass rounded-lg text-sm"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.mobile-menu-btn.p-2.glass",
+    "text": "",
+    "attrs": {
+      "class": "mobile-menu-btn p-2 glass rounded-lg"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.text-gray-300.hover:text-white",
+    "text": "П÷╓√ AI",
+    "attrs": {
+      "class": "nav-btn text-gray-300 hover:text-white transition",
+      "data-section": "ai"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex.items-center.space-x-2",
+    "text": "John",
+    "attrs": {
+      "class": "flex items-center space-x-2 px-3 sm:px-4 py-2 gradient-primary rounded-lg hover-lift mobile-hide"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "text": "Home",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "text": "Projects",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "text": "AI",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "text": "Orders",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "text": "More",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button#refreshMetrics.px-3.sm:px-4.py-2",
+    "text": "Refresh",
+    "attrs": {
+      "id": "refreshMetrics",
+      "class": "px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.mt-4.w-full.px-6",
+    "text": "Generate with AI",
+    "attrs": {
+      "class": "mt-4 w-full px-6 py-3 gradient-primary rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.w-full.py-3.gradient-primary",
+    "text": "Open AI Assistant",
+    "attrs": {
+      "class": "w-full py-3 gradient-primary rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button#exportData.glass.p-4.sm:p-6",
+    "text": "Export Data",
+    "attrs": {
+      "id": "exportData",
+      "class": "glass p-4 sm:p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button#runReport.glass.p-4.sm:p-6",
+    "text": "Generate Report",
+    "attrs": {
+      "id": "runReport",
+      "class": "glass p-4 sm:p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button#systemCheck.glass.p-4.sm:p-6",
+    "text": "System Health",
+    "attrs": {
+      "id": "systemCheck",
+      "class": "glass p-4 sm:p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple"
+    }
+  },
+  {
+    "kind": "link",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "a.text-xl.sm:text-2xl.font-bold",
+    "text": "PORTAL Global",
+    "href": "#",
+    "attrs": {
+      "class": "text-xl sm:text-2xl font-bold gradient-text",
+      "href": "#"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.glass.rounded-lg",
+    "onclick": "toggleMobileMenu()",
+    "text": "",
+    "attrs": {
+      "class": "p-3 glass rounded-lg"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "onclick": "navigateToSection('dashboard')",
+    "text": "Dashboard",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "dashboard"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "onclick": "navigateToSection('projects')",
+    "text": "Projects",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "projects"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "onclick": "navigateToSection('ai')",
+    "text": "AI Assistant",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "ai"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "onclick": "navigateToSection('orders')",
+    "text": "Orders",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "orders"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "onclick": "navigateToSection('pricing')",
+    "text": "Pricing",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "pricing"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "onclick": "navigateToSection('clients')",
+    "text": "Clients",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "clients"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.nav-btn.w-full.text-left",
+    "onclick": "navigateToSection('portal')",
+    "text": "Client Portal",
+    "attrs": {
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center",
+      "data-section": "portal"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.glass.rounded-lg",
+    "onclick": "showModal('Profile', '<p class=\\'text-gray-300\\'>Profile settings</p>')",
+    "text": "Profile",
+    "attrs": {
+      "class": "p-3 glass rounded-lg text-sm"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.p-3.glass.rounded-lg",
+    "onclick": "auth.logout()",
+    "text": "Logout",
+    "attrs": {
+      "class": "p-3 glass rounded-lg text-sm"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.mobile-menu-btn.p-2.glass",
+    "onclick": "toggleMobileMenu()",
+    "text": "",
+    "attrs": {
+      "class": "mobile-menu-btn p-2 glass rounded-lg"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex.items-center.space-x-2",
+    "onclick": "openProfile()",
+    "text": "John",
+    "attrs": {
+      "class": "flex items-center space-x-2 px-3 sm:px-4 py-2 gradient-primary rounded-lg hover-lift mobile-hide"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "onclick": "navigateToSection('dashboard')",
+    "text": "Home",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "onclick": "navigateToSection('projects')",
+    "text": "Projects",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "onclick": "navigateToSection('ai')",
+    "text": "AI",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "onclick": "navigateToSection('orders')",
+    "text": "Orders",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.flex-1.p-4.flex",
+    "onclick": "toggleMobileMenu()",
+    "text": "More",
+    "attrs": {
+      "class": "flex-1 p-4 flex flex-col items-center justify-center"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.mt-4.w-full.px-6",
+    "onclick": "generateAIProject()",
+    "text": "Generate with AI",
+    "attrs": {
+      "class": "mt-4 w-full px-6 py-3 gradient-primary rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_436a56.html",
+    "selector": "button.w-full.py-3.gradient-primary",
+    "onclick": "navigateToSection('ai')",
+    "text": "Open AI Assistant",
+    "attrs": {
+      "class": "w-full py-3 gradient-primary rounded-lg font-semibold hover-lift"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-2.rounded-lg.active:scale-95",
+    "text": "",
+    "attrs": {
+      "class": "p-2 rounded-lg active:scale-95 relative"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "text": "New Project",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "text": "AI Assistant",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "text": "Orders",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "text": "Analytics",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.text-sm.text-blue-500",
+    "text": "View All",
+    "attrs": {
+      "class": "text-sm text-blue-500"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.bg-gradient-to-r",
+    "text": "New",
+    "attrs": {
+      "class": "px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-sm flex items-center"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.bg-blue-600",
+    "text": "All",
+    "attrs": {
+      "class": "px-3 py-2 bg-blue-600 rounded-lg text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.glass",
+    "text": "Active",
+    "attrs": {
+      "class": "px-3 py-2 glass rounded-lg text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.glass",
+    "text": "Planning",
+    "attrs": {
+      "class": "px-3 py-2 glass rounded-lg text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.glass",
+    "text": "Completed",
+    "attrs": {
+      "class": "px-3 py-2 glass rounded-lg text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-2.rounded-lg.glass",
+    "text": "",
+    "attrs": {
+      "class": "p-2 rounded-lg glass"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-3.bg-gradient-to-r.from-blue-500",
+    "text": "",
+    "attrs": {
+      "class": "p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-1.glass",
+    "text": "Generate plan",
+    "attrs": {
+      "class": "px-3 py-1 glass rounded-full text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-1.glass",
+    "text": "Analyze metrics",
+    "attrs": {
+      "class": "px-3 py-1 glass rounded-full text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-1.glass",
+    "text": "Create tasks",
+    "attrs": {
+      "class": "px-3 py-1 glass rounded-full text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.bg-gradient-to-r",
+    "text": "New Order",
+    "attrs": {
+      "class": "px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg text-sm flex items-center"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.justify-between",
+    "text": "Notifications",
+    "attrs": {
+      "class": "flex items-center justify-between p-3 glass rounded-lg active:scale-95 w-full"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.justify-between",
+    "text": "Dark Mode",
+    "attrs": {
+      "class": "flex items-center justify-between p-3 glass rounded-lg active:scale-95 w-full"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.justify-between",
+    "text": "Security",
+    "attrs": {
+      "class": "flex items-center justify-between p-3 glass rounded-lg active:scale-95 w-full"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.justify-between",
+    "text": "Billing & Plan",
+    "attrs": {
+      "class": "flex items-center justify-between p-3 glass rounded-lg active:scale-95 w-full"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-2.glass.rounded-lg",
+    "text": "",
+    "attrs": {
+      "class": "p-2 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item.active",
+    "text": "Home",
+    "attrs": {
+      "class": "tab-item active",
+      "data-tab": "dashboard"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "text": "Projects",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "projects"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "text": "AI",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "ai"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "text": "Orders",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "orders"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "text": "Profile",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "profile"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "Dashboard",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "Projects",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "AI Assistant",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "Orders",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "Clients",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "Analytics",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "Settings",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "text": "Install App",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.w-full.py-3.bg-gradient-to-r",
+    "text": "Install App",
+    "attrs": {
+      "class": "w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold"
+    }
+  },
+  {
+    "kind": "button",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.w-full.py-3.glass",
+    "text": "Not Now",
+    "attrs": {
+      "class": "w-full py-3 glass rounded-lg"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-2.rounded-lg.active:scale-95",
+    "onclick": "showNotifications()",
+    "text": "",
+    "attrs": {
+      "class": "p-2 rounded-lg active:scale-95 relative"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "onclick": "showBottomSheet('newProject')",
+    "text": "New Project",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "onclick": "navigateTo('ai')",
+    "text": "AI Assistant",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "onclick": "navigateTo('orders')",
+    "text": "Orders",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.flex-col.items-center",
+    "onclick": "showBottomSheet('analytics')",
+    "text": "Analytics",
+    "attrs": {
+      "class": "flex flex-col items-center p-3 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.text-sm.text-blue-500",
+    "onclick": "navigateTo('projects')",
+    "text": "View All",
+    "attrs": {
+      "class": "text-sm text-blue-500"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-3",
+    "onclick": "openProject('ecommerce')",
+    "text": "E-Commerce Platform Technology Б─╒ 75% complete Active",
+    "attrs": {
+      "class": "glass rounded-lg p-3 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-3",
+    "onclick": "openProject('banking')",
+    "text": "Mobile Banking App Finance Б─╒ 25% complete Planning",
+    "attrs": {
+      "class": "glass rounded-lg p-3 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.bg-gradient-to-r",
+    "onclick": "showBottomSheet('newProject')",
+    "text": "New",
+    "attrs": {
+      "class": "px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-sm flex items-center"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-4",
+    "onclick": "openProject('ecommerce')",
+    "text": "E-Commerce Platform Technology Б─╒ Due Dec 15 Active 75% Progress",
+    "attrs": {
+      "class": "glass rounded-lg p-4 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-4",
+    "onclick": "openProject('banking')",
+    "text": "Mobile Banking App Finance Б─╒ Due Jan 20 Planning 25% Progress",
+    "attrs": {
+      "class": "glass rounded-lg p-4 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-4",
+    "onclick": "openProject('marketing')",
+    "text": "Brand Campaign Marketing Б─╒ Due Nov 30 Completed 90% Progress",
+    "attrs": {
+      "class": "glass rounded-lg p-4 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-3.bg-gradient-to-r.from-blue-500",
+    "onclick": "sendMessage()",
+    "text": "",
+    "attrs": {
+      "class": "p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-1.glass",
+    "onclick": "quickMessage('Generate project plan')",
+    "text": "Generate plan",
+    "attrs": {
+      "class": "px-3 py-1 glass rounded-full text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-1.glass",
+    "onclick": "quickMessage('Analyze metrics')",
+    "text": "Analyze metrics",
+    "attrs": {
+      "class": "px-3 py-1 glass rounded-full text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-1.glass",
+    "onclick": "quickMessage('Create task list')",
+    "text": "Create tasks",
+    "attrs": {
+      "class": "px-3 py-1 glass rounded-full text-sm whitespace-nowrap"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.px-3.py-2.bg-gradient-to-r",
+    "onclick": "showBottomSheet('newOrder')",
+    "text": "New Order",
+    "attrs": {
+      "class": "px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg text-sm flex items-center"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-4",
+    "onclick": "openOrder('7842')",
+    "text": "#ORD-7842 Website Development Completed Client TechCorp Inc. Amount $2,500",
+    "attrs": {
+      "class": "glass rounded-lg p-4 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-4",
+    "onclick": "openOrder('7843')",
+    "text": "#ORD-7843 Technical Support In Progress Client StartupXYZ Amount $800",
+    "attrs": {
+      "class": "glass rounded-lg p-4 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.glass.rounded-lg.p-4",
+    "onclick": "openOrder('7844')",
+    "text": "#ORD-7844 Mobile App Design Pending Client Global Retail Amount $4,200",
+    "attrs": {
+      "class": "glass rounded-lg p-4 active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.justify-between",
+    "onclick": "toggleTheme()",
+    "text": "Dark Mode",
+    "attrs": {
+      "class": "flex items-center justify-between p-3 glass rounded-lg active:scale-95 w-full"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.justify-between",
+    "onclick": "showModal('pricing')",
+    "text": "Billing & Plan",
+    "attrs": {
+      "class": "flex items-center justify-between p-3 glass rounded-lg active:scale-95 w-full"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-2.glass.rounded-lg",
+    "onclick": "installApp()",
+    "text": "",
+    "attrs": {
+      "class": "p-2 glass rounded-lg active:scale-95"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item.active",
+    "onclick": "navigateTo('dashboard')",
+    "text": "Home",
+    "attrs": {
+      "class": "tab-item active",
+      "data-tab": "dashboard"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "onclick": "navigateTo('projects')",
+    "text": "Projects",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "projects"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "onclick": "navigateTo('ai')",
+    "text": "AI",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "ai"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "onclick": "navigateTo('orders')",
+    "text": "Orders",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "orders"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.tab-item",
+    "onclick": "navigateTo('profile')",
+    "text": "Profile",
+    "attrs": {
+      "class": "tab-item",
+      "data-tab": "profile"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "navigateToSection('dashboard')",
+    "text": "Dashboard",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "navigateToSection('projects')",
+    "text": "Projects",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "navigateToSection('ai')",
+    "text": "AI Assistant",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "navigateToSection('orders')",
+    "text": "Orders",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "navigateToSection('clients')",
+    "text": "Clients",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "navigateToSection('analytics')",
+    "text": "Analytics",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "showModal('settings')",
+    "text": "Settings",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg hover:bg-gray-800"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.flex.items-center.w-full",
+    "onclick": "installApp()",
+    "text": "Install App",
+    "attrs": {
+      "class": "flex items-center w-full p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "div.sidebar-overlay",
+    "onclick": "toggleSidebar()",
+    "text": "",
+    "attrs": {
+      "class": "sidebar-overlay"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.p-2.rounded-lg.glass",
+    "onclick": "closeModal()",
+    "text": "",
+    "attrs": {
+      "class": "p-2 rounded-lg glass"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.w-full.py-3.bg-gradient-to-r",
+    "onclick": "installPWA()",
+    "text": "Install App",
+    "attrs": {
+      "class": "w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold"
+    }
+  },
+  {
+    "kind": "onclick",
+    "file": "deepseek_html_20260204_d3242a.html",
+    "selector": "button.w-full.py-3.glass",
+    "onclick": "hideInstallPrompt()",
+    "text": "Not Now",
+    "attrs": {
+      "class": "w-full py-3 glass rounded-lg"
+    }
+  }
+]

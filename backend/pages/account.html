@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global | Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <meta name="theme-color" content="#0b0f19">
+    <style>
+        :root {
+            --bg: #0b1112;
+            --bg-2: #0f1c1f;
+            --card: #121c1f;
+            --card-2: #0f171a;
+            --ink: #f3f7f5;
+            --muted: #9bb0b0;
+            --accent: #4fb3a5;
+            --accent-2: #f2c46d;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            background: radial-gradient(circle at 15% 10%, rgba(79, 179, 165, 0.22), transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(242, 196, 109, 0.15), transparent 45%),
+                linear-gradient(160deg, var(--bg), var(--bg-2));
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+        .top__inner{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+        .brand{color:#e9eefc;text-decoration:none;font-weight:700}
+        .nav{display:flex;gap:12px;flex-wrap:wrap}
+        .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
+        .nav a:hover{color:#e9eefc}
+        .account{margin-left:auto;display:flex;align-items:center;gap:10px;color:#9fb0d0;font-size:13px}
+        .plan-badge{border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+        .plan-free{border:1px solid rgba(255,255,255,.18);color:#d7dde8;background:rgba(255,255,255,.08)}
+        .plan-pro{border:1px solid rgba(43,108,255,.6);color:#cfe0ff;background:rgba(43,108,255,.2)}
+        .plan-business{border:1px solid rgba(148,82,255,.5);color:#eadcff;background:rgba(148,82,255,.18)}
+        .account .upgrade{display:none;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(79,179,165,.6);color:#e9eefc;font-weight:600;font-size:12px;text-decoration:none}
+        .logout{background:#11182a;border:1px solid rgba(255,255,255,.08);color:#e9eefc;border-radius:10px;padding:8px 10px;cursor:pointer}
+        @media(max-width:560px){.account{margin-left:0}.logout{margin-left:0}}
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .hero {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 4vw, 44px);
+        }
+
+        .hero p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 46px rgba(0, 0, 0, 0.35);
+        }
+
+        .card h2 {
+            font-size: 20px;
+        }
+
+        .card p,
+        .card li,
+        .card td,
+        .card th {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .kv {
+            display: grid;
+            gap: 8px;
+        }
+
+        .kv span {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            border: 1px solid transparent;
+            background: var(--accent);
+            color: #072b28;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--ink);
+        }
+
+        .status {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .status.error {
+            color: #f3a6a6;
+        }
+
+        .status.success {
+            color: #a9f3d4;
+        }
+
+        .status.warning {
+            color: #f7d28c;
+        }
+
+        .pulse {
+            animation: pulse 0.45s ease-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.98); opacity: 0.7; }
+            70% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <header class="top">
+      <div class="top__inner">
+        <a class="brand" href="/">PORTAL</a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/app">Dashboard</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/docs">Docs</a>
+          <a href="/help">Help</a>
+          <a href="/cabinet">Cabinet</a>
+          <a href="/admin" id="adminLink" style="display:none">Admin</a>
+        </nav>
+        <div class="account" id="accountInfo">
+          <span id="accountEmail">Loading...</span>
+          <span class="plan-badge plan-free" id="accountPlan">Free</span>
+          <a class="upgrade" id="upgradeLink" href="/pricing">Upgrade</a>
+        </div>
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <div class="page">
+        <section class="hero">
+            <h1>Account & Plan</h1>
+            <p>Review your subscription, limits, and current usage for this workspace.</p>
+        </section>
+
+        <section class="grid">
+            <div class="card">
+                <h2>Account summary</h2>
+                <div class="kv"><span>Email</span><div id="summaryEmail">-</div></div>
+                <div class="kv"><span>Plan</span><div id="summaryPlan">-</div></div>
+                <div class="kv"><span>Price</span><div id="summaryPrice">-</div></div>
+                <div class="status" id="summaryStatus"></div>
+            </div>
+            <div class="card">
+                <h2>Plan actions</h2>
+                <p>Upgrade or downgrade instantly for the demo. No payments are processed.</p>
+                <div class="btn-row">
+                    <button class="btn" id="upgradePro">Upgrade to Pro</button>
+                    <button class="btn" id="upgradeBusiness">Upgrade to Business</button>
+                    <button class="btn btn-ghost" id="downgradeFree">Downgrade to Free</button>
+                    <button class="btn btn-ghost" id="adminBootstrap" style="display:none">Promote me to Admin (dev-only)</button>
+                </div>
+                <div class="status" id="actionStatus"></div>
+            </div>
+        </section>
+
+        <section class="grid" style="margin-top:18px">
+            <div class="card">
+                <h2>Limits</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Resource</th>
+                            <th>Limit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Projects</td><td id="limitProjects">-</td></tr>
+                        <tr><td>Clients</td><td id="limitClients">-</td></tr>
+                        <tr><td>Providers</td><td id="limitProviders">-</td></tr>
+                        <tr><td>Orders</td><td id="limitOrders">-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <h2>Usage</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Resource</th>
+                            <th>Current</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Projects</td><td id="usageProjects">-</td></tr>
+                        <tr><td>Clients</td><td id="usageClients">-</td></tr>
+                        <tr><td>Providers</td><td id="usageProviders">-</td></tr>
+                        <tr><td>Orders</td><td id="usageOrders">-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card" style="margin-top:18px">
+            <h2>Subscription history</h2>
+            <div class="status" id="historyStatus">Loading history...</div>
+            <div id="historyList"></div>
+        </section>
+    </div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        const adminBootstrapBtn = $("adminBootstrap");
+
+        const setStatus = (id, message, variant = "") => {
+            const el = $(id);
+            if (!el) return;
+            el.textContent = message || "";
+            el.classList.remove("error", "success", "warning", "pulse");
+            if (variant === true || variant === "error") {
+                el.classList.add("error");
+            }
+            if (variant === "success") {
+                el.classList.add("success", "pulse");
+            }
+            if (variant === "warning") {
+                el.classList.add("warning", "pulse");
+            }
+            if (variant) {
+                setTimeout(() => {
+                    el.classList.remove("pulse");
+                }, 450);
+            }
+        };
+
+        const formatLimit = (value) => {
+            if (value === null || value === undefined) return "Unlimited";
+            const num = Number(value);
+            if (!Number.isFinite(num)) return "Unlimited";
+            return String(num);
+        };
+
+        const setPlanBadge = (element, planCode, planName) => {
+            if (!element) return;
+            const code = String(planCode || "free").toLowerCase();
+            element.textContent = planName || code.toUpperCase();
+            element.classList.remove("plan-free", "plan-pro", "plan-business");
+            element.classList.add(`plan-${code}`);
+        };
+
+        const loadSubscription = async () => {
+            try {
+                const response = await fetch("/api/subscription/me", { credentials: "include" });
+                if (response.status === 401) {
+                    window.location.href = "/login?returnUrl=/cabinet";
+                    return null;
+                }
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Failed to load account");
+                }
+                return body.data;
+            } catch (error) {
+                setStatus("summaryStatus", error.message, true);
+                return null;
+            }
+        };
+
+        const loadAdminBootstrap = async () => {
+            if (!adminBootstrapBtn) return;
+            const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+            if (!isLocal) {
+                adminBootstrapBtn.style.display = "none";
+                return;
+            }
+            try {
+                const response = await fetch("/api/admin/bootstrap/status", { credentials: "include" });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok || !body.data?.enabled) {
+                    adminBootstrapBtn.style.display = "none";
+                    return;
+                }
+                adminBootstrapBtn.style.display = "inline-flex";
+            } catch (error) {
+                adminBootstrapBtn.style.display = "none";
+            }
+        };
+
+        const renderAccount = (data) => {
+            if (!data) return;
+            $("accountEmail").textContent = data.email || "Account";
+            $("summaryEmail").textContent = data.email || "-";
+            setPlanBadge($("accountPlan"), data.plan_code || "free", data.plan_name || data.plan_code || "Free");
+            $("summaryPlan").textContent = data.plan_name || data.plan_code || "Free";
+            $("summaryPrice").textContent = data.price_month ? `$${data.price_month}/month` : "$0";
+
+            const planCode = String(data.plan_code || "free").toLowerCase();
+            const upgradeLink = $("upgradeLink");
+            if (upgradeLink) {
+                upgradeLink.style.display = planCode === "free" ? "inline-flex" : "none";
+            }
+            const adminLink = $("adminLink");
+            if (adminLink) {
+                adminLink.style.display = data.role === "admin" ? "inline-flex" : "none";
+            }
+
+            const limits = data.limits || {};
+            $("limitProjects").textContent = formatLimit(limits.maxProjects);
+            $("limitClients").textContent = formatLimit(limits.maxClients);
+            $("limitProviders").textContent = formatLimit(limits.maxProviders);
+            $("limitOrders").textContent = formatLimit(limits.maxOrders);
+
+            const usage = data.usage || {};
+            $("usageProjects").textContent = usage.projects ?? 0;
+            $("usageClients").textContent = usage.clients ?? 0;
+            $("usageProviders").textContent = usage.providers ?? 0;
+            $("usageOrders").textContent = usage.orders ?? 0;
+
+            const history = data.history || [];
+            const historyList = $("historyList");
+            if (!history.length) {
+                setStatus("historyStatus", "No subscription history yet.");
+                historyList.innerHTML = "";
+                return;
+            }
+
+            setStatus("historyStatus", "");
+            historyList.innerHTML = history.map((entry) => {
+                const status = entry.status || "";
+                const plan = entry.plan_code || "";
+                const created = entry.created_at || "";
+                const periodEnd = entry.current_period_end || "";
+                return `<div class="status">${plan.toUpperCase()} - ${status} (since ${created}, ends ${periodEnd})</div>`;
+            }).join("");
+        };
+
+        const runAction = async (planCode, endpoint, message) => {
+            setStatus("actionStatus", message || "Updating...");
+            try {
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ plan_code: planCode })
+                });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Update failed");
+                }
+                const data = await loadSubscription();
+                renderAccount(data);
+                setStatus("actionStatus", "Plan updated.", "success");
+            } catch (error) {
+                setStatus("actionStatus", error.message, true);
+            }
+        };
+
+        $("upgradePro").addEventListener("click", () => runAction("pro", "/api/subscription/upgrade", "Upgrading to Pro..."));
+        $("upgradeBusiness").addEventListener("click", () => runAction("business", "/api/subscription/upgrade", "Upgrading to Business..."));
+        $("downgradeFree").addEventListener("click", () => runAction("free", "/api/subscription/downgrade", "Downgrading to Free..."));
+        if (adminBootstrapBtn) {
+            adminBootstrapBtn.addEventListener("click", async () => {
+                const token = prompt("Enter ADMIN_BOOTSTRAP_TOKEN");
+                if (!token) return;
+                setStatus("actionStatus", "Promoting to admin...", "warning");
+                try {
+                    const response = await fetch("/api/admin/bootstrap", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({ token })
+                    });
+                    const body = await response.json().catch(() => ({}));
+                    if (!response.ok || !body.ok) {
+                        throw new Error(body.message || body.error || "Bootstrap failed");
+                    }
+                    setStatus("actionStatus", "You are now an admin.", "success");
+                    const adminLink = $("adminLink");
+                    if (adminLink) adminLink.style.display = "inline-flex";
+                } catch (error) {
+                    setStatus("actionStatus", error.message, true);
+                }
+            });
+        }
+
+        const logoutBtn = $("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                try {
+                    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+                } catch (error) {
+                    // ignore
+                }
+                window.location.href = "/login";
+            });
+        }
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(() => {});
+        }
+
+        loadSubscription().then(renderAccount);
+        loadAdminBootstrap();
+    </script>
+</body>
+</html>

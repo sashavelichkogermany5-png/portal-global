@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global ╨СтФАтЦа Unified Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --success: #4CAF50;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --dark: #0f0f0f;
+            --dark-light: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        body.theme-light {
+            background: linear-gradient(135deg, #f7fafc 0%, #e9d8fd 100%);
+            color: #0f0f0f;
+        }
+
+        /* Animated background */
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(76, 175, 80, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            animation: gradientFloat 20s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -3;
+        }
+
+        @keyframes gradientFloat {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-20px) translateY(10px); }
+            50% { transform: translateX(20px) translateY(-10px); }
+            75% { transform: translateX(-10px) translateY(-20px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(102, 126, 234, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -2;
+            opacity: 0.3;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 50%;
+            animation: particleFloat 10s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        .nav-fixed {
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-active { background: rgba(255,255,255,0.06); }
+
+        /* Glass morphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-dark {
+            background: rgba(15,23,42,0.80);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .glass-enhanced {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Gradients */
+        .gradient-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .gradient-success {
+            background: linear-gradient(135deg, var(--success), #45a049);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hover effects */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 3D card effects */
+        .card-3d {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-8px) rotateX(2deg);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Magnetic hover */
+        .magnetic-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .magnetic-hover:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Glow effects */
+        .glow-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glow-effect::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #667eea, #764ba2);
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .glow-effect:hover::before {
+            opacity: 1;
+            animation: glowRotate 2s linear infinite;
+        }
+
+        @keyframes glowRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse-enhanced {
+            animation: pulseEnhanced 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulseEnhanced {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* Neon glow */
+        .neon-glow {
+            text-shadow:
+                0 0 10px rgba(102, 126, 234, 0.8),
+                0 0 20px rgba(102, 126, 234, 0.6),
+                0 0 30px rgba(102, 126, 234, 0.4),
+                0 0 40px rgba(102, 126, 234, 0.2);
+            animation: neonFlicker 3s infinite alternate;
+        }
+
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+        }
+
+        /* Holographic */
+        .holographic {
+            position: relative;
+            background: linear-gradient(45deg, #667eea, #764ba2, #667eea, #764ba2);
+            background-size: 400% 400%;
+            animation: holographicShift 8s ease infinite;
+        }
+
+        @keyframes holographicShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Float animation */
+        .float-animation { animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Shimmer effect */
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Stagger animation */
+        .stagger-animation > * {
+            opacity: 0;
+            animation: staggerFadeIn 0.6s ease-out forwards;
+        }
+        .stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes staggerFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Metric cards */
+        .metric-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .metric-card:hover::before { left: 100%; }
+
+        .metric-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        /* Chat bubbles */
+        .chat-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin: 8px 0;
+        }
+
+        .chat-user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-ai {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-right: auto;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid rgba(102, 126, 234, 0.2);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Ripple effect */
+        .btn-ripple { position: relative; overflow: hidden; }
+
+        @keyframes rippleEffect {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .mobile-hidden {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Animated Background -->
+    <div class="bg-animated"></div>
+    <div class="cyber-grid"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-fixed fixed top-0 w-full z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <a href="#" class="text-2xl font-bold gradient-text">PORTAL Global</a>
+                <div class="hidden md:flex space-x-6 nav-menu">
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="dashboard">╨Я├╖тМатФ╝ Dashboard</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="projects">╨Я├╖тЙИтФМ╨ЮтХжтЦР Projects</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="ai">╨Я├╖тХУтИЪ AI Assistant</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="orders">╨Я├╖тМатХХ Orders</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="automation">╨С┬атХС Automation</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="pricing">╨Я├╖тЦУтХЯ Pricing</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="clients">╨Я├╖тЦТтХФ Clients</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="providers">╨Я├╖тХУ┬▓ Providers</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="compliance">╨С┬атИЪ╨ЮтХжтЦР Compliance</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="account">╨Я├╖тЦТтХУ Account</button>
+                    <button class="nav-btn text-gray-300 hover:text-white transition" data-section="cabinet">╨Я├╖тФдтХе╨Я├╖тФдтХи Cabinet</button>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleNotifications()" class="relative p-2 glass rounded-lg hover-lift">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <button id="themeToggle" class="p-2 glass rounded-lg hover-lift">
+                    <i data-lucide="moon" class="w-5 h-5"></i>
+                </button>
+                <button onclick="openProfile()" class="flex items-center space-x-2 px-4 py-2 gradient-primary rounded-lg hover-lift">
+                    <img src="https://picsum.photos/seed/user/32/32" alt="Profile" class="w-6 h-6 rounded-full">
+                    <span class="hidden md:inline">Ivan Petrov</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20 min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+        <!-- Dashboard Section -->
+        <section class="scroll-mt-24 fade-in" id="dashboard">
+            <div class="mb-8 text-center slide-up">
+                <h1 class="text-5xl font-bold mb-4 gradient-text">Welcome to PORTAL Global</h1>
+                <p class="text-xl text-gray-400">Your intelligent project management platform</p>
+            </div>
+
+            <!-- Business Metrics -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Business Metrics</h2>
+                <button class="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple" id="refreshMetrics">
+                    <i class="w-4 h-4" data-lucide="refresh-cw"></i> Refresh
+                </button>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 stagger-animation">
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="trending-up"></i>
+                        </div>
+                        <span class="text-sm font-bold text-green-500 holographic neon-glow bg-green-500/10 px-2 py-1 rounded-full">+15%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">LTV</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="ltv">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="activity"></i>
+                        </div>
+                        <span class="text-sm font-bold text-red-500 holographic neon-glow bg-red-500/10 px-2 py-1 rounded-full">-2%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Churn Rate</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="churn">0%</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="dollar-sign"></i>
+                        </div>
+                        <span class="text-sm font-bold text-blue-500 holographic neon-glow bg-blue-500/10 px-2 py-1 rounded-full">+8%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">ARPU</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="arpu">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="users"></i>
+                        </div>
+                        <span class="text-sm font-bold text-purple-500 holographic neon-glow bg-purple-500/10 px-2 py-1 rounded-full">+12%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Active Clients</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="activeClients">0</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-4 mt-6 stagger-animation" style="animation-delay: 0.2s;">
+                <div class="metric-card card-3d magnetic-hover">
+                    <div class="flex items-center mb-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-600 rounded flex items-center justify-center mr-2 float-animation">
+                            <i class="w-3 h-3 text-white" data-lucide="trending-up"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">MRR</p>
+                    <p class="text-xl font-bold neon-glow" id="mrr">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover">
+                    <div class="flex items-center mb-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-600 rounded flex items-center justify-center mr-2 float-animation" style="animation-delay: 0.3s;">
+                            <i class="w-3 h-3 text-white" data-lucide="pie-chart"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Net Revenue</p>
+                    <p class="text-xl font-bold neon-glow" id="netRevenue">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover">
+                    <div class="flex items-center mb-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-orange-500 to-red-600 rounded flex items-center justify-center mr-2 float-animation" style="animation-delay: 0.6s;">
+                            <i class="w-3 h-3 text-white" data-lucide="percent"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Avg Provider Payout</p>
+                    <p class="text-xl font-bold neon-glow" id="avgPayout">0%</p>
+                </div>
+            </div>
+
+            <!-- Original Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-8">
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="briefcase" class="w-8 h-8 text-blue-500"></i>
+                        <span class="text-sm text-green-500">+12%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">24</h3>
+                    <p class="text-gray-400">Active Projects</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="users" class="w-8 h-8 text-green-500"></i>
+                        <span class="text-sm text-green-500">+8%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">156</h3>
+                    <p class="text-gray-400">Team Members</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="check-circle" class="w-8 h-8 text-purple-500"></i>
+                        <span class="text-sm text-green-500">+24%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">89%</h3>
+                    <p class="text-gray-400">Completion Rate</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="trending-up" class="w-8 h-8 text-orange-500"></i>
+                        <span class="text-sm text-red-500">-3%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">$2.4M</h3>
+                    <p class="text-gray-400">Revenue</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <div class="glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Project Progress</h3>
+                    <canvas id="progressChart"></canvas>
+                </div>
+                <div class="glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Team Performance</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="px-6 py-16 glass-dark scroll-mt-24" id="projects">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl font-bold mb-8">Active Projects</h2>
+                
+                <!-- AI Project Generator -->
+                <div class="glass-dark rounded-2xl p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-yellow-500 mr-3"></i>
+                        <h2 class="text-2xl font-bold">AI Project Generator</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Describe your project idea</label>
+                            <textarea 
+                                id="projectIdea"
+                                placeholder="Example: Create a mobile app for food delivery with real-time tracking..."
+                                class="w-full h-32 bg-gray-800 rounded-lg p-4 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+                            ></textarea>
+                            <button onclick="generateAIProject()" class="mt-4 w-full md:w-auto px-6 py-3 gradient-primary rounded-lg font-semibold hover-lift">
+                                <i data-lucide="zap" class="inline w-4 h-4 mr-2"></i>
+                                Generate with AI
+                            </button>
+                        </div>
+                        <div id="aiOutput" class="glass rounded-lg p-6 min-h-[200px] flex items-center justify-center">
+                            <div class="text-center text-gray-400">
+                                <i data-lucide="cpu" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                                <p>AI-generated project plan will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Templates -->
+                <div class="mb-8">
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <button onclick="filterProjects('all')" class="px-4 py-2 bg-blue-600 rounded-lg">All Projects</button>
+                        <button onclick="filterProjects('tech')" class="px-4 py-2 glass rounded-lg hover-lift">Technology</button>
+                        <button onclick="filterProjects('business')" class="px-4 py-2 glass rounded-lg hover-lift">Business</button>
+                        <button onclick="filterProjects('creative')" class="px-4 py-2 glass rounded-lg hover-lift">Creative</button>
+                    </div>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                        <div class="h-40 bg-gradient-to-br from-blue-500 to-purple-600 p-6">
+                            <h3 class="text-xl font-bold">E-Commerce Platform</h3>
+                            <p class="text-blue-100">Technology</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span class="text-sm text-gray-400">In Progress</span>
+                                </div>
+                                <span class="text-sm font-semibold">75%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <img src="https://picsum.photos/seed/user1/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user2/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user3/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                </div>
+                                <span class="text-sm text-gray-400">Due: Dec 15</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                        <div class="h-40 bg-gradient-to-br from-green-500 to-teal-600 p-6">
+                            <h3 class="text-xl font-bold">Mobile Banking App</h3>
+                            <p class="text-green-100">Finance</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                                    <span class="text-sm text-gray-400">Planning</span>
+                                </div>
+                                <span class="text-sm font-semibold">25%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 25%"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <img src="https://picsum.photos/seed/user4/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user5/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                </div>
+                                <span class="text-sm text-gray-400">Due: Jan 20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                        <div class="h-40 bg-gradient-to-br from-orange-500 to-red-600 p-6">
+                            <h3 class="text-xl font-bold">Brand Campaign</h3>
+                            <p class="text-orange-100">Marketing</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                                    <span class="text-sm text-gray-400">Review</span>
+                                </div>
+                                <span class="text-sm font-semibold">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <img src="https://picsum.photos/seed/user6/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user7/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                </div>
+                                <span class="text-sm text-gray-400">Due: Nov 30</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section class="px-6 py-16 scroll-mt-24" id="ai">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-4">AI Assistant</h2>
+                    <p class="text-gray-400">Your intelligent project management companion</p>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="glass-dark rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-700">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 gradient-primary rounded-full flex items-center justify-center mr-3">
+                                <i data-lucide="bot" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">PORTAL AI</h3>
+                                <p class="text-sm text-gray-400">Always here to help</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-96 overflow-y-auto p-6" id="chatMessages">
+                        <div class="chat-bubble chat-ai">
+                            Hello! I'm your AI assistant. I can help you with project planning, task management, and answering questions about your projects. How can I assist you today?
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-gray-700">
+                        <div class="flex items-center space-x-4">
+                            <input 
+                                type="text" 
+                                id="chatInput"
+                                placeholder="Ask me anything about your projects..."
+                                class="flex-1 bg-gray-800 rounded-lg px-4 py-3 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+                                onkeypress="if(event.key === 'Enter') sendMessage()"
+                            >
+                            <button onclick="sendMessage()" class="p-3 gradient-primary rounded-lg hover-lift">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section class="scroll-mt-24" id="orders">
+            <h2 class="text-2xl font-bold mb-4">Orders</h2>
+            <div class="glass rounded-xl p-6">
+                <p class="text-gray-300">Order management system will appear here (table/kanban).</p>
+                <div class="mt-4 flex gap-2">
+                    <button class="px-4 py-2 glass rounded-lg hover-lift btn-ripple" id="createOrderDemo">
+                        <i class="w-4 h-4 inline" data-lucide="plus"></i> Create order (demo)
+                    </button>
+                    <button class="px-4 py-2 glass rounded-lg hover-lift btn-ripple" id="openOrderFilter">
+                        <i class="w-4 h-4 inline" data-lucide="filter"></i> Filters (demo)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Automation Section -->
+        <section class="scroll-mt-24" id="automation">
+            <h2 class="text-2xl font-bold mb-4">Automation</h2>
+            <div class="glass rounded-xl p-6 space-y-3">
+                <p class="text-gray-300">Automation workflows, n8n flows, triggers, integrations.</p>
+                <button class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover-lift active:scale-95 btn-ripple" id="automationDemo">
+                    Run demo workflow
+                </button>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="px-6 py-16 glass-dark scroll-mt-24" id="pricing">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-4">Choose Your Plan</h2>
+                    <p class="text-gray-400">Flexible pricing for teams of all sizes</p>
+                </div>
+
+                <!-- Pricing Calculator -->
+                <div class="glass rounded-2xl p-8 mb-12">
+                    <h3 class="text-xl font-semibold mb-6">Intelligent Pricing Calculator</h3>
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Team Size</label>
+                            <input type="number" id="calcTeamSize" value="10" min="1" max="1000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Projects/Month</label>
+                            <input type="number" id="calcProjects" value="15" min="1" max="1000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Storage (GB)</label>
+                            <input type="number" id="calcStorage" value="50" min="0" max="10000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold" id="recommendedPrice">$25/month</p>
+                        <p class="text-gray-400" id="planRecommendation">Professional Plan recommended</p>
+                    </div>
+                </div>
+
+                <!-- Pricing Cards -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="glass rounded-2xl p-8 hover-lift">
+                        <h3 class="text-xl font-bold mb-2">Starter</h3>
+                        <p class="text-3xl font-bold mb-6">$9<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Up to 10 projects</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 15 team members</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Basic analytics</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Email support</li>
+                        </ul>
+                        <button class="w-full py-3 glass rounded-lg font-semibold hover-lift">Start Free Trial</button>
+                    </div>
+
+                    <div class="glass-dark rounded-2xl p-8 hover-lift border-2 border-blue-500 relative">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-blue-500 text-white text-sm rounded-full">RECOMMENDED</div>
+                        <h3 class="text-xl font-bold mb-2">Professional</h3>
+                        <p class="text-3xl font-bold mb-6">$25<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Unlimited projects</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 50 team members</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Advanced analytics</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> AI assistant</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Priority support</li>
+                        </ul>
+                        <button class="w-full py-3 gradient-primary rounded-lg font-semibold hover-lift">Start Free Trial</button>
+                    </div>
+
+                    <div class="glass rounded-2xl p-8 hover-lift">
+                        <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                        <p class="text-3xl font-bold mb-6">$99<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Unlimited everything</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Custom integrations</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Dedicated manager</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> SLA guarantee</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 24/7 support</li>
+                        </ul>
+                        <button class="w-full py-3 glass rounded-lg font-semibold hover-lift">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clients Section -->
+        <section class="scroll-mt-24" id="clients">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Client Management</h2>
+                <button class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple" id="addClientBtn">
+                    <i class="w-4 h-4" data-lucide="user-plus"></i> Add Client
+                </button>
+            </div>
+            <div class="glass rounded-xl overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th class="p-4 text-left">Client</th>
+                            <th class="p-4 text-left">MRR</th>
+                            <th class="p-4 text-left">Status</th>
+                            <th class="p-4 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Providers Section -->
+        <section class="scroll-mt-24" id="providers">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Service Providers</h2>
+                <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple" id="addProviderBtn">
+                    <i class="w-4 h-4" data-lucide="briefcase"></i> Add Provider
+                </button>
+            </div>
+            <div class="glass rounded-xl overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th class="p-4 text-left">Provider</th>
+                            <th class="p-4 text-left">Services</th>
+                            <th class="p-4 text-left">Payout Rate</th>
+                            <th class="p-4 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="providersTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Compliance Section -->
+        <section class="scroll-mt-24" id="compliance">
+            <h2 class="text-2xl font-bold mb-4">Compliance</h2>
+            <div class="glass rounded-xl p-6 space-y-3">
+                <p class="text-gray-300">GDPR, audit log, roles, KYC/AML, legal docs.</p>
+                <button class="px-4 py-2 glass rounded-lg hover-lift btn-ripple" id="openLegal">
+                    <i class="w-4 h-4 inline" data-lucide="scale"></i> Open legal checklist
+                </button>
+            </div>
+        </section>
+
+        <!-- Account Section -->
+        <section class="scroll-mt-24" id="account">
+            <h2 class="text-2xl font-bold mb-4">Account</h2>
+            <div class="glass rounded-xl p-6 space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+                    <div>
+                        <div class="font-bold">Ivan Petrov (demo)</div>
+                        <div class="text-sm text-gray-400">admin@portal.global</div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button class="px-4 py-2 glass rounded-lg hover-lift btn-ripple" id="changePlan">Change plan</button>
+                    <button class="px-4 py-2 glass rounded-lg hover-lift btn-ripple" id="logoutBtn">
+                        <i class="w-4 h-4 inline" data-lucide="log-out"></i> Log out (demo)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cabinet Section (Russian) -->
+        <section class="scroll-mt-24" id="cabinet">
+            <div class="glass rounded-2xl overflow-hidden">
+                <div class="glass-dark border-b border-gray-800 px-6 py-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600"></div>
+                        <h2 class="text-2xl font-bold gradient-text">╨┐├╖╨┐┬╖╨┐тХР╨┐тХТ╨┐тЦС╨┐тМб ╨┐тЙИ╨┐тХЯ╨┐тХи╨┐тХЯ╨┐тХе╨┐тХм╨┐тХб</h2>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="hidden md:inline">╨┐тЙд╨┐тХб╨┐тХЯ╨┐тХл ╨┐├╖╨┐тХг╤ПтФМ╤ПтФА╨┐тХм╨┐тХб</span>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <section class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-bold mb-4">╨┐├╖╨┐тХм╤ПтФВ╨┐тХй╨┐тХг╨┐тХв╨┐тХл╨┐тХж╨┐тХг ╨┐тХе╨┐тХЯ╨┐тХи╨┐тХЯ╨┐тХе╤ПтЦА</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-4 bg-gray-800/50 rounded-lg">
+                                    <div>
+                                        <p class="font-medium">#ORD-7842</p>
+                                        <p class="text-sm text-gray-400">╨┐тЦУ╨┐тХг╨┐тХа-╤ПтФА╨┐тХЯ╨┐тХе╤ПтФА╨┐тХЯ╨┐тХа╨┐тХм╤ПтФМ╨┐тХи╨┐тХЯ ╨┐тХй╨┐тХг╨┐тХл╨┐тХв╨┐тХж╨┐тХл╨┐╨Б╨┐тХЯ</p>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-sm bg-green-900/30 text-green-400">╨┐тЦУ╤ПтЦА╨┐┬й╨┐тХм╨┐тХй╨┐тХл╨┐тХг╨┐тХл</span>
+                                </div>
+                                <div class="flex justify-between items-center p-4 bg-gray-800/50 rounded-lg">
+                                    <div>
+                                        <p class="font-medium">#ORD-7843</p>
+                                        <p class="text-sm text-gray-400">╨┐тХТ╨┐тХг╤ПтФШ╨┐тХл╨┐тХж╤ПтФд╨┐тХг╤ПтФВ╨┐тХи╨┐тХЯ╤ПтЦР ╨┐┬й╨┐тХм╨┐тХв╨┐тХв╨┐тХг╤ПтФА╨┐тХд╨┐тХи╨┐тХЯ</p>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-sm bg-yellow-900/30 text-yellow-400">╨┐тЦУ ╤ПтФА╨┐тХЯ╨┐тХа╨┐тХм╤ПтФМ╨┐тХг</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-bold mb-4">╨┐┬а╨┐тХЯ╨┐тХи ╤ПтФВ╨┐тХв╨┐тХг╨┐тХй╨┐тХЯ╤ПтФМ╤ПтЦД ╨┐тХе╨┐тХЯ╨┐тХи╨┐тХЯ╨┐тХе ╤ПтФд╨┐тХг╤ПтФА╨┐тХг╨┐тХе ╨┐тЙд╨┐тЙд-╨┐┬й╨┐тХм╨┐тХк╨┐тХм╤ПтФ┤╨┐тХл╨┐тХж╨┐тХи?</h3>
+                            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+                                <li>╨┐┬▓╨┐тХЯ╨┐тХд╨┐тХк╨┐тХж╤ПтФМ╨┐тХг ╨┐тХл╨┐тХЯ ╨┐тХж╨┐тХи╨┐тХм╨┐тХл╨┐тХи╤ПтФР ╤ПтФд╨┐тХЯ╤ПтФМ╨┐тХЯ ╨┐тХб ╨┐┬й╤ПтФА╨┐тХЯ╨┐тХб╨┐тХм╨┐тХк ╨┐тХл╨┐тХж╨┐тХд╨┐тХл╨┐тХг╨┐тХк ╤ПтФР╨┐╨Б╨┐тХй╤ПтФР.</li>
+                                <li>╨┐┬╖╨┐┬й╨┐тХж╤ПтФм╨┐тХж╤ПтФМ╨┐тХг, ╤ПтФд╤ПтФМ╨┐тХм ╨┐тХб╨┐тХЯ╨┐тХк ╨┐тХл╤ПтФР╨┐тХд╨┐тХл╨┐тХм, ╨┐┬й╤ПтФА╨┐тХм╤ПтФВ╤ПтФМ╤ПтЦА╨┐тХк╨┐тХж ╤ПтФВ╨┐тХй╨┐тХм╨┐тХб╨┐тХЯ╨┐тХк╨┐тХж.</li>
+                                <li>╨┐тЦС╤ПтФВ╤ПтФВ╨┐тХж╤ПтФВ╤ПтФМ╨┐тХг╨┐тХл╤ПтФМ ╤ПтФР╤ПтФМ╨┐тХм╤ПтФд╨┐тХл╨┐тХж╤ПтФМ ╨┐тХв╨┐тХг╤ПтФМ╨┐тХЯ╨┐тХй╨┐тХж ╨┐тХж ╨┐┬й╨┐тХм╨┐тХк╨┐тХм╨┐тХд╨┐тХг╤ПтФМ ╨┐тХм╤ПтФФ╨┐тХм╤ПтФА╨┐тХк╨┐тХж╤ПтФМ╤ПтЦД ╨┐тХе╨┐тХЯ╤ПтЦР╨┐тХб╨┐тХи╤ПтФР.</li>
+                                <li>╨┐тХС╤ПтФМ╨┐тХЯ╤ПтФМ╤ПтФР╤ПтФВ ╨┐┬й╨┐тХм╤ПтЦР╨┐тХб╨┐тХж╤ПтФМ╤ПтФВ╤ПтЦР ╨┐тХб ╤ПтФА╨┐тХЯ╨┐тХе╨┐тХв╨┐тХг╨┐тХй╨┐тХг "╨┐├╖╨┐тХм╤ПтФВ╨┐тХй╨┐тХг╨┐тХв╨┐тХл╨┐тХж╨┐тХг ╨┐тХе╨┐тХЯ╨┐тХи╨┐тХЯ╨┐тХе╤ПтЦА".</li>
+                            </ol>
+                        </section>
+                    </div>
+                    <div class="space-y-6">
+                        <section class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-bold mb-4">╨┐тЦУ╨┐тХЯ╤ПтФм╨┐тХЯ ╤ПтФВ╤ПтФМ╨┐тХЯ╤ПтФМ╨┐тХж╤ПтФВ╤ПтФМ╨┐тХж╨┐тХи╨┐тХЯ</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-gray-400">╨┐тЦУ╤ПтФВ╨┐тХг╨┐╨Б╨┐тХм ╨┐тХе╨┐тХЯ╨┐тХи╨┐тХЯ╨┐тХе╨┐тХм╨┐тХб</p>
+                                    <p class="text-3xl font-bold">14</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">╨┐тЦС╨┐тХи╤ПтФМ╨┐тХж╨┐тХб╨┐тХл╤ПтЦА╤ПтФШ</p>
+                                    <p class="text-3xl font-bold">2</p>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-bold mb-4">╨┐тЙд╨┐тЙд-╨┐┬й╨┐тХм╨┐тХк╨┐тХм╤ПтФ┤╨┐тХл╨┐тХж╨┐тХи ╨┐┬й╨┐тХм ╨┐тХе╨┐тХЯ╨┐тХи╨┐тХЯ╨┐тХе╨┐тХЯ╨┐тХк</h3>
+                            <p class="text-gray-400 mb-4">╨┐тЙИ╨┐тХв╨┐тХг╤ПтФВ╤ПтЦД ╨┐┬й╨┐тХм╤ПтЦР╨┐тХб╨┐тХж╤ПтФМ╤ПтФВ╤ПтЦР ╤ПтФР╨┐тХк╨┐тХл╤ПтЦА╨┐тХз ╤ПтФд╨┐тХЯ╤ПтФМ-╨┐тХб╨┐тХж╨┐тХв╨┐тХд╨┐тХг╤ПтФМ (Elfsight/Umnico/╤ПтФВ╨┐тХб╨┐тХм╨┐тХз).</p>
+                            <div class="min-h-[200px] border-2 border-dashed border-gray-700 rounded-lg flex items-center justify-center text-gray-500" id="ai-chat-widget-container">
+                                <div class="text-center p-4">
+                                    <i class="fas fa-robot text-4xl mb-2"></i>
+                                    <p>╨┐тЙИ╨┐тХв╨┐тХг╤ПтФВ╤ПтЦД ╨┐тХа╤ПтФР╨┐тХв╨┐тХг╤ПтФМ ╨┐тЙд╨┐тЙд-╨┐тХЯ╤ПтФВ╤ПтФВ╨┐тХж╤ПтФВ╤ПтФМ╨┐тХг╨┐тХл╤ПтФМ</p>
+                                    <p class="text-sm mt-2">(╨┐┬а╨┐тХм╨┐тХв ╨┐тХб╨┐тХж╨┐тХв╨┐тХд╨┐тХг╤ПтФМ╨┐тХЯ ╨┐тХб╤ПтФВ╤ПтФМ╨┐тХЯ╨┐тХб╨┐тХй╤ПтЦР╨┐тХг╤ПтФМ╤ПтФВ╤ПтЦР ╤ПтФВ╤ПтЦМ╨┐тХв╨┐тХЯ)</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 py-4 text-center text-gray-500 text-sm">
+                    ╨▒тХШ 2023╨СтФАтМа2025 ╨┐├╖╨┐тХм╤ПтФА╤ПтФМ╨┐тХЯ╨┐тХй ╨┐тХе╨┐тХЯ╨┐тХи╨┐тХЯ╨┐тХе╨┐тХм╨┐тХб. ╨┐тЦУ╨┐тХЯ╤ПтФм ╨┐тХй╨┐тХж╤ПтФд╨┐тХл╤ПтЦА╨┐тХз ╨┐тХи╨┐тХЯ╨┐тХа╨┐тХж╨┐тХл╨┐тХг╤ПтФМ ╤ПтФВ ╨┐тХж╨┐тХл╤ПтФМ╨┐тХг╨┐тХй╨┐тХй╨┐тХг╨┐тХи╤ПтФМ╤ПтФР╨┐тХЯ╨┐тХй╤ПтЦД╨┐тХл╤ПтЦА╨┐тХк ╨┐┬й╨┐тХм╨┐тХк╨┐тХм╤ПтФ┤╨┐тХл╨┐тХж╨┐тХи╨┐тХм╨┐тХк.
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section>
+            <h2 class="text-2xl font-bold mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button class="glass p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple" id="exportData">
+                    <i class="w-8 h-8 mb-2" data-lucide="download"></i>
+                    <span>Export Data (JSON)</span>
+                </button>
+                <button class="glass p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple" id="runReport">
+                    <i class="w-8 h-8 mb-2" data-lucide="file-text"></i>
+                    <span>Generate Report</span>
+                </button>
+                <button class="glass p-6 rounded-xl hover-lift active:scale-95 flex flex-col items-center justify-center btn-ripple" id="systemCheck">
+                    <i class="w-8 h-8 mb-2" data-lucide="shield-check"></i>
+                    <span>System Health</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4" id="modal">
+        <div class="glass-dark rounded-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="modalTitle">Modal Title</h3>
+                <button class="p-2 hover:bg-gray-800 rounded-lg btn-ripple" id="closeModal">
+                    <i class="w-5 h-5" data-lucide="x"></i>
+                </button>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-dark border-t border-gray-800 px-6 py-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="font-bold mb-4 gradient-text">PORTAL Global</h3>
+                    <p class="text-gray-400 text-sm">Multi-tenant service automation platform for modern businesses.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><button class="nav-btn hover:text-white transition text-left" data-section="dashboard">Dashboard</button></li>
+                        <li><button class="nav-btn hover:text-white transition text-left" data-section="orders">Orders</button></li>
+                        <li><button class="nav-btn hover:text-white transition text-left" data-section="automation">Automation</button></li>
+                        <li><button class="nav-btn hover:text-white transition text-left" data-section="pricing">Pricing</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><button class="modal-btn hover:text-white transition text-left" data-modal="about">About</button></li>
+                        <li><button class="modal-btn hover:text-white transition text-left" data-modal="blog">Blog</button></li>
+                        <li><button class="modal-btn hover:text-white transition text-left" data-modal="careers">Careers</button></li>
+                        <li><button class="nav-btn hover:text-white transition text-left" data-section="compliance">╨С┬атИЪ╨ЮтХжтЦР Legal</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <button class="social-btn p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-platform="twitter">
+                            <i class="w-5 h-5" data-lucide="twitter"></i>
+                        </button>
+                        <button class="social-btn p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-platform="linkedin">
+                            <i class="w-5 h-5" data-lucide="linkedin"></i>
+                        </button>
+                        <button class="social-btn p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-platform="github">
+                            <i class="w-5 h-5" data-lucide="github"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-gray-400 pt-8 border-t border-gray-800 text-sm">
+                <p>╨▒тХШ 2025 PORTAL Global GmbH. All rights reserved. Made with ╨С┬атХС╨ЮтХжтЦР in Berlin ╨Я├╖тФдтХШ╨Я├╖тФдтХЩ</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Global state
+        const STORAGE_KEY = 'portal_global_unified_v2';
+        let clients = [
+            { id: 1, name: "TechCorp Inc.", mrr: 2500, status: "active" },
+            { id: 2, name: "StartupXYZ", mrr: 800, status: "active" },
+            { id: 3, name: "Global Retail", mrr: 4200, status: "active" },
+            { id: 4, name: "CloudNet", mrr: 1500, status: "inactive" }
+        ];
+
+        let providers = [
+            { id: 1, name: "Cloud Services Co.", services: ["Hosting", "CDN"], payoutRate: 75 },
+            { id: 2, name: "DevOps Team", services: ["Monitoring", "Automation"], payoutRate: 82 },
+            { id: 3, name: "Security Pro", services: ["SSL", "Firewall"], payoutRate: 68 }
+        ];
+
+        // Authentication system
+        const auth = {
+            login: async (email, password) => {
+                try {
+                    // Simulate API call
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            localStorage.setItem('jwt', 'demo_token_12345');
+                            localStorage.setItem('userRole', 'admin');
+                            localStorage.setItem('userId', '1');
+                            localStorage.setItem('userName', 'Ivan Petrov');
+                            localStorage.setItem('userEmail', email);
+                            localStorage.setItem('userAvatar', 'https://picsum.photos/seed/user/32/32');
+                            console.log('Login successful!');
+                            resolve(true);
+                        }, 1000);
+                    });
+                } catch (error) {
+                    console.error('Login failed:', error);
+                    return false;
+                }
+            },
+            
+            logout: () => {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userAvatar');
+                console.log('Logged out successfully');
+                showModal('Logged Out', '<p class="text-gray-300">You have been logged out successfully.</p>');
+            },
+            
+            getToken: () => localStorage.getItem('jwt'),
+            getRole: () => localStorage.getItem('userRole'),
+            isAuthenticated: () => !!localStorage.getItem('jwt'),
+            getUserId: () => localStorage.getItem('userId'),
+            getUserName: () => localStorage.getItem('userName'),
+            getUserEmail: () => localStorage.getItem('userEmail'),
+            getUserAvatar: () => localStorage.getItem('userAvatar'),
+            
+            validateRole: (requiredRole) => {
+                const userRole = localStorage.getItem('userRole');
+                return userRole === requiredRole;
+            },
+            
+            hasPermission: (permission) => {
+                const role = localStorage.getItem('userRole');
+                const permissions = {
+                    'owner': ['read', 'write', 'admin', 'billing', 'compliance'],
+                    'client': ['read', 'write', 'billing'],
+                    'worker': ['read', 'write']
+                };
+                return permissions[role]?.includes(permission) || false;
+            }
+        };
+
+        // Initialize charts
+        function initCharts() {
+            // Progress Chart
+            const progressCtx = document.getElementById('progressChart')?.getContext('2d');
+            if (progressCtx) {
+                new Chart(progressCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Completed', 'In Progress', 'Planning'],
+                        datasets: [{
+                            data: [45, 35, 20],
+                            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#9ca3af' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart')?.getContext('2d');
+            if (performanceCtx) {
+                new Chart(performanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Team Efficiency',
+                            data: [65, 72, 78, 82, 88, 92],
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#9ca3af' }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: '#374151' },
+                                ticks: { color: '#9ca3af' }
+                            },
+                            y: {
+                                grid: { color: '#374151' },
+                                ticks: { color: '#9ca3af' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // AI Project Generation
+        async function generateAIProject() {
+            const idea = document.getElementById('projectIdea').value;
+            const output = document.getElementById('aiOutput');
+            
+            if (!idea.trim()) {
+                alert('Please describe your project idea');
+                return;
+            }
+
+            output.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-400">Generating project plan...</p>
+                </div>
+            `;
+
+            // Simulate AI processing
+            setTimeout(() => {
+                output.innerHTML = `
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold">AI-Generated Project Plan</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Project Name:</span>
+                                <span class="font-medium">${idea.split(' ').slice(0, 3).join(' ')} Platform</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Timeline:</span>
+                                <span class="font-medium">3-4 months</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Team Size:</span>
+                                <span class="font-medium">5-8 developers</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Budget:</span>
+                                <span class="font-medium">$50,000 - $75,000</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Risk Level:</span>
+                                <span class="font-medium text-yellow-500">Medium</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-gray-700">
+                            <p class="text-sm text-gray-400 mb-3">AI Recommendations:</p>
+                            <ul class="text-sm space-y-2">
+                                <li>╨СтФАтХТ Start with MVP development</li>
+                                <li>╨СтФАтХТ Focus on core user flows</li>
+                                <li>╨СтФАтХТ Implement agile methodology</li>
+                            </ul>
+                        </div>
+                        <button class="w-full py-2 gradient-primary rounded-lg mt-4 hover-lift" onclick="createProjectFromAI()">
+                            Create Project
+                        </button>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function createProjectFromAI() {
+            showModal('Project Created', '<p class="text-gray-300">Project has been successfully created and added to your active projects!</p>');
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            
+            if (input.value.trim() === '') return;
+
+            // Add user message
+            messages.innerHTML += `
+                <div class="chat-bubble chat-user">
+                    ${escapeHtml(input.value)}
+                </div>
+            `;
+
+            const userMessage = input.value;
+            input.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = [
+                    "I'll help you with that! Let me analyze your requirements...",
+                    "Based on your project history, I recommend focusing on critical path first.",
+                    "I've updated your project timeline to better reflect current progress.",
+                    "Great question! Here are some resources that might help...",
+                    "I can help you optimize that workflow. Let me suggest some improvements.",
+                    "Based on your team's performance data, I recommend adjusting the timeline."
+                ];
+                
+                messages.innerHTML += `
+                    <div class="chat-bubble chat-ai">
+                        ${responses[Math.floor(Math.random() * responses.length)]}
+                    </div>
+                `;
+                
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // Pricing calculator
+        function updatePricing() {
+            const teamSize = document.getElementById('calcTeamSize')?.value;
+            const projects = document.getElementById('calcProjects')?.value;
+            const storage = document.getElementById('calcStorage')?.value;
+
+            if (!teamSize || !projects || !storage) return;
+
+            let recommendedPrice = 9;
+            let recommendation = 'Starter Plan';
+
+            if (teamSize > 10 || projects > 20 || storage > 100) {
+                recommendedPrice = 25;
+                recommendation = 'Professional Plan';
+            }
+
+            if (teamSize > 50 || projects > 100 || storage > 500) {
+                recommendedPrice = 99;
+                recommendation = 'Enterprise Plan';
+            }
+
+            const priceElement = document.getElementById('recommendedPrice');
+            const planElement = document.getElementById('planRecommendation');
+            
+            if (priceElement) priceElement.textContent = `$${recommendedPrice}/month`;
+            if (planElement) planElement.textContent = recommendation;
+        }
+
+        // Filter projects
+        function filterProjects(category) {
+            const buttons = document.querySelectorAll('#projects button');
+            const cards = document.querySelectorAll('.project-card');
+            
+            buttons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(category) || 
+                    (category === 'all' && btn.textContent.includes('All'))) {
+                    btn.classList.add('bg-blue-600');
+                    btn.classList.remove('glass');
+                } else {
+                    btn.classList.remove('bg-blue-600');
+                    btn.classList.add('glass');
+                }
+            });
+
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    // Simple filtering logic
+                    card.style.display = 'block';
+                }
+            });
+        }
+
+        // Business Metrics Functions
+        function safeDiv(a, b) {
+            if (!b || b === 0) return 0;
+            return a / b;
+        }
+
+        function calculateMRR() {
+            return clients.reduce((sum, c) => sum + (Number(c.mrr) || 0), 0);
+        }
+
+        function calculateARPU() {
+            return safeDiv(calculateMRR(), clients.length);
+        }
+
+        function calculateChurn() {
+            const inactive = clients.filter(c => c.status === "inactive").length;
+            return (safeDiv(inactive, clients.length) * 100).toFixed(1);
+        }
+
+        function calculateLTV() {
+            const avgMRR = calculateARPU();
+            const avgLifespan = 24;
+            return avgMRR * avgLifespan;
+        }
+
+        function calculateNetRevenue() {
+            const mrr = calculateMRR();
+            const providerCosts = providers.reduce((sum, p) => sum + (safeDiv(p.payoutRate, 100) * 5000), 0);
+            return mrr - providerCosts;
+        }
+
+        function calculateProviderPayoutRate() {
+            return safeDiv(
+                providers.reduce((sum, p) => sum + (Number(p.payoutRate) || 0), 0),
+                providers.length
+            ).toFixed(1);
+        }
+
+        function updateMetrics() {
+            const ltv = calculateLTV();
+            const churn = calculateChurn();
+            const arpu = calculateARPU();
+            const active = clients.filter(c => c.status === "active").length;
+            const mrr = calculateMRR();
+            const netRevenue = calculateNetRevenue();
+            const avgPayout = calculateProviderPayoutRate();
+
+            document.getElementById('ltv').textContent = `$${ltv.toFixed(2)}`;
+            document.getElementById('churn').textContent = `${churn}%`;
+            document.getElementById('arpu').textContent = `$${arpu.toFixed(2)}`;
+            document.getElementById('activeClients').textContent = active;
+            document.getElementById('mrr').textContent = `$${mrr.toFixed(2)}`;
+            document.getElementById('netRevenue').textContent = `$${netRevenue.toFixed(2)}`;
+            document.getElementById('avgPayout').textContent = `${avgPayout}%`;
+        }
+
+        function updateMetricsWithAnimation() {
+            const metrics = ['ltv', 'churn', 'arpu', 'activeClients', 'mrr', 'netRevenue', 'avgPayout'];
+            metrics.forEach(metric => {
+                const element = document.getElementById(metric);
+                if (element) {
+                    element.classList.add('shimmer');
+                    setTimeout(() => element.classList.remove('shimmer'), 450);
+                }
+            });
+            updateMetrics();
+        }
+
+        // Client Management
+        function renderClientsTable() {
+            const tbody = document.getElementById('clientsTable');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+
+            clients.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = 'border-t border-gray-800 hover:bg-gray-800/50';
+                row.innerHTML = `
+                    <td class="p-4">
+                        <div class="font-semibold">${escapeHtml(client.name)}</div>
+                        <div class="text-sm text-gray-400">ID: ${client.id}</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="font-semibold">$${Number(client.mrr).toFixed(0)}</div>
+                        <div class="text-sm text-gray-400">monthly</div>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-sm ${client.status === 'active' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}">
+                            ${client.status}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex gap-2">
+                            <button class="edit-client p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-id="${client.id}">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button class="toggle-client p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-id="${client.id}">
+                                <i data-lucide="${client.status === 'active' ? 'pause' : 'play'}" class="w-4 h-4"></i>
+                            </button>
+                            <button class="delete-client p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-id="${client.id}">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Reattach event listeners
+            document.querySelectorAll('.edit-client').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = Number(e.currentTarget.dataset.id);
+                    const client = clients.find(c => c.id === id);
+                    showModal(`Edit Client #${id}`, renderEditClientForm(client));
+                    wireEditClientForm(id);
+                });
+            });
+
+            document.querySelectorAll('.toggle-client').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = Number(e.currentTarget.dataset.id);
+                    const c = clients.find(x => x.id === id);
+                    c.status = c.status === 'active' ? 'inactive' : 'active';
+                    updateUI();
+                });
+            });
+
+            document.querySelectorAll('.delete-client').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = Number(e.currentTarget.dataset.id);
+                    if (confirm(`Delete client #${id}?`)) {
+                        clients = clients.filter(c => c.id !== id);
+                        updateUI();
+                    }
+                });
+            });
+        }
+
+        function renderProvidersTable() {
+            const tbody = document.getElementById('providersTable');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+
+            providers.forEach(provider => {
+                const row = document.createElement('tr');
+                row.className = 'border-t border-gray-800 hover:bg-gray-800/50';
+                row.innerHTML = `
+                    <td class="p-4">
+                        <div class="font-semibold">${escapeHtml(provider.name)}</div>
+                        <div class="text-sm text-gray-400">ID: ${provider.id}</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex flex-wrap gap-2">
+                            ${(provider.services || []).map(s => `<span class="px-2 py-1 bg-blue-900/30 text-blue-400 rounded text-sm">${escapeHtml(s)}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="font-semibold">${Number(provider.payoutRate).toFixed(1)}%</div>
+                        <div class="text-sm text-gray-400">payout</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex gap-2">
+                            <button class="edit-provider p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-id="${provider.id}">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button class="adjust-payout p-2 glass rounded-lg hover-lift active:scale-95 btn-ripple" data-id="${provider.id}">
+                                <i data-lucide="percent" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Reattach event listeners
+            document.querySelectorAll('.edit-provider').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = Number(e.currentTarget.dataset.id);
+                    const p = providers.find(x => x.id === id);
+                    showModal(`Edit Provider #${id}`, renderEditProviderForm(p));
+                    wireEditProviderForm(id);
+                });
+            });
+
+            document.querySelectorAll('.adjust-payout').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = Number(e.currentTarget.dataset.id);
+                    const provider = providers.find(p => p.id === id);
+                    const newRate = prompt(`Adjust payout rate for ${provider.name} (current: ${provider.payoutRate}%):`, provider.payoutRate);
+                    if (newRate !== null && newRate !== '' && !isNaN(newRate)) {
+                        provider.payoutRate = Number(newRate);
+                        updateUI();
+                    }
+                });
+            });
+        }
+
+        function updateUI() {
+            updateMetrics();
+            renderClientsTable();
+            renderProvidersTable();
+            lucide.createIcons();
+            initButtonRipples();
+        }
+
+        // Modal system
+        function showModal(title, contentHtml) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').innerHTML = contentHtml;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+            lucide.createIcons();
+            initButtonRipples();
+        }
+
+        function hideModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('modal').classList.remove('flex');
+        }
+
+        // Form rendering
+        function renderEditClientForm(client) {
+            return `
+                <form id="editClientForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm mb-1">Client Name</label>
+                        <input name="name" type="text" class="w-full p-2 glass rounded-lg" value="${escapeAttr(client.name)}" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Monthly Revenue ($)</label>
+                        <input name="mrr" type="number" class="w-full p-2 glass rounded-lg" value="${Number(client.mrr) || 0}" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Status</label>
+                        <select name="status" class="w-full p-2 glass rounded-lg">
+                            <option value="active" ${client.status === 'active' ? 'selected' : ''}>active</option>
+                            <option value="inactive" ${client.status === 'inactive' ? 'selected' : ''}>inactive</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover-lift btn-ripple">
+                        Save
+                    </button>
+                </form>
+            `;
+        }
+
+        function wireEditClientForm(id) {
+            const form = document.getElementById('editClientForm');
+            if (!form) return;
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const c = clients.find(x => x.id === id);
+                c.name = String(fd.get('name') || '').trim();
+                c.mrr = Number(fd.get('mrr') || 0);
+                c.status = String(fd.get('status') || 'active');
+                updateUI();
+                hideModal();
+            });
+        }
+
+        function renderEditProviderForm(provider) {
+            return `
+                <form id="editProviderForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm mb-1">Provider Name</label>
+                        <input name="name" type="text" class="w-full p-2 glass rounded-lg"
+                               value="${escapeAttr(provider.name)}" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Services (comma-separated)</label>
+                        <input name="services" type="text" class="w-full p-2 glass rounded-lg"
+                               value="${escapeAttr((provider.services || []).join(', '))}" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Payout Rate (%)</label>
+                        <input name="payoutRate" type="number" step="0.1"
+                               class="w-full p-2 glass rounded-lg"
+                               value="${Number(provider.payoutRate) || 0}" required>
+                    </div>
+                    <button type="submit"
+                            class="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg hover-lift btn-ripple">
+                        Save
+                    </button>
+                </form>
+            `;
+        }
+
+        function wireEditProviderForm(id) {
+            const form = document.getElementById('editProviderForm');
+            if (!form) return;
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const p = providers.find(x => x.id === id);
+                p.name = String(fd.get('name') || '').trim();
+                p.services = String(fd.get('services') || '')
+                    .split(',')
+                    .map(s => s.trim())
+                    .filter(Boolean);
+                p.payoutRate = Number(fd.get('payoutRate') || 0);
+                updateUI();
+                hideModal();
+            });
+        }
+
+        // Utility functions
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, (m) => ({
+                '&':'&','<':'<','>':'>','"':'"',"'":'''
+            }[m]));
+        }
+
+        function escapeAttr(str) {
+            return escapeHtml(str).replace(/"/g, '"');
+        }
+
+        function nextId(arr) {
+            const max = arr.reduce((m, x) => Math.max(m, Number(x.id) || 0), 0);
+            return max + 1;
+        }
+
+        function downloadFile(filename, content, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        // Particle System
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
+
+            particlesContainer.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Button Ripples
+        function initButtonRipples() {
+            document.querySelectorAll('.btn-ripple').forEach(btn => {
+                if (btn.dataset.rippleInit === '1') return;
+                btn.dataset.rippleInit = '1';
+
+                btn.addEventListener('click', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const ripple = document.createElement('div');
+                    ripple.style.position = 'absolute';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.style.width = '0';
+                    ripple.style.height = '0';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.transform = 'translate(-50%, -50%)';
+                    ripple.style.background = 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)';
+                    ripple.style.animation = 'rippleEffect 0.6s ease-out';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        }
+
+        // Initialize all enhancements
+        function initializeEnhancements() {
+            // Load saved state
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.clients) clients = data.clients;
+                    if (data.providers) providers = data.providers;
+                }
+            } catch (e) {
+                console.warn('Failed to load saved state');
+            }
+
+            initParticles();
+            initCharts();
+            updatePricing();
+            updateUI();
+            initButtonRipples();
+
+            // Auto login demo user
+            if (!auth.isAuthenticated()) {
+                auth.login('admin@portal.global', 'demo123');
+            }
+
+            // Handle hash navigation
+            const hash = (location.hash || '').replace('#', '');
+            if (hash && document.getElementById(hash)) {
+                setTimeout(() => {
+                    document.getElementById(hash).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setActiveNav(hash);
+                }, 50);
+            } else {
+                setActiveNav('dashboard');
+            }
+
+            // Save state before unload
+            window.addEventListener('beforeunload', () => {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ clients, providers }));
+            });
+
+            console.log('╨Я├╖┬атФА PORTAL Global Unified Platform initialized');
+        }
+
+        // Navigation
+        function setActiveNav(sectionId) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
+            document.querySelectorAll(`.nav-btn[data-section="${sectionId}"]`).forEach(b => b.classList.add('nav-active'));
+        }
+
+        // Theme toggle
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            const body = document.body;
+            const icon = document.querySelector('#themeToggle i');
+
+            const isDark = body.classList.contains('bg-gray-900');
+            if (isDark) {
+                body.classList.remove('bg-gray-900', 'text-white');
+                body.classList.add('bg-gray-50', 'text-gray-900', 'theme-light');
+                icon?.setAttribute('data-lucide', 'sun');
+            } else {
+                body.classList.remove('bg-gray-50', 'text-gray-900', 'theme-light');
+                body.classList.add('bg-gray-900', 'text-white');
+                icon?.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        });
+
+        // Navigation buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const section = btn.dataset.section;
+                const element = document.getElementById(section);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setActiveNav(section);
+                    history.replaceState(null, '', `#${section}`);
+                }
+            });
+        });
+
+        // Modal buttons
+        document.querySelectorAll('.modal-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modal = btn.dataset.modal;
+                showModal(modal.charAt(0).toUpperCase() + modal.slice(1),
+                    `<p class="text-gray-300">This is the ${modal} section content.</p>`);
+            });
+        });
+
+        // Social buttons
+        document.querySelectorAll('.social-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const platform = btn.dataset.platform;
+                showModal('Connect', `<p class="text-gray-300">Opening ${platform} profile╨СтФАтХХ (demo)</p>`);
+            });
+        });
+
+        // Button event listeners
+        document.getElementById('refreshMetrics')?.addEventListener('click', () => {
+            const icon = document.querySelector('#refreshMetrics i');
+            if (icon) icon.classList.add('animate-spin');
+            updateMetricsWithAnimation();
+            setTimeout(() => icon && icon.classList.remove('animate-spin'), 900);
+        });
+
+        document.getElementById('addClientBtn')?.addEventListener('click', () => {
+            showModal('Add New Client', `
+                <form id="addClientForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm mb-1">Client Name</label>
+                        <input name="name" type="text" class="w-full p-2 glass rounded-lg" placeholder="Enter client name" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Monthly Revenue ($)</label>
+                        <input name="mrr" type="number" class="w-full p-2 glass rounded-lg" placeholder="Enter MRR" required>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover-lift btn-ripple">
+                        Add Client
+                    </button>
+                </form>
+            `);
+
+            document.getElementById('addClientForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const newClient = {
+                    id: nextId(clients),
+                    name: String(fd.get('name') || '').trim(),
+                    mrr: Number(fd.get('mrr') || 0),
+                    status: 'active'
+                };
+                clients.push(newClient);
+                updateUI();
+                hideModal();
+            });
+        });
+
+        document.getElementById('addProviderBtn')?.addEventListener('click', () => {
+            showModal('Add New Provider', `
+                <form id="addProviderForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm mb-1">Provider Name</label>
+                        <input name="name" type="text" class="w-full p-2 glass rounded-lg" placeholder="Enter provider name" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Services (comma-separated)</label>
+                        <input name="services" type="text" class="w-full p-2 glass rounded-lg" placeholder="Hosting, CDN, Monitoring" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Payout Rate (%)</label>
+                        <input name="payoutRate" type="number" step="0.1" class="w-full p-2 glass rounded-lg" placeholder="75" required>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg hover-lift btn-ripple">
+                        Add Provider
+                    </button>
+                </form>
+            `);
+
+            document.getElementById('addProviderForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const newProvider = {
+                    id: nextId(providers),
+                    name: String(fd.get('name') || '').trim(),
+                    services: String(fd.get('services') || '')
+                        .split(',')
+                        .map(s => s.trim())
+                        .filter(Boolean),
+                    payoutRate: Number(fd.get('payoutRate') || 0)
+                };
+                providers.push(newProvider);
+                updateUI();
+                hideModal();
+            });
+        });
+
+        document.getElementById('exportData')?.addEventListener('click', () => {
+            const data = {
+                exportedAt: new Date().toISOString(),
+                clients,
+                providers,
+                metrics: {
+                    ltv: calculateLTV(),
+                    churn: Number(calculateChurn()),
+                    arpu: calculateARPU(),
+                    mrr: calculateMRR(),
+                    netRevenue: calculateNetRevenue(),
+                    avgProviderPayout: Number(calculateProviderPayoutRate())
+                }
+            };
+            downloadFile('portal-export.json', JSON.stringify(data, null, 2), 'application/json');
+        });
+
+        document.getElementById('runReport')?.addEventListener('click', () => {
+            showModal('Monthly Report', `
+                <div class="space-y-4">
+                    <div class="p-4 glass rounded-lg">
+                        <h4 class="font-bold mb-2">Executive Summary</h4>
+                        <p class="text-gray-300">Total MRR: $${calculateMRR().toFixed(2)}</p>
+                        <p class="text-gray-300">Active Clients: ${clients.filter(c => c.status === 'active').length}</p>
+                        <p class="text-gray-300">Churn Rate: ${calculateChurn()}%</p>
+                        <p class="text-gray-300">Net Revenue (demo): $${calculateNetRevenue().toFixed(2)}</p>
+                    </div>
+                    <button id="printReport" class="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover-lift btn-ripple">
+                        Print / Save as PDF
+                    </button>
+                </div>
+            `);
+
+            document.getElementById('printReport')?.addEventListener('click', () => window.print());
+        });
+
+        document.getElementById('systemCheck')?.addEventListener('click', () => {
+            const status = Math.random() > 0.2 ? 'healthy' : 'degraded';
+            showModal('System Health Check', `
+                <div class="space-y-4">
+                    <div class="p-4 ${status === 'healthy' ? 'bg-green-900/30' : 'bg-yellow-900/30'} rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="${status === 'healthy' ? 'check-circle' : 'alert-triangle'}"
+                               class="w-5 h-5 ${status === 'healthy' ? 'text-green-400' : 'text-yellow-400'}"></i>
+                            <span class="font-bold">System Status: ${status === 'healthy' ? 'All Systems Operational' : 'Performance Degraded'}</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-3 glass rounded-lg text-center">
+                            <div class="text-sm text-gray-400">API Latency</div>
+                            <div class="font-bold">${(Math.random() * 100).toFixed(1)}ms</div>
+                        </div>
+                        <div class="p-3 glass rounded-lg text-center">
+                            <div class="text-sm text-gray-400">Uptime</div>
+                            <div class="font-bold">99.${Math.floor(Math.random() * 99)}%</div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+
+        document.getElementById('automationDemo')?.addEventListener('click', () => {
+            showModal('Automation Workflow', `
+                <div class="space-y-4">
+                    <p class="text-gray-300">Running demo automation workflow...</p>
+                    <div class="p-4 bg-gray-800 rounded-lg">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span>Trigger: New order received</span>
+                        </div>
+                        <div class="flex items-center space-x-2 mb-2">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span>Action: Create project in Jira</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                            <span>Action: Send notification to team</span>
+                        </div>
+                    </div>
+                    <p class="text-green-400">╨С┬░тМа Workflow completed successfully</p>
+                </div>
+            `);
+        });
+
+        document.getElementById('openLegal')?.addEventListener('click', () => {
+            showModal('Legal Checklist', `
+                <ul class="list-disc pl-5 text-gray-300 space-y-2">
+                    <li>GDPR compliance: ╨С┬░тМа Completed</li>
+                    <li>Data processing agreement: ╨С┬░тМа Signed</li>
+                    <li>Audit log: ╨С┬░тМа Enabled</li>
+                    <li>Roles & permissions: ╨С┬░тМа Configured</li>
+                    <li>KYC/AML procedures: ╨С┬░тМа In place</li>
+                    <li>DPAs with providers: ╨С┬░тМа Completed</li>
+                </ul>
+            `);
+        });
+
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            auth.logout();
+        });
+
+        document.getElementById('changePlan')?.addEventListener('click', () => {
+            showModal('Change Plan', `
+                <div class="space-y-4">
+                    <p class="text-gray-300">Current plan: <strong>Professional</strong></p>
+                    <div class="space-y-2">
+                        <button class="w-full p-3 glass rounded-lg hover-lift">Upgrade to Enterprise</button>
+                        <button class="w-full p-3 glass rounded-lg hover-lift">Downgrade to Starter</button>
+                    </div>
+                </div>
+            `);
+        });
+
+        document.getElementById('createOrderDemo')?.addEventListener('click', () => {
+            showModal('Create New Order', `
+                <form id="createOrderForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm mb-1">Order Title</label>
+                        <input type="text" class="w-full p-2 glass rounded-lg" placeholder="E.g., Website redesign" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Description</label>
+                        <textarea class="w-full p-2 glass rounded-lg h-24" placeholder="Describe the order requirements..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Priority</label>
+                        <select class="w-full p-2 glass rounded-lg">
+                            <option>Low</option>
+                            <option selected>Medium</option>
+                            <option>High</option>
+                            <option>Urgent</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover-lift btn-ripple">
+                        Create Order
+                    </button>
+                </form>
+            `);
+        });
+
+        document.getElementById('openOrderFilter')?.addEventListener('click', () => {
+            showModal('Order Filters', `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm mb-1">Status</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center"><input type="checkbox" class="mr-2"> All</label>
+                            <label class="flex items-center"><input type="checkbox" class="mr-2" checked> Pending</label>
+                            <label class="flex items-center"><input type="checkbox" class="mr-2" checked> In Progress</label>
+                            <label class="flex items-center"><input type="checkbox" class="mr-2"> Completed</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Date Range</label>
+                        <input type="date" class="w-full p-2 glass rounded-lg mb-2">
+                        <input type="date" class="w-full p-2 glass rounded-lg">
+                    </div>
+                    <button class="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg hover-lift btn-ripple">
+                        Apply Filters
+                    </button>
+                </div>
+            `);
+        });
+
+        document.getElementById('closeModal')?.addEventListener('click', hideModal);
+        document.getElementById('modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'modal') hideModal();
+        });
+
+        // Utility functions from first file
+        function toggleNotifications() {
+            showModal('Notifications', `
+                <div class="space-y-3">
+                    <div class="p-3 glass rounded-lg">
+                        <div class="flex justify-between">
+                            <span class="font-medium">New project assigned</span>
+                            <span class="text-xs text-gray-400">2 min ago</span>
+                        </div>
+                        <p class="text-sm text-gray-400">You have been assigned to "Mobile App Redesign"</p>
+                    </div>
+                    <div class="p-3 glass rounded-lg">
+                        <div class="flex justify-between">
+                            <span class="font-medium">Meeting reminder</span>
+                            <span class="text-xs text-gray-400">1 hour ago</span>
+                        </div>
+                        <p class="text-sm text-gray-400">Weekly sync in 30 minutes</p>
+                    </div>
+                    <div class="p-3 glass rounded-lg">
+                        <div class="flex justify-between">
+                            <span class="font-medium">Payment received</span>
+                            <span class="text-xs text-gray-400">3 hours ago</span>
+                        </div>
+                        <p class="text-sm text-gray-400">Invoice #INV-7842 has been paid</p>
+                    </div>
+                </div>
+            `);
+        }
+
+        function toggleTheme() {
+            const current = document.body.classList.contains('theme-light') ? 'light' : 'dark';
+            alert(`${current === 'dark' ? 'Dark' : 'Light'} mode is currently enabled.`);
+        }
+
+        function openProfile() {
+            showModal('Profile Settings', `
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/seed/user/64/64" class="w-16 h-16 rounded-full">
+                        <div>
+                            <h4 class="font-bold">${auth.getUserName() || 'Ivan Petrov'}</h4>
+                            <p class="text-gray-400">${auth.getUserEmail() || 'admin@portal.global'}</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <button class="w-full p-3 glass rounded-lg hover-lift text-left">Edit Profile</button>
+                        <button class="w-full p-3 glass rounded-lg hover-lift text-left">Security Settings</button>
+                        <button class="w-full p-3 glass rounded-lg hover-lift text-left">Billing Information</button>
+                        <button class="w-full p-3 glass rounded-lg hover-lift text-left">Notification Preferences</button>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeEnhancements);
+
+        // Make auth available globally for debugging
+        window.PORTAL = window.PORTAL || {};
+        window.PORTAL.auth = auth;
+        window.PORTAL.clients = clients;
+        window.PORTAL.providers = providers;
+
+        console.log('╨Я├╖┬атФА PORTAL Global Unified Platform fully loaded');
+    </script>
+</body>
+</html>

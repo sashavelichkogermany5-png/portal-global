@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global - Premium Service Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --success: #4CAF50;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --dark: #0f0f0f;
+            --dark-light: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(76, 175, 80, 0.1) 0%, transparent 50%);
+            animation: gradientFloat 20s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes gradientFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(10px, 20px) scale(1.05); }
+            66% { transform: translate(-15px, -10px) scale(0.95); }
+            100% { transform: translate(5px, -15px) scale(1.02); }
+        }
+
+        /* Navigation */
+        .nav-fixed {
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Glass morphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Gradients */
+        .gradient-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .gradient-success {
+            background: linear-gradient(135deg, var(--success), #45a049);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Hover effects */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .mobile-hidden {
+                display: none;
+            }
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid rgba(102, 126, 234, 0.2);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* AI Assistant chat */
+        .chat-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin: 8px 0;
+        }
+
+        .chat-user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-ai {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animated"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-fixed fixed top-0 w-full z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <a href="#" class="text-2xl font-bold gradient-text">PORTAL Global</a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#dashboard" class="text-gray-300 hover:text-white transition">Dashboard</a>
+                    <a href="#projects" class="text-gray-300 hover:text-white transition">Projects</a>
+                    <a href="#ai" class="text-gray-300 hover:text-white transition">AI Assistant</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-white transition">Pricing</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="document.getElementById('loginModal').style.display='flex'" class="px-4 py-2 glass rounded-lg hover-lift">Login</button>
+                <button onclick="document.getElementById('registerModal').style.display='flex'" class="px-4 py-2 gradient-primary rounded-lg hover-lift">Register</button>
+                <button onclick="toggleNotifications()" class="relative p-2 glass rounded-lg hover-lift">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <button onclick="toggleTheme()" class="p-2 glass rounded-lg hover-lift">
+                    <i data-lucide="moon" class="w-5 h-5"></i>
+                </button>
+                <button onclick="openProfile()" class="flex items-center space-x-2 px-4 py-2 gradient-primary rounded-lg hover-lift">
+                    <img src="https://picsum.photos/seed/user/32/32" alt="Profile" class="w-6 h-6 rounded-full">
+                    <span class="hidden md:inline">Profile</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20 min-h-screen">
+        <!-- Hero Dashboard Section -->
+        <section id="dashboard" class="px-6 py-16 fade-in">
+            <div class="max-w-7xl mx-auto">
+                <!-- Welcome Header -->
+                <div class="mb-8 text-center slide-up">
+                    <h1 class="text-5xl font-bold mb-4 gradient-text">Welcome to PORTAL Global</h1>
+                    <p class="text-xl text-gray-400">Your intelligent project management platform</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="glass rounded-xl p-6 hover-lift">
+                        <div class="flex items-center justify-between mb-4">
+                            <i data-lucide="briefcase" class="w-8 h-8 text-blue-500"></i>
+                            <span class="text-sm text-green-500">+12%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2">24</h3>
+                        <p class="text-gray-400">Active Projects</p>
+                    </div>
+                    <div class="glass rounded-xl p-6 hover-lift">
+                        <div class="flex items-center justify-between mb-4">
+                            <i data-lucide="users" class="w-8 h-8 text-green-500"></i>
+                            <span class="text-sm text-green-500">+8%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2">156</h3>
+                        <p class="text-gray-400">Team Members</p>
+                    </div>
+                    <div class="glass rounded-xl p-6 hover-lift">
+                        <div class="flex items-center justify-between mb-4">
+                            <i data-lucide="check-circle" class="w-8 h-8 text-purple-500"></i>
+                            <span class="text-sm text-green-500">+24%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2">89%</h3>
+                        <p class="text-gray-400">Completion Rate</p>
+                    </div>
+                    <div class="glass rounded-xl p-6 hover-lift">
+                        <div class="flex items-center justify-between mb-4">
+                            <i data-lucide="trending-up" class="w-8 h-8 text-orange-500"></i>
+                            <span class="text-sm text-red-500">-3%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2">$2.4M</h3>
+                        <p class="text-gray-400">Revenue</p>
+                    </div>
+                </div>
+
+                <!-- AI Project Creation -->
+                <div class="glass-dark rounded-2xl p-8 mb-8">
+                    <div class="flex items-center mb-6">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-yellow-500 mr-3"></i>
+                        <h2 class="text-2xl font-bold">AI Project Generator</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Describe your project idea</label>
+                            <textarea 
+                                id="projectIdea"
+                                placeholder="Example: Create a mobile app for food delivery with real-time tracking..."
+                                class="w-full h-32 bg-gray-800 rounded-lg p-4 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+                            ></textarea>
+                            <button onclick="generateAIProject()" class="mt-4 w-full md:w-auto px-6 py-3 gradient-primary rounded-lg font-semibold hover-lift">
+                                <i data-lucide="zap" class="inline w-4 h-4 mr-2"></i>
+                                Generate with AI
+                            </button>
+                        </div>
+                        <div id="aiOutput" class="glass rounded-lg p-6 min-h-[200px] flex items-center justify-center">
+                            <div class="text-center text-gray-400">
+                                <i data-lucide="cpu" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                                <p>AI-generated project plan will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-4">Project Progress</h3>
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-4">Team Performance</h3>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="px-6 py-16 glass-dark">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl font-bold mb-8">Active Projects</h2>
+                
+                <!-- Project Templates -->
+                <div class="mb-8">
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <button onclick="filterProjects('all')" class="px-4 py-2 bg-blue-600 rounded-lg">All Projects</button>
+                        <button onclick="filterProjects('tech')" class="px-4 py-2 glass rounded-lg hover-lift">Technology</button>
+                        <button onclick="filterProjects('business')" class="px-4 py-2 glass rounded-lg hover-lift">Business</button>
+                        <button onclick="filterProjects('creative')" class="px-4 py-2 glass rounded-lg hover-lift">Creative</button>
+                    </div>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                        <div class="h-40 bg-gradient-to-br from-blue-500 to-purple-600 p-6">
+                            <h3 class="text-xl font-bold">E-Commerce Platform</h3>
+                            <p class="text-blue-100">Technology</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span class="text-sm text-gray-400">In Progress</span>
+                                </div>
+                                <span class="text-sm font-semibold">75%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <img src="https://picsum.photos/seed/user1/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user2/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user3/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                </div>
+                                <span class="text-sm text-gray-400">Due: Dec 15</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                        <div class="h-40 bg-gradient-to-br from-green-500 to-teal-600 p-6">
+                            <h3 class="text-xl font-bold">Mobile Banking App</h3>
+                            <p class="text-green-100">Finance</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                                    <span class="text-sm text-gray-400">Planning</span>
+                                </div>
+                                <span class="text-sm font-semibold">25%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 25%"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <img src="https://picsum.photos/seed/user4/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user5/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                </div>
+                                <span class="text-sm text-gray-400">Due: Jan 20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                        <div class="h-40 bg-gradient-to-br from-orange-500 to-red-600 p-6">
+                            <h3 class="text-xl font-bold">Brand Campaign</h3>
+                            <p class="text-orange-100">Marketing</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                                    <span class="text-sm text-gray-400">Review</span>
+                                </div>
+                                <span class="text-sm font-semibold">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <img src="https://picsum.photos/seed/user6/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    <img src="https://picsum.photos/seed/user7/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                </div>
+                                <span class="text-sm text-gray-400">Due: Nov 30</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="ai" class="px-6 py-16">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-4">AI Assistant</h2>
+                    <p class="text-gray-400">Your intelligent project management companion</p>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="glass-dark rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-700">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center mr-3">
+                                <i data-lucide="bot" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">PORTAL AI</h3>
+                                <p class="text-sm text-gray-400">Always here to help</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-96 overflow-y-auto p-6" id="chatMessages">
+                        <div class="chat-bubble chat-ai">
+                            Hello! I'm your AI assistant. I can help you with project planning, task management, and answering questions about your projects. How can I assist you today?
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-gray-700">
+                        <div class="flex items-center space-x-4">
+                            <input 
+                                type="text" 
+                                id="chatInput"
+                                placeholder="Ask me anything about your projects..."
+                                class="flex-1 bg-gray-800 rounded-lg px-4 py-3 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+                                onkeypress="if(event.key === 'Enter') sendMessage()"
+                            >
+                            <button onclick="sendMessage()" class="p-3 gradient-primary rounded-lg hover-lift">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="px-6 py-16 glass-dark">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-4">Choose Your Plan</h2>
+                    <p class="text-gray-400">Flexible pricing for teams of all sizes</p>
+                </div>
+
+                <!-- Pricing Calculator -->
+                <div class="glass rounded-2xl p-8 mb-12">
+                    <h3 class="text-xl font-semibold mb-6">Intelligent Pricing Calculator</h3>
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Team Size</label>
+                            <input type="number" id="calcTeamSize" value="10" min="1" max="1000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Projects/Month</label>
+                            <input type="number" id="calcProjects" value="15" min="1" max="1000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Storage (GB)</label>
+                            <input type="number" id="calcStorage" value="50" min="0" max="10000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold" id="recommendedPrice">$25/month</p>
+                        <p class="text-gray-400" id="planRecommendation">Professional Plan recommended</p>
+                    </div>
+                </div>
+
+                <!-- Pricing Cards -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="glass rounded-2xl p-8 hover-lift">
+                        <h3 class="text-xl font-bold mb-2">Starter</h3>
+                        <p class="text-3xl font-bold mb-6">$9<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Up to 10 projects</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 15 team members</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Basic analytics</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Email support</li>
+                        </ul>
+                        <button class="w-full py-3 glass rounded-lg font-semibold hover-lift">Start Free Trial</button>
+                    </div>
+
+                    <div class="glass-dark rounded-2xl p-8 hover-lift border-2 border-blue-500 relative">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-blue-500 text-white text-sm rounded-full">RECOMMENDED</div>
+                        <h3 class="text-xl font-bold mb-2">Professional</h3>
+                        <p class="text-3xl font-bold mb-6">$25<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Unlimited projects</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 50 team members</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Advanced analytics</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> AI assistant</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Priority support</li>
+                        </ul>
+                        <button class="w-full py-3 gradient-primary rounded-lg font-semibold hover-lift">Start Free Trial</button>
+                    </div>
+
+                    <div class="glass rounded-2xl p-8 hover-lift">
+                        <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                        <p class="text-3xl font-bold mb-6">$99<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Unlimited everything</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Custom integrations</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Dedicated manager</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> SLA guarantee</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 24/7 support</li>
+                        </ul>
+                        <button class="w-full py-3 glass rounded-lg font-semibold hover-lift">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-dark border-t border-gray-800 px-6 py-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="font-bold mb-4">PORTAL Global</h3>
+                    <p class="text-gray-400">The intelligent project management platform for modern teams.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition">Enterprise</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">About</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="p-2 glass rounded-lg hover-lift">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="p-2 glass rounded-lg hover-lift">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="p-2 glass rounded-lg hover-lift">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-gray-400 pt-8 border-t border-gray-800">
+                <p>&copy; 2026 PORTAL Global. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Initialize charts
+        function initCharts() {
+            // Progress Chart
+            const progressCtx = document.getElementById('progressChart').getContext('2d');
+            new Chart(progressCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'In Progress', 'Planning'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Team Efficiency',
+                        data: [65, 72, 78, 82, 88, 92],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#9ca3af' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#374151' },
+                            ticks: { color: '#9ca3af' }
+                        },
+                        y: {
+                            grid: { color: '#374151' },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // AI Project Generation
+        async function generateAIProject() {
+            const idea = document.getElementById('projectIdea').value;
+            const output = document.getElementById('aiOutput');
+            
+            output.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-400">Generating project plan...</p>
+                </div>
+            `;
+
+            // Simulate AI processing
+            setTimeout(() => {
+                output.innerHTML = `
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold">AI-Generated Project Plan</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Project Name:</span>
+                                <span class="font-medium">${idea.split(' ').slice(0, 3).join(' ')} Platform</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Timeline:</span>
+                                <span class="font-medium">3-4 months</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Team Size:</span>
+                                <span class="font-medium">5-8 developers</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Budget:</span>
+                                <span class="font-medium">$50,000 - $75,000</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Risk Level:</span>
+                                <span class="font-medium text-yellow-500">Medium</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-gray-700">
+                            <p class="text-sm text-gray-400 mb-3">AI Recommendations:</p>
+                            <ul class="text-sm space-y-2">
+                                <li>тАв Start with MVP development</li>
+                                <li>тАв Focus on core user flows</li>
+                                <li>тАв Implement agile methodology</li>
+                            </ul>
+                        </div>
+                        <button class="w-full py-2 gradient-primary rounded-lg mt-4 hover-lift">
+                            Create Project
+                        </button>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            
+            if (input.value.trim() === '') return;
+
+            // Add user message
+            messages.innerHTML += `
+                <div class="chat-bubble chat-user">
+                    ${input.value}
+                </div>
+            `;
+
+            const userMessage = input.value;
+            input.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = [
+                    "I'll help you with that! Let me analyze your requirements...",
+                    "Based on your project history, I recommend focusing on critical path first.",
+                    "I've updated your project timeline to better reflect current progress.",
+                    "Great question! Here are some resources that might help..."
+                ];
+                
+                messages.innerHTML += `
+                    <div class="chat-bubble chat-ai">
+                        ${responses[Math.floor(Math.random() * responses.length)]}
+                    </div>
+                `;
+                
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // Pricing calculator
+        function updatePricing() {
+            const teamSize = document.getElementById('calcTeamSize').value;
+            const projects = document.getElementById('calcProjects').value;
+            const storage = document.getElementById('calcStorage').value;
+
+            let recommendedPrice = 9;
+            let recommendation = 'Starter Plan';
+
+            if (teamSize > 10 || projects > 20 || storage > 100) {
+                recommendedPrice = 25;
+                recommendation = 'Professional Plan';
+            }
+
+            if (teamSize > 50 || projects > 100 || storage > 500) {
+                recommendedPrice = 99;
+                recommendation = 'Enterprise Plan';
+            }
+
+            document.getElementById('recommendedPrice').textContent = `$${recommendedPrice}/month`;
+            document.getElementById('planRecommendation').textContent = recommendation;
+        }
+
+        // Filter projects
+        function filterProjects(category) {
+            const buttons = document.querySelectorAll('button');
+            const cards = document.querySelectorAll('.project-card');
+            
+            buttons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(category) || 
+                    (category === 'all' && btn.textContent.includes('All'))) {
+                    btn.classList.add('bg-blue-600');
+                    btn.classList.remove('glass');
+                } else {
+                    btn.classList.remove('bg-blue-600');
+                    btn.classList.add('glass');
+                }
+            });
+
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    // Simple filtering logic - in real app, use data attributes
+                    card.style.display = 'block';
+                }
+            });
+        }
+
+        // API Configuration
+        const API_URL = 'http://localhost:3007';
+        let currentUser = null;
+        let token = localStorage.getItem('token');
+
+        async function apiRequest(endpoint, options = {}) {
+            const headers = { 'Content-Type': 'application/json', ...options.headers };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            
+            const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
+            return await res.json();
+        }
+
+        // Utility functions
+        function toggleNotifications() {
+            // Show orders count
+            loadOrdersCount();
+        }
+
+        function toggleTheme() {
+            alert('Dark mode is currently enabled. Light mode coming soon!');
+        }
+
+        function openProfile() {
+            if (currentUser) {
+                alert(`Profile: ${currentUser.firstName} ${currentUser.lastName}\nEmail: ${currentUser.email}\nRole: ${currentUser.role}`);
+            } else {
+                alert('Please login first!');
+            }
+        }
+
+        async function loadOrdersCount() {
+            if (!token) {
+                alert('Please login first!');
+                return;
+            }
+            const data = await apiRequest('/api/orders');
+            if (data.orders) {
+                alert(`You have ${data.orders.length} order(s)!`);
+            }
+        }
+
+        // Login function
+        async function doLogin(email, password) {
+            const data = await apiRequest('/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            });
+            if (data.token) {
+                token = data.token;
+                currentUser = data.user;
+                localStorage.setItem('token', token);
+                document.getElementById('loginModal').style.display = 'none';
+                alert('Login successful!');
+            } else {
+                alert(data.error || 'Login failed!');
+            }
+        }
+
+        // Register function
+        async function doRegister(email, password, firstName, lastName) {
+            const data = await apiRequest('/api/auth/register', {
+                method: 'POST',
+                body: JSON.stringify({ email, password, firstName, lastName, role: 'client' })
+            });
+            if (data.token) {
+                token = data.token;
+                currentUser = data.user;
+                localStorage.setItem('token', token);
+                document.getElementById('registerModal').style.display = 'none';
+                alert('Registration successful!');
+            } else {
+                alert(data.error || 'Registration failed!');
+            }
+        }
+
+        // Load orders
+        async function loadOrders() {
+            if (!token) return [];
+            const data = await apiRequest('/api/orders');
+            return data.orders || [];
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            updatePricing();
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+    <!-- Login Modal -->
+    <div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+        <div class="glass p-8 rounded-xl" style="max-width:400px; width:90%;">
+            <h2 class="text-2xl font-bold mb-4">Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email" class="w-full p-3 mb-3 rounded bg-gray-800 text-white border">
+            <input type="password" id="loginPassword" placeholder="Password" class="w-full p-3 mb-4 rounded bg-gray-800 text-white border">
+            <button onclick="doLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)" class="w-full py-3 gradient-primary rounded-lg font-semibold">Login</button>
+            <button onclick="document.getElementById('loginModal').style.display='none'" class="w-full py-2 mt-2 text-gray-400">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+        <div class="glass p-8 rounded-xl" style="max-width:400px; width:90%;">
+            <h2 class="text-2xl font-bold mb-4">Register</h2>
+            <input type="text" id="regFirstName" placeholder="First Name" class="w-full p-3 mb-3 rounded bg-gray-800 text-white border">
+            <input type="text" id="regLastName" placeholder="Last Name" class="w-full p-3 mb-3 rounded bg-gray-800 text-white border">
+            <input type="email" id="regEmail" placeholder="Email" class="w-full p-3 mb-3 rounded bg-gray-800 text-white border">
+            <input type="password" id="regPassword" placeholder="Password" class="w-full p-3 mb-4 rounded bg-gray-800 text-white border">
+            <button onclick="doRegister(document.getElementById('regEmail').value, document.getElementById('regPassword').value, document.getElementById('regFirstName').value, document.getElementById('regLastName').value)" class="w-full py-3 gradient-primary rounded-lg font-semibold">Register</button>
+            <button onclick="document.getElementById('registerModal').style.display='none'" class="w-full py-2 mt-2 text-gray-400">Cancel</button>
+        </div>
+    </div>
+</body>
+</html>

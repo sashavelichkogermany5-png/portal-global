@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "updatedAt": "2026-02-25T01:32:54.6968220+01:00",
+  "items": [
+    {
+      "mission": 3,
+      "itemId": "m3-tenant-switch-ui",
+      "description": "Verify tenant switcher UI and /api/tenants/switch alias behavior",
+      "filesLikely": [
+        "web-next/app/components/TenantSwitcher.tsx",
+        "web-next/app/components/Navbar.tsx",
+        "server.js",
+        "ops/smoke-agent-e2e.ps1"
+      ],
+      "doneCriteria": "smoke step tenantSwitch + tenantRbac passes",
+      "status": "done",
+      "lastExitCode": 0,
+      "attempts": 0,
+      "startedAt": "2026-02-25T01:32:54.6825529+01:00",
+      "finishedAt": "2026-02-25T01:32:54.6942581+01:00"
+    },
+    {
+      "mission": 4,
+      "itemId": "m4-admin-audit-filters",
+      "description": "Add audit filters/pagination in admin API + UI",
+      "filesLikely": [
+        "server.js",
+        "web-next/app/admin/page.tsx",
+        "web-next/app/components/AdminAudit.tsx"
+      ],
+      "doneCriteria": "admin audit list filters return expected rows",
+      "status": "pending",
+      "lastExitCode": 0,
+      "attempts": 0
+    },
+    {
+      "mission": 5,
+      "itemId": "m5-tenant-invites",
+      "description": "Implement tenant invite flow (create, list, accept) with RBAC",
+      "filesLikely": [
+        "server.js",
+        "web-next/app/admin/page.tsx",
+        "web-next/app/components/TenantInvites.tsx"
+      ],
+      "doneCriteria": "invite create/accept smoke scenario passes",
+      "status": "pending",
+      "lastExitCode": 0,
+      "attempts": 0
+    },
+    {
+      "mission": 6,
+      "itemId": "m6-usage-limits",
+      "description": "Enforce plan usage limits with clear API errors and UI hints",
+      "filesLikely": [
+        "server.js",
+        "web-next/app/app/page.tsx",
+        "docs/PLAN-LIMITS.md"
+      ],
+      "doneCriteria": "limit scenario smoke step returns 402/429",
+      "status": "pending",
+      "lastExitCode": 0,
+      "attempts": 0
+    },
+    {
+      "mission": 7,
+      "itemId": "m7-billing-settings",
+      "description": "Add billing/plan update endpoints and settings UI",
+      "filesLikely": [
+        "server.js",
+        "web-next/app/settings/billing/page.tsx"
+      ],
+      "doneCriteria": "plan change API + UI save succeeds",
+      "status": "pending",
+      "lastExitCode": 0,
+      "attempts": 0
+    },
+    {
+      "mission": 8,
+      "itemId": "m8-admin-exports",
+      "description": "Add admin export endpoints and UI (CSV/JSON)",
+      "filesLikely": [
+        "server.js",
+        "web-next/app/admin/page.tsx",
+        "web-next/app/components/AdminExports.tsx"
+      ],
+      "doneCriteria": "export download returns expected file",
+      "status": "pending",
+      "lastExitCode": 0,
+      "attempts": 0
+    },
+    {
+      "mission": 9,
+      "itemId": "m9-retention-cleanup",
+      "description": "Add retention cleanup jobs and audit export controls",
+      "filesLikely": [
+        "server.js",
+        "ops/night-shift.ps1",
+        "docs/RETENTION.md"
+      ],
+      "doneCriteria": "cleanup job logs actions per tenant",
+      "status": "pending",
+      "lastExitCode": 0,
+      "attempts": 0
+    },
+    {
+      "mission": 10,
+      "itemId": "m10-night-shift-hardening",
+      "description": "Harden night-shift logging and summarize last PASS/FAIL",
+      "filesLikely": [
+        "ops/night-shift.ps1",
+        "docs/NIGHT-SHIFT.md",
+        "docs/PROJECT-STATE.md"
+      ],
+      "doneCriteria": "night-shift log includes lastStatus/lastItem",
+      "status": "pending",
+      "lastExitCode": 0,
+      "attempts": 0
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+﻿services:
+  portal:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    env_file: .env
+    command: sh -lc "npm ci && npm run start:prod"
+    restart: unless-stopped
+    ports:
+      - "3000:3000"

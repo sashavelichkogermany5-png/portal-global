@@ -1,0 +1,3269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global | Unified Ops</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <meta name="theme-color" content="#0b0f19">
+    <style>
+        :root {
+            --bg: #0b1112;
+            --bg-2: #0f1c1f;
+            --card: #121c1f;
+            --card-2: #0f171a;
+            --ink: #f3f7f5;
+            --muted: #9bb0b0;
+            --accent: #4fb3a5;
+            --accent-2: #f2c46d;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            background: radial-gradient(circle at 15% 10%, rgba(79, 179, 165, 0.22), transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(242, 196, 109, 0.15), transparent 45%),
+                linear-gradient(160deg, var(--bg), var(--bg-2));
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px 80px;
+        }
+
+        .dashboard-shell {
+            margin-top: 24px;
+        }
+
+        .dashboard-main {
+            display: grid;
+            gap: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: rgba(15, 23, 26, 0.85);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 16px;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-badge {
+            font-size: 12px;
+            color: var(--accent-2);
+            border: 1px solid rgba(242, 196, 109, 0.4);
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        nav a:hover {
+            color: var(--ink);
+        }
+
+        .hero {
+            margin-top: 28px;
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .hero-card {
+            background: linear-gradient(140deg, rgba(15, 25, 27, 0.9), rgba(18, 28, 31, 0.85));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 4vw, 44px);
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .btn {
+            border: 1px solid transparent;
+            background: var(--accent);
+            color: #072b28;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(79, 179, 165, 0.2);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--ink);
+        }
+
+        .metrics {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
+
+        .metric {
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: rgba(15, 23, 26, 0.65);
+        }
+
+        .metric h3 {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .metric p {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .global-status {
+            margin-top: 18px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(17, 24, 42, 0.6);
+            color: #e9eefc;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .global-status.visible {
+            display: block;
+        }
+
+        .global-status.error {
+            border-color: rgba(255, 128, 128, 0.5);
+            background: rgba(255, 120, 120, 0.12);
+            color: #ffd7d7;
+        }
+
+        .global-status.warning {
+            border-color: rgba(242, 196, 109, 0.5);
+            background: rgba(242, 196, 109, 0.12);
+            color: #ffe7b8;
+        }
+
+        .global-status.success {
+            border-color: rgba(79, 179, 165, 0.5);
+            background: rgba(79, 179, 165, 0.12);
+            color: #d7fff5;
+        }
+
+        .global-status a {
+            color: #f2c46d;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .status {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .status.success { color: #a9f3d4; }
+        .status.warning { color: #f7d28c; }
+        .status.error { color: #ffb3b3; }
+
+        .pulse { animation: pulse 0.45s ease-out; }
+
+        @keyframes pulse {
+            0% { transform: scale(0.98); opacity: 0.7; }
+            70% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        section {
+            margin-top: 38px;
+        }
+
+        .section-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-actions input[type="text"] {
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card-2);
+            color: var(--ink);
+            font-size: 12px;
+            min-width: 180px;
+        }
+
+        .toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .toggle input {
+            accent-color: var(--accent);
+        }
+
+        .btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .export-hint {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .export-hint a {
+            color: #f2c46d;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .onboarding-widget {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(79, 179, 165, 0.35);
+            background: rgba(79, 179, 165, 0.12);
+            color: #e9eefc;
+        }
+
+        .business-panel {
+            margin-top: 22px;
+            border: 1px solid rgba(79, 179, 165, 0.35);
+            border-radius: 22px;
+            padding: 20px 22px;
+            background: linear-gradient(150deg, rgba(15, 25, 27, 0.9), rgba(18, 28, 31, 0.85));
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 16px;
+        }
+
+        .business-panel__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .business-panel__title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .business-panel__subtitle {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .business-panel__actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .business-widgets {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .widget-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px;
+            background: rgba(12, 19, 21, 0.8);
+            display: grid;
+            gap: 10px;
+        }
+
+        .widget-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+        }
+
+        .widget-metric {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .widget-meta {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .widget-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .widget-list-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px 10px;
+            background: rgba(10, 16, 18, 0.7);
+            display: grid;
+            gap: 4px;
+        }
+
+        .widget-list-item h4 {
+            font-size: 13px;
+        }
+
+        .widget-list-item .meta {
+            font-size: 11px;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .widget-kpis {
+            display: grid;
+            gap: 8px;
+        }
+
+        .widget-kpi {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .widget-kpi strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .status-pill {
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            width: fit-content;
+        }
+
+        .status-pill.ok {
+            border-color: rgba(79, 179, 165, 0.6);
+            color: #b9ffea;
+            background: rgba(79, 179, 165, 0.12);
+        }
+
+        .status-pill.warn {
+            border-color: rgba(242, 196, 109, 0.6);
+            color: #ffe7b8;
+            background: rgba(242, 196, 109, 0.12);
+        }
+
+        .business-upsell {
+            margin-top: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 18px 20px;
+            background: rgba(15, 23, 26, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .business-upsell__title {
+            font-weight: 600;
+        }
+
+        .business-upsell__text {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .business-unlocks {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 10px 14px;
+            background: rgba(10, 16, 18, 0.6);
+        }
+
+        .business-unlocks summary {
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        .business-unlocks ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 0;
+        }
+
+        .business-unlocks li {
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            color: var(--ink);
+        }
+
+        .business-only {
+            display: none;
+        }
+
+        .onboarding-widget .title {
+            font-weight: 700;
+        }
+
+        .onboarding-widget .progress {
+            color: #cde6e0;
+            font-size: 13px;
+        }
+
+        .onboarding-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(4, 8, 9, 0.75);
+            z-index: 40;
+            padding: 20px;
+        }
+
+        .onboarding-modal.open {
+            display: flex;
+        }
+
+        .onboarding-card {
+            max-width: 560px;
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 12px;
+        }
+
+        .checklist {
+            display: grid;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .checklist li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .checklist li span {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .checklist li .tag {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .checklist li.done .tag {
+            border-color: rgba(79, 179, 165, 0.6);
+            color: #b9ffea;
+        }
+
+        .confetti {
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            display: none;
+            z-index: 45;
+        }
+
+        .confetti.active {
+            display: block;
+        }
+
+        .confetti span {
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            background: #4fb3a5;
+            animation: confettiFall 1.8s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(320px) rotate(220deg); opacity: 0; }
+        }
+
+        .collapse-btn {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .section-body.collapsed {
+            display: none;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(11, 15, 25, 0.92);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: none;
+            justify-content: space-around;
+            padding: 10px 12px 14px;
+            z-index: 20;
+        }
+
+        .bottom-nav a {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .install-banner{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:rgba(17,24,42,.95);border:1px solid rgba(255,255,255,.12);color:#e9eefc;padding:10px 14px;border-radius:14px;display:none;gap:10px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.35);font-size:13px;z-index:20}
+        .install-banner button{border:1px solid rgba(255,255,255,.18);background:transparent;color:#e9eefc;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:12px}
+
+        @media (max-width: 900px) {
+            .dashboard-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .bottom-nav {
+                display: flex;
+            }
+
+            .page {
+                padding-bottom: 120px;
+            }
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title h2 {
+            font-size: 24px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 46px rgba(0, 0, 0, 0.35);
+        }
+
+        .grid-two {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        form {
+            display: grid;
+            gap: 12px;
+        }
+
+        label {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card-2);
+            color: var(--ink);
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .list-item {
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(12, 19, 21, 0.8);
+            display: grid;
+            gap: 6px;
+        }
+
+        .list-item.deleted {
+            border-style: dashed;
+            opacity: 0.75;
+        }
+
+        .list-item.deleted h4 {
+            text-decoration: line-through;
+        }
+
+        .list-item h4 {
+            font-size: 16px;
+        }
+
+        .list-meta {
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        .status {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+            font-family: "Source Code Pro", monospace;
+        }
+
+        .status.error {
+            color: #ffb3b3;
+        }
+
+        .status.success {
+            color: #a9f3d4;
+        }
+
+        .status.warning {
+            color: #f7d28c;
+        }
+
+        .ai-output {
+            white-space: pre-wrap;
+            font-family: "Source Code Pro", monospace;
+            color: var(--muted);
+        }
+
+        footer {
+            margin-top: 50px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+    <style>
+        .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+        .top__inner{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+        .brand{color:#e9eefc;text-decoration:none;font-weight:700}
+        .nav{display:flex;gap:12px;flex-wrap:wrap}
+        .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
+        .nav a:hover{color:#e9eefc}
+        .tenant-switch{display:flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(8,14,20,.4);color:var(--muted);font-size:12px}
+        .tenant-switch label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+        .tenant-switch select{background:transparent;border:none;color:var(--ink);font-family:inherit;font-size:12px}
+        .tenant-switch select:focus{outline:none}
+        .account{margin-left:auto;display:flex;align-items:center;gap:10px;color:#9fb0d0;font-size:13px}
+        .plan-badge{border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+        .plan-free{border:1px solid rgba(255,255,255,.18);color:#d7dde8;background:rgba(255,255,255,.08)}
+        .plan-pro{border:1px solid rgba(43,108,255,.6);color:#cfe0ff;background:rgba(43,108,255,.2)}
+        .plan-business{border:1px solid rgba(148,82,255,.5);color:#eadcff;background:rgba(148,82,255,.18)}
+        .account .upgrade{display:none;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(79,179,165,.6);color:#e9eefc;font-weight:600;font-size:12px;text-decoration:none}
+        .logout{background:#11182a;border:1px solid rgba(255,255,255,.08);color:#e9eefc;border-radius:10px;padding:8px 10px;cursor:pointer}
+        @media(max-width:560px){.account{margin-left:0}.logout{width:100%}}
+    </style>
+    <style>
+        .header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+        .agent-console{position:fixed;right:24px;bottom:24px;width:min(420px,92vw);max-height:70vh;background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);display:none;flex-direction:column;z-index:35}
+        .agent-console.open{display:flex}
+        .agent-console__header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);background:rgba(15,23,26,.95);border-top-left-radius:20px;border-top-right-radius:20px}
+        .agent-console__actions{display:flex;gap:8px;flex-wrap:wrap}
+        .agent-console__body{padding:12px 16px 16px;overflow-y:auto;display:grid;gap:16px}
+        .agent-console__section{display:grid;gap:8px}
+        .agent-console__title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+        .agent-message{padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:rgba(12,19,21,.85);display:grid;gap:6px}
+        .agent-message .meta{font-size:11px;font-family:"Source Code Pro", monospace;color:var(--muted)}
+        .agent-message .text{font-size:13px}
+        .agent-message.info{border-color:rgba(79,179,165,.4)}
+        .agent-message.warn{border-color:rgba(242,196,109,.5)}
+        .agent-message.error{border-color:rgba(255,128,128,.5)}
+        .agent-actions{display:grid;gap:8px}
+        .agent-action{padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:rgba(12,19,21,.85);display:grid;gap:6px}
+        .agent-action .meta{font-size:11px;font-family:"Source Code Pro", monospace;color:var(--muted)}
+        .agent-action .title{font-weight:600}
+        .agent-console__empty{font-size:12px;color:var(--muted)}
+        @media (max-width:700px){.agent-console{right:12px;left:12px;width:auto;max-height:80vh}}
+    </style>
+</head>
+<body>
+    <header class="top">
+      <div class="top__inner">
+        <a class="brand" href="/">PORTAL</a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/app">Dashboard</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/docs">Docs</a>
+          <a href="/help">Help</a>
+          <a href="/cabinet">Cabinet</a>
+          <a href="/admin" id="adminLink" style="display:none">Admin</a>
+        </nav>
+        <div class="tenant-switch" id="tenantSwitch" style="display:none">
+          <label for="tenantSelect">Tenant</label>
+          <select id="tenantSelect"></select>
+        </div>
+        <div class="account" id="accountInfo">
+          <button id="loginBtn" class="login-btn" onclick="showLoginModal()">Login</button>
+          <span id="accountEmail" style="display:none;">Loading...</span>
+          <span class="plan-badge plan-free" id="accountPlan" style="display:none;">Free</span>
+          <a class="upgrade" id="upgradeLink" href="/pricing" style="display:none;">Upgrade</a>
+        </div>
+        <button id="logoutBtn" class="logout" style="display:none;">Logout</button>
+        <button id="theme-toggle" class="theme-toggle" onclick="Portal.theme.toggle()" title="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+    <div class="page">
+        <section class="business-panel business-only" id="businessPanel">
+            <div class="business-panel__head">
+                <div>
+                    <div class="business-panel__title">Business Control Panel</div>
+                    <div class="business-panel__subtitle">Premium ops signal with live agents, approvals, and governance.</div>
+                </div>
+                <div class="business-panel__actions">
+                    <button class="btn" type="button" id="installCommandBtn">Generate Install Command</button>
+                    <span class="status" id="installCommandStatus"></span>
+                </div>
+            </div>
+            <div class="business-widgets">
+                <div class="widget-card">
+                    <div class="widget-title">Agents Online</div>
+                    <div class="widget-metric"><span id="agentOnlineCount">0</span> / <span id="agentTotalCount">0</span></div>
+                    <div class="widget-meta">Last heartbeat: <span id="agentLastSeen">-</span></div>
+                    <button class="btn-small" type="button" id="openLocalAutopilot">Open Local Autopilot</button>
+                </div>
+                <div class="widget-card">
+                    <div class="widget-title">Pending Approvals</div>
+                    <div class="widget-metric" id="pendingApprovalsCount">0</div>
+                    <div class="widget-list" id="pendingApprovalsList"></div>
+                    <button class="btn-small" type="button" id="openApprovalsTab">Review Approvals</button>
+                </div>
+                <div class="widget-card">
+                    <div class="widget-title">Webhook Health</div>
+                    <span class="status-pill ok" id="webhookStatusBadge">OK</span>
+                    <div class="widget-kpis">
+                        <div class="widget-kpi"><span>Last inbound</span><strong id="webhookLastInbound">-</strong></div>
+                        <div class="widget-kpi"><span>Failures 24h</span><strong id="webhookFailures">0</strong></div>
+                    </div>
+                    <button class="btn-small" type="button" id="openWebhooksTab">Manage Webhooks</button>
+                </div>
+                <div class="widget-card">
+                    <div class="widget-title">Usage Snapshot (Business)</div>
+                    <div class="widget-kpis">
+                        <div class="widget-kpi"><span>AI calls</span><strong id="usageAiCalls">0</strong></div>
+                        <div class="widget-kpi"><span>Exports</span><strong id="usageExports">0</strong></div>
+                        <div class="widget-kpi"><span>Autopilot cycles</span><strong id="usageAutopilot">0</strong></div>
+                        <div class="widget-kpi"><span>Imports</span><strong id="usageImports">0</strong></div>
+                    </div>
+                    <button class="btn-small" type="button" id="openAuditTab">View Audit</button>
+                </div>
+            </div>
+            <details class="business-unlocks">
+                <summary>What you unlock in Business</summary>
+                <ul>
+                    <li>Workspaces</li>
+                    <li>Members/Roles</li>
+                    <li>Audit</li>
+                    <li>Keys</li>
+                    <li>Local Autopilot</li>
+                    <li>Approvals</li>
+                    <li>Rules</li>
+                    <li>Webhooks</li>
+                    <li>Import</li>
+                    <li>Share Links</li>
+                    <li>Backup</li>
+                </ul>
+            </details>
+        </section>
+        <section class="business-upsell" id="businessUpsell" style="display:none">
+            <div>
+                <div class="business-upsell__title">Business Control Panel</div>
+                <div class="business-upsell__text">Upgrade to unlock live agents, approvals, webhooks, audit, and automated ops.</div>
+            </div>
+            <a class="btn" href="/pricing">See Business</a>
+        </section>
+        <header>
+            <div class="brand">
+                <span>PORTAL Global</span>
+                <span class="brand-badge">Live Preview</span>
+            </div>
+            <div class="header-actions">
+                <nav id="sectionNav"></nav>
+                <button class="btn btn-ghost" type="button" id="openAgentConsole">Agent Console</button>
+            </div>
+        </header>
+
+        <div class="dashboard-shell">
+            <main class="dashboard-main">
+                <div class="global-status" id="globalStatus"></div>
+                <div class="onboarding-widget" id="onboardingWidget" style="display:none">
+                    <div class="title">First-run checklist</div>
+                    <div class="progress" id="onboardingProgress">0/5 complete</div>
+                    <button class="btn btn-ghost" type="button" id="openOnboarding">View checklist</button>
+                    <button class="btn" type="button" id="seedDemo">Generate demo data</button>
+                </div>
+
+        <section class="hero">
+            <div class="hero-card">
+                <h1>Unified ops workspace for teams managing real delivery.</h1>
+                <p>Connect projects, clients, providers, and orders in one place. This UI now reads and writes real data from SQLite-backed APIs.</p>
+                <div class="hero-actions">
+                    <a class="btn" href="#projects">Create a project</a>
+                    <button class="btn btn-ghost" type="button" id="refreshAll">Refresh all data</button>
+                </div>
+            </div>
+            <div class="hero-card">
+                <div class="section-title">
+                    <h2>Live snapshot</h2>
+                    <button class="btn btn-ghost" type="button" id="refreshStats">Refresh stats</button>
+                </div>
+                <div class="metrics" id="stats">
+                    <div class="metric">
+                        <h3>Total projects</h3>
+                        <p id="statProjects">0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Total orders</h3>
+                        <p id="statOrders">0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Active orders</h3>
+                        <p id="statActiveOrders">0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Leads</h3>
+                        <p id="statLeads">0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Clients</h3>
+                        <p id="statClients">0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Providers</h3>
+                        <p id="statProviders">0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>AI requests</h3>
+                        <p id="statAiRequests">0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>MRR</h3>
+                        <p id="statMrr">$0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Net revenue</h3>
+                        <p id="statNetRevenue">$0</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Avg payout</h3>
+                        <p id="statAvgPayout">0%</p>
+                    </div>
+                </div>
+                <div class="status" id="statsStatus"></div>
+            </div>
+        </section>
+
+        <section id="ai">
+            <div class="section-title">
+                <h2>AI tools</h2>
+                <div class="section-actions">
+                    <span class="status" id="aiStatus"></span>
+                    <button class="collapse-btn" type="button" data-toggle="aiBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="aiBody">
+                <div class="grid-two">
+                <div class="card">
+                    <h3>AI project generator</h3>
+                    <p class="status">Posts to /api/ai-project and logs the request.</p>
+                    <form id="aiProjectForm">
+                        <label for="aiIdea">Project idea</label>
+                        <textarea id="aiIdea" name="aiIdea" placeholder="Example: compliance automation for vendor onboarding"></textarea>
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Generate plan</button>
+                        </div>
+                    </form>
+                    <div class="ai-output" id="aiProjectOutput">No output yet.</div>
+                </div>
+                <div class="card">
+                    <h3>AI assistant</h3>
+                    <p class="status">Posts to /api/chat and logs the request.</p>
+                    <form id="aiChatForm">
+                        <label for="aiMessage">Message</label>
+                        <textarea id="aiMessage" name="aiMessage" placeholder="Ask for next steps or risks"></textarea>
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Send message</button>
+                        </div>
+                    </form>
+                    <div class="ai-output" id="aiChatOutput">No output yet.</div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="revenue">
+            <div class="section-title">
+                <h2>Revenue</h2>
+                <div class="section-actions">
+                    <span class="status" id="revenueStatus"></span>
+                    <label class="toggle"><input type="checkbox" id="autopilotToggle" /> Autopilot</label>
+                    <button class="btn" type="button" id="autopilotRun">Run 1 cycle</button>
+                    <button class="btn btn-ghost" type="button" id="autopilotRefresh">Refresh</button>
+                    <button class="collapse-btn" type="button" data-toggle="revenueBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="revenueBody">
+                <div class="grid-two">
+                    <div class="card">
+                        <h3>Autopilot status</h3>
+                        <div class="status" id="autopilotSummary"></div>
+                        <div class="list" id="landingList"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Offers</h3>
+                        <div class="list" id="autopilotOffers"></div>
+                    </div>
+                </div>
+                <div class="grid-two">
+                    <div class="card">
+                        <h3>Leads</h3>
+                        <div class="list" id="autopilotLeads"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Metrics</h3>
+                        <div class="list" id="autopilotMetrics"></div>
+                    </div>
+                </div>
+                <div class="card" id="approvals">
+                    <h3>Approvals</h3>
+                    <div class="list" id="autopilotApprovals"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="webhooks" class="business-only">
+            <div class="section-title">
+                <h2>Webhooks</h2>
+                <div class="section-actions">
+                    <span class="status" id="webhooksStatus"></span>
+                    <button class="btn btn-ghost" type="button" id="refreshWebhooks">Refresh</button>
+                    <button class="collapse-btn" type="button" data-toggle="webhooksBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="webhooksBody">
+                <div class="grid-two">
+                    <div class="card">
+                        <h3>Inbound health</h3>
+                        <div class="list" id="webhooksHealthList"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Delivery</h3>
+                        <p class="status">Forward to your destinations with signed requests and retry policies.</p>
+                        <a class="btn btn-ghost" href="/docs">View webhook docs</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="audit" class="business-only">
+            <div class="section-title">
+                <h2>Audit</h2>
+                <div class="section-actions">
+                    <span class="status" id="auditStatus"></span>
+                    <button class="btn btn-ghost" type="button" id="refreshAudit">Refresh</button>
+                    <button class="collapse-btn" type="button" data-toggle="auditBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="auditBody">
+                <div class="card">
+                    <h3>Recent activity</h3>
+                    <div class="list" id="auditRecentList"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-title">
+                <h2>Projects</h2>
+                <div class="section-actions">
+                    <span class="status" id="projectsStatus"></span>
+                    <input type="text" id="projectSearch" placeholder="Search projects" />
+                    <button class="btn btn-ghost" type="button" id="exportProjects">Export CSV</button>
+                    <span class="export-hint" id="exportProjectsHint" style="display:none">Upgrade to export: <a href="/pricing">View plans</a></span>
+                    <label class="toggle"><input type="checkbox" id="projectsShowDeleted" /> Show deleted</label>
+                    <button class="collapse-btn" type="button" data-toggle="projectsBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="projectsBody">
+                <div class="grid-two">
+                <div class="card">
+                    <h3>Create or update project</h3>
+                    <form id="projectForm">
+                        <input type="hidden" id="projectId">
+                        <label for="projectName">Name</label>
+                        <input id="projectName" name="projectName" placeholder="Expansion rollout" required>
+                        <label for="projectCategory">Category</label>
+                        <input id="projectCategory" name="projectCategory" placeholder="growth">
+                        <label for="projectStatus">Status</label>
+                        <input id="projectStatus" name="projectStatus" placeholder="Planning">
+                        <label for="projectProgress">Progress (0-100)</label>
+                        <input id="projectProgress" name="projectProgress" type="number" min="0" max="100" value="0">
+                        <label for="projectDue">Due date</label>
+                        <input id="projectDue" name="projectDue" type="date">
+                        <label for="projectNotes">Notes</label>
+                        <textarea id="projectNotes" name="projectNotes" placeholder="Notes for this project"></textarea>
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Save project</button>
+                            <button class="btn btn-ghost" type="button" id="projectCancel">Cancel edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Project list</h3>
+                    <div class="list" id="projectsList"></div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="leads">
+            <div class="section-title">
+                <h2>Leads</h2>
+                <div class="section-actions">
+                    <span class="status" id="leadsStatus"></span>
+                    <label class="toggle"><input type="checkbox" id="leadsShowDeleted" /> Show deleted</label>
+                    <button class="collapse-btn" type="button" data-toggle="leadsBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="leadsBody">
+                <div class="grid-two">
+                <div class="card">
+                    <h3>Create or update lead</h3>
+                    <form id="leadForm">
+                        <input type="hidden" id="leadId">
+                        <label for="leadName">Name</label>
+                        <input id="leadName" name="leadName" placeholder="Alex Morgan">
+                        <label for="leadCompany">Company</label>
+                        <input id="leadCompany" name="leadCompany" placeholder="Silverline Health">
+                        <label for="leadEmail">Email</label>
+                        <input id="leadEmail" name="leadEmail" type="email" placeholder="alex@silverline.io">
+                        <label for="leadPhone">Phone</label>
+                        <input id="leadPhone" name="leadPhone" placeholder="+1 415 555 1840">
+                        <label for="leadSource">Source</label>
+                        <input id="leadSource" name="leadSource" placeholder="web, referral, event">
+                        <label for="leadStatus">Status</label>
+                        <select id="leadStatus" name="leadStatus">
+                            <option value="new" selected>new</option>
+                            <option value="contacted">contacted</option>
+                            <option value="qualified">qualified</option>
+                            <option value="proposal">proposal</option>
+                            <option value="won">won</option>
+                            <option value="lost">lost</option>
+                        </select>
+                        <label for="leadNotes">Notes</label>
+                        <textarea id="leadNotes" name="leadNotes" placeholder="Notes for this lead"></textarea>
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Save lead</button>
+                            <button class="btn btn-ghost" type="button" id="leadCancel">Cancel edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Lead list</h3>
+                    <div class="list" id="leadsList"></div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="clients">
+            <div class="section-title">
+                <h2>Clients</h2>
+                <div class="section-actions">
+                    <span class="status" id="clientsStatus"></span>
+                    <label class="toggle"><input type="checkbox" id="clientsShowDeleted" /> Show deleted</label>
+                    <button class="collapse-btn" type="button" data-toggle="clientsBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="clientsBody">
+                <div class="grid-two">
+                <div class="card">
+                    <h3>Create or update client</h3>
+                    <form id="clientForm">
+                        <input type="hidden" id="clientId">
+                        <label for="clientName">Name</label>
+                        <input id="clientName" name="clientName" placeholder="Northwind" required>
+                        <label for="clientMrr">MRR</label>
+                        <input id="clientMrr" name="clientMrr" type="number" step="0.01" value="0">
+                        <label for="clientStatus">Status</label>
+                        <select id="clientStatus" name="clientStatus">
+                            <option value="active">active</option>
+                            <option value="paused">paused</option>
+                            <option value="churned">churned</option>
+                        </select>
+                        <label for="clientNotes">Notes</label>
+                        <textarea id="clientNotes" name="clientNotes" placeholder="Notes for this client"></textarea>
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Save client</button>
+                            <button class="btn btn-ghost" type="button" id="clientCancel">Cancel edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Client list</h3>
+                    <div class="list" id="clientsList"></div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="providers">
+            <div class="section-title">
+                <h2>Providers</h2>
+                <div class="section-actions">
+                    <span class="status" id="providersStatus"></span>
+                    <label class="toggle"><input type="checkbox" id="providersShowDeleted" /> Show deleted</label>
+                    <button class="collapse-btn" type="button" data-toggle="providersBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="providersBody">
+                <div class="grid-two">
+                <div class="card">
+                    <h3>Create or update provider</h3>
+                    <form id="providerForm">
+                        <input type="hidden" id="providerId">
+                        <label for="providerName">Name</label>
+                        <input id="providerName" name="providerName" placeholder="Atlas Partners" required>
+                        <label for="providerServices">Services (comma separated)</label>
+                        <input id="providerServices" name="providerServices" placeholder="design, compliance, delivery">
+                        <label for="providerPayout">Payout rate (%)</label>
+                        <input id="providerPayout" name="providerPayout" type="number" step="0.1" value="0">
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Save provider</button>
+                            <button class="btn btn-ghost" type="button" id="providerCancel">Cancel edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Provider list</h3>
+                    <div class="list" id="providersList"></div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="orders">
+            <div class="section-title">
+                <h2>Orders</h2>
+                <div class="section-actions">
+                    <span class="status" id="ordersStatus"></span>
+                    <button class="btn btn-ghost" type="button" id="exportOrders">Export CSV</button>
+                    <span class="export-hint" id="exportOrdersHint" style="display:none">Upgrade to export: <a href="/pricing">View plans</a></span>
+                    <label class="toggle"><input type="checkbox" id="ordersShowDeleted" /> Show deleted</label>
+                    <button class="collapse-btn" type="button" data-toggle="ordersBody">Collapse</button>
+                </div>
+            </div>
+            <div class="section-body" id="ordersBody">
+                <div class="grid-two">
+                <div class="card">
+                    <h3>Create or update order</h3>
+                    <form id="orderForm">
+                        <input type="hidden" id="orderId">
+                        <label for="orderTitle">Title</label>
+                        <input id="orderTitle" name="orderTitle" placeholder="Priority onboarding" required>
+                        <label for="orderDescription">Description</label>
+                        <textarea id="orderDescription" name="orderDescription" placeholder="Client needs accelerated onboarding and setup."></textarea>
+                        <label for="orderStatus">Status</label>
+                        <input id="orderStatus" name="orderStatus" placeholder="Pending">
+                        <label for="orderPriority">Priority</label>
+                        <select id="orderPriority" name="orderPriority">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Save order</button>
+                            <button class="btn btn-ghost" type="button" id="orderCancel">Cancel edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Order list</h3>
+                    <div class="list" id="ordersList"></div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            Data persists in SQLite under the server database directory. Restart the server to confirm durability.
+        </footer>
+            </main>
+        </div>
+
+        <div class="install-banner" id="installBanner">
+            <span>Install PORTAL for faster access.</span>
+            <button id="installBtn" type="button">Install</button>
+            <button id="installDismiss" type="button">Not now</button>
+        </div>
+    </div>
+
+    <div class="agent-console" id="agentConsole" aria-hidden="true">
+        <div class="agent-console__header">
+            <div>
+                <h3>Agent Console</h3>
+                <div class="status" id="agentConsoleStatus"></div>
+            </div>
+            <div class="agent-console__actions">
+                <button class="btn btn-ghost" type="button" id="agentReplay">Replay</button>
+                <button class="btn btn-ghost" type="button" id="agentClose">Close</button>
+            </div>
+        </div>
+        <div class="agent-console__body">
+            <div class="agent-console__section">
+                <div class="agent-console__title">Messages</div>
+                <div class="agent-messages" id="agentMessages"></div>
+            </div>
+            <div class="agent-console__section">
+                <div class="agent-console__title">Actions</div>
+                <div class="agent-actions" id="agentActions"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="onboarding-modal" id="onboardingModal">
+        <div class="onboarding-card">
+            <h3>First-run checklist</h3>
+            <p class="status">Complete these steps to get the most out of PORTAL.</p>
+            <ul class="checklist" id="onboardingList"></ul>
+            <div class="form-actions">
+                <button class="btn" type="button" id="completeOnboarding">Mark completed</button>
+                <button class="btn btn-ghost" type="button" id="closeOnboarding">Close</button>
+            </div>
+        </div>
+    </div>
+    <div class="confetti" id="confetti">
+        <span style="left:10%; background:#4fb3a5"></span>
+        <span style="left:20%; background:#f2c46d"></span>
+        <span style="left:30%; background:#2b6cff"></span>
+        <span style="left:40%; background:#f7d28c"></span>
+        <span style="left:50%; background:#9d7bff"></span>
+        <span style="left:60%; background:#4fb3a5"></span>
+        <span style="left:70%; background:#f2c46d"></span>
+        <span style="left:80%; background:#2b6cff"></span>
+        <span style="left:90%; background:#9d7bff"></span>
+    </div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        const sectionNavItems = [
+            { href: "#stats", label: "Stats" },
+            { href: "#ai", label: "AI" },
+            { href: "#revenue", label: "Revenue" },
+            { href: "#projects", label: "Projects" },
+            { href: "#leads", label: "Leads" },
+            { href: "#clients", label: "Clients" },
+            { href: "#providers", label: "Providers" },
+            { href: "#orders", label: "Orders" }
+        ];
+        const businessNavItems = [
+            { href: "#approvals", label: "Approvals" },
+            { href: "#webhooks", label: "Webhooks" },
+            { href: "#audit", label: "Audit" }
+        ];
+        const sectionNav = $("sectionNav");
+        const renderSectionNav = (isBusiness) => {
+            if (!sectionNav) return;
+            const items = isBusiness
+                ? [...sectionNavItems, ...businessNavItems]
+                : sectionNavItems;
+            sectionNav.innerHTML = items
+                .map((item) => `<a href="${item.href}">${item.label}</a>`)
+                .join("");
+        };
+        renderSectionNav(false);
+        const accountEmail = $("accountEmail");
+        const accountPlan = $("accountPlan");
+        const upgradeLink = $("upgradeLink");
+        const adminLink = $("adminLink");
+        const tenantSwitch = $("tenantSwitch");
+        const tenantSelect = $("tenantSelect");
+        const globalStatus = $("globalStatus");
+        const onboardingWidget = $("onboardingWidget");
+        const onboardingProgress = $("onboardingProgress");
+        const onboardingModal = $("onboardingModal");
+        const onboardingList = $("onboardingList");
+        const openOnboarding = $("openOnboarding");
+        const closeOnboarding = $("closeOnboarding");
+        const completeOnboarding = $("completeOnboarding");
+        const confetti = $("confetti");
+        const seedDemoBtn = $("seedDemo");
+        const projectSearch = $("projectSearch");
+        const exportProjectsBtn = $("exportProjects");
+        const exportOrdersBtn = $("exportOrders");
+        const exportProjectsHint = $("exportProjectsHint");
+        const exportOrdersHint = $("exportOrdersHint");
+        const openAgentConsole = $("openAgentConsole");
+        const agentConsole = $("agentConsole");
+        const agentClose = $("agentClose");
+        const agentReplay = $("agentReplay");
+        const agentMessages = $("agentMessages");
+        const agentActions = $("agentActions");
+        const agentConsoleStatus = $("agentConsoleStatus");
+        const revenueStatus = $("revenueStatus");
+        const autopilotToggle = $("autopilotToggle");
+        const autopilotRun = $("autopilotRun");
+        const autopilotRefresh = $("autopilotRefresh");
+        const autopilotSummary = $("autopilotSummary");
+        const autopilotOffers = $("autopilotOffers");
+        const autopilotLeads = $("autopilotLeads");
+        const autopilotMetrics = $("autopilotMetrics");
+        const autopilotApprovals = $("autopilotApprovals");
+        const landingList = $("landingList");
+        const businessPanel = $("businessPanel");
+        const businessUpsell = $("businessUpsell");
+        const installCommandBtn = $("installCommandBtn");
+        const installCommandStatus = $("installCommandStatus");
+        const agentOnlineCount = $("agentOnlineCount");
+        const agentTotalCount = $("agentTotalCount");
+        const agentLastSeen = $("agentLastSeen");
+        const pendingApprovalsCount = $("pendingApprovalsCount");
+        const pendingApprovalsList = $("pendingApprovalsList");
+        const webhookStatusBadge = $("webhookStatusBadge");
+        const webhookLastInbound = $("webhookLastInbound");
+        const webhookFailures = $("webhookFailures");
+        const usageAiCalls = $("usageAiCalls");
+        const usageExports = $("usageExports");
+        const usageAutopilot = $("usageAutopilot");
+        const usageImports = $("usageImports");
+        const openLocalAutopilot = $("openLocalAutopilot");
+        const openApprovalsTab = $("openApprovalsTab");
+        const openWebhooksTab = $("openWebhooksTab");
+        const openAuditTab = $("openAuditTab");
+        const webhooksStatus = $("webhooksStatus");
+        const webhooksHealthList = $("webhooksHealthList");
+        const refreshWebhooks = $("refreshWebhooks");
+        const auditStatus = $("auditStatus");
+        const auditRecentList = $("auditRecentList");
+        const refreshAudit = $("refreshAudit");
+
+        const appState = {
+            planCode: "free",
+            planName: "Free",
+            isAdmin: false,
+            tenantId: null,
+            tenantRole: null,
+            memberships: [],
+            onboardingCompleted: false,
+            projectQuery: "",
+            showDeleted: {
+                projects: false,
+                leads: false,
+                clients: false,
+                providers: false,
+                orders: false
+            }
+        };
+
+        const agentState = {
+            lastEventId: null,
+            lastCorrelationId: null
+        };
+
+        const getReturnUrl = () => `${window.location.pathname}${window.location.search || ""}`;
+
+        const redirectToLogin = () => {
+            const returnUrl = encodeURIComponent(getReturnUrl());
+            window.location.href = `/login?returnUrl=${returnUrl}`;
+        };
+
+        const showGlobalStatus = (message, variant = "error") => {
+            if (!globalStatus) return;
+            globalStatus.innerHTML = message;
+            globalStatus.classList.add("visible", "pulse");
+            globalStatus.classList.remove("error", "warning", "success");
+            if (variant) {
+                globalStatus.classList.add(variant);
+            }
+            if (variant === "error" || variant === "warning") {
+                trackEvent("system.exception", {
+                    message,
+                    variant,
+                    page: window.location.pathname
+                });
+            }
+            setTimeout(() => {
+                globalStatus.classList.remove("pulse");
+            }, 450);
+        };
+
+        const clearGlobalStatus = () => {
+            if (!globalStatus) return;
+            globalStatus.innerHTML = "";
+            globalStatus.classList.remove("visible", "error", "warning", "success", "pulse");
+        };
+
+        const getTenantId = () => appState.tenantId
+            || localStorage.getItem("activeTenantId")
+            || localStorage.getItem("tenantId");
+
+        const trackEvent = (type, payload = {}, options = {}) => {
+            const tenantId = getTenantId();
+            if (!tenantId || !type) return;
+            const body = {
+                type,
+                source: options.source || "ui",
+                payload
+            };
+            if (options.actionMode) {
+                body.actionMode = options.actionMode;
+            }
+            fetch("/api/events", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Tenant-Id": tenantId
+                },
+                body: JSON.stringify(body),
+                keepalive: Boolean(options.keepalive)
+            }).catch(() => {});
+        };
+
+        const entityLabelMap = {
+            projects: "Projects",
+            leads: "Leads",
+            clients: "Clients",
+            providers: "Providers",
+            orders: "Orders"
+        };
+
+        const setPlanBadge = (element, planCode, planName) => {
+            if (!element) return;
+            const code = String(planCode || "free").toLowerCase();
+            element.textContent = planName || code.toUpperCase();
+            element.classList.remove("plan-free", "plan-pro", "plan-business");
+            element.classList.add(`plan-${code}`);
+        };
+
+        const getStoredTenantId = () => localStorage.getItem("activeTenantId") || localStorage.getItem("tenantId");
+
+        const setStoredTenantId = (tenantId) => {
+            if (!tenantId) {
+                localStorage.removeItem("activeTenantId");
+                localStorage.removeItem("tenantId");
+                return;
+            }
+            localStorage.setItem("activeTenantId", String(tenantId));
+            localStorage.setItem("tenantId", String(tenantId));
+        };
+
+        const renderTenantSwitch = () => {
+            if (!tenantSwitch || !tenantSelect) return;
+            const list = Array.isArray(appState.memberships) ? appState.memberships : [];
+            if (list.length <= 1) {
+                tenantSwitch.style.display = "none";
+                return;
+            }
+            tenantSwitch.style.display = "flex";
+            tenantSelect.innerHTML = "";
+            list.forEach((membership) => {
+                const option = document.createElement("option");
+                option.value = String(membership.tenantId);
+                const label = membership.tenantName || `Tenant ${membership.tenantId}`;
+                const roleLabel = membership.role ? ` (${membership.role})` : "";
+                option.textContent = `${label}${roleLabel}`;
+                tenantSelect.appendChild(option);
+            });
+            if (appState.tenantId) {
+                tenantSelect.value = String(appState.tenantId);
+            }
+        };
+
+        const getEntityFromPath = (path) => {
+            const match = String(path).match(/\/api\/([^/?]+)/);
+            return match ? match[1] : "items";
+        };
+
+        const escapeHtml = (value) => String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+
+        const setStatus = (id, message, variant = "") => {
+            const el = $(id);
+            if (!el) return;
+            el.textContent = message || "";
+            el.classList.remove("error", "success", "warning", "pulse");
+            if (variant === true || variant === "error") {
+                el.classList.add("error");
+            }
+            if (variant === "success") {
+                el.classList.add("success", "pulse");
+            }
+            if (variant === "warning") {
+                el.classList.add("warning", "pulse");
+            }
+            if (variant) {
+                setTimeout(() => {
+                    el.classList.remove("pulse");
+                }, 450);
+            }
+        };
+
+        const formatAgentTime = (value) => {
+            if (!value) return "";
+            const safeValue = String(value).replace(" ", "T");
+            const date = new Date(safeValue.endsWith("Z") ? safeValue : `${safeValue}Z`);
+            if (Number.isNaN(date.getTime())) return String(value);
+            return date.toLocaleTimeString();
+        };
+
+        const renderAgentMessages = (messages) => {
+            if (!agentMessages) return;
+            if (!Array.isArray(messages) || !messages.length) {
+                agentMessages.innerHTML = '<div class="agent-console__empty">No messages yet.</div>';
+                return;
+            }
+            agentMessages.innerHTML = messages.map((message) => {
+                const severity = ["info", "warn", "error"].includes(message.severity) ? message.severity : "info";
+                const time = formatAgentTime(message.createdAt);
+                const sender = escapeHtml(message.sender || "agent");
+                const target = escapeHtml(message.target || "user");
+                const text = escapeHtml(message.message || "");
+                return `
+                    <div class="agent-message ${severity}">
+                        <div class="meta">${time} | ${sender} -&gt; ${target} | ${severity}</div>
+                        <div class="text">${text}</div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const buildActionSummary = (action) => {
+            if (!action) return "";
+            const request = action.request || {};
+            if (action.type === "lead_status_update") {
+                const leadId = request.leadId || request.lead_id || request.id || "?";
+                const status = request.status || "?";
+                return `Lead ${leadId} -> ${status}`;
+            }
+            if (action.type === "tag_lead") {
+                const leadId = request.leadId || request.lead_id || request.id || "?";
+                const tags = Array.isArray(request.tags) ? request.tags.join(", ") : (request.tags || "");
+                return `Lead ${leadId} tags: ${tags || "(none)"}`;
+            }
+            if (action.type === "create_ticket") {
+                return request.subject || "Create support ticket";
+            }
+            return "Action ready";
+        };
+
+        const canExecuteAgentAction = (action) => {
+            if (!action || action.status === "done") return false;
+            if (action.type === "lead_status_update") {
+                return appState.isAdmin || appState.tenantRole === "admin";
+            }
+            return true;
+        };
+
+        const renderAgentActions = (actions) => {
+            if (!agentActions) return;
+            if (!Array.isArray(actions) || !actions.length) {
+                agentActions.innerHTML = '<div class="agent-console__empty">No actions yet.</div>';
+                return;
+            }
+            agentActions.innerHTML = actions.map((action) => {
+                const summary = escapeHtml(buildActionSummary(action));
+                const actor = escapeHtml(action.actor || "agent");
+                const status = escapeHtml(action.status || "draft");
+                const resultMessage = action.result?.message || action.result?.error || "";
+                const resultLine = resultMessage ? `<div class="status">${escapeHtml(resultMessage)}</div>` : "";
+                const executeButton = canExecuteAgentAction(action)
+                    ? `<button class="btn btn-ghost" type="button" data-action="execute" data-id="${action.id}">Execute</button>`
+                    : "";
+                return `
+                    <div class="agent-action">
+                        <div class="title">${escapeHtml(action.type || "action")}</div>
+                        <div class="meta">${actor} | ${status}</div>
+                        <div class="status">${summary}</div>
+                        ${resultLine}
+                        ${executeButton}
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const loadAgentThread = async (correlationId) => {
+            if (!correlationId) return;
+            const [messages, actions] = await Promise.all([
+                apiFetch(`/api/agent/messages?correlationId=${encodeURIComponent(correlationId)}`),
+                apiFetch(`/api/agent/actions?correlationId=${encodeURIComponent(correlationId)}`)
+            ]);
+            renderAgentMessages(messages);
+            renderAgentActions(actions);
+        };
+
+        const dispatchAgentEvent = async (payload) => {
+            const data = await apiFetch("/api/agent/dispatch", {
+                method: "POST",
+                body: JSON.stringify(payload || {})
+            });
+            if (data?.correlationId) {
+                agentState.lastCorrelationId = data.correlationId;
+            }
+            renderAgentMessages(data?.messages || []);
+            renderAgentActions(data?.actions || []);
+            return data;
+        };
+
+        const initAgentConsole = async () => {
+            if (!agentConsole) return;
+            try {
+                const eventData = await apiFetch("/api/agent/events", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        event_type: "page_view",
+                        context: {
+                            page: window.location.pathname,
+                            title: document.title
+                        }
+                    })
+                });
+                agentState.lastEventId = eventData.eventId;
+                agentState.lastCorrelationId = eventData.correlationId;
+                await dispatchAgentEvent({ eventId: eventData.eventId });
+                setStatus("agentConsoleStatus", "Conversation ready.");
+            } catch (error) {
+                setStatus("agentConsoleStatus", error.message, "error");
+            }
+        };
+
+        const renderAutopilotStatus = (data) => {
+            if (autopilotToggle) {
+                autopilotToggle.checked = Boolean(data.enabled);
+            }
+            if (autopilotSummary) {
+                const lastRun = data.lastRunAt ? new Date(data.lastRunAt).toLocaleString() : "n/a";
+                autopilotSummary.textContent = `Mode: ${data.mode} | Payment: ${data.paymentMode} | Last run: ${lastRun}`;
+            }
+        };
+
+        const renderAutopilotOffers = (offers) => {
+            if (!autopilotOffers) return;
+            if (!Array.isArray(offers) || !offers.length) {
+                autopilotOffers.innerHTML = '<div class="status">No offers yet.</div>';
+                return;
+            }
+            autopilotOffers.innerHTML = offers.map((offer) => {
+                const price = Number(offer.price || 0);
+                const status = escapeHtml(offer.status || "draft");
+                return `
+                    <div class="list-item">
+                        <h4>${escapeHtml(offer.title || "Untitled")}</h4>
+                        <div class="status">${escapeHtml(offer.promise || "")}</div>
+                        <div class="list-meta">Price: ${price} EUR | Status: ${status}</div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const renderLandingLinks = (offers) => {
+            if (!landingList) return;
+            if (!Array.isArray(offers) || !offers.length) {
+                landingList.innerHTML = '<div class="status">No landing pages yet.</div>';
+                return;
+            }
+            const links = offers
+                .map((offer) => offer.landing?.slug ? {
+                    title: offer.title,
+                    slug: offer.landing.slug
+                } : null)
+                .filter(Boolean);
+            if (!links.length) {
+                landingList.innerHTML = '<div class="status">No landing pages yet.</div>';
+                return;
+            }
+            landingList.innerHTML = links.map((link) => {
+                const url = `/autopilot/${link.slug}`;
+                return `
+                    <div class="list-item">
+                        <h4>${escapeHtml(link.title || "Landing")}</h4>
+                        <div class="status"><a href="${url}" target="_blank">${url}</a></div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const renderAutopilotLeads = (leads) => {
+            if (!autopilotLeads) return;
+            if (!Array.isArray(leads) || !leads.length) {
+                autopilotLeads.innerHTML = '<div class="status">No leads yet.</div>';
+                return;
+            }
+            autopilotLeads.innerHTML = leads.slice(0, 10).map((lead) => {
+                return `
+                    <div class="list-item">
+                        <h4>${escapeHtml(lead.name || lead.email)}</h4>
+                        <div class="list-meta">${escapeHtml(lead.email || "")}</div>
+                        <div class="status">${escapeHtml(lead.status || "new")}</div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const renderAutopilotMetrics = (metrics) => {
+            if (!autopilotMetrics) return;
+            const summary = metrics?.summary || {};
+            const daily = Array.isArray(metrics?.daily) ? metrics.daily.slice(-5) : [];
+            autopilotMetrics.innerHTML = `
+                <div class="list-item">
+                    <h4>Totals</h4>
+                    <div class="list-meta">Visits: ${summary.visits || 0} | Leads: ${summary.leads || 0} | Paid: ${summary.paid || 0}</div>
+                    <div class="status">Revenue: ${summary.revenue || 0} EUR</div>
+                </div>
+                ${daily.map((item) => `
+                    <div class="list-item">
+                        <h4>${escapeHtml(item.date)}</h4>
+                        <div class="list-meta">Visits: ${item.visits || 0} | Leads: ${item.leads || 0}</div>
+                        <div class="status">Revenue: ${item.revenue || 0} EUR</div>
+                    </div>
+                `).join("")}
+            `;
+        };
+
+        const renderAutopilotApprovals = (actions) => {
+            if (!autopilotApprovals) return;
+            if (!Array.isArray(actions) || !actions.length) {
+                autopilotApprovals.innerHTML = '<div class="status">No approvals pending.</div>';
+                return;
+            }
+            autopilotApprovals.innerHTML = actions.map((action) => {
+                const title = action.payload?.title || action.type;
+                const canExecute = appState.isAdmin || appState.tenantRole === "admin";
+                const button = canExecute
+                    ? `<button class="btn-small" data-action="execute" data-id="${action.id}">Approve</button>`
+                    : "";
+                return `
+                    <div class="list-item">
+                        <h4>${escapeHtml(title || "Draft action")}</h4>
+                        <div class="list-meta">${escapeHtml(action.type || "")}</div>
+                        <div class="list-actions">${button}</div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const loadAutopilotStatus = async () => {
+            const data = await apiFetch("/api/autopilot/status");
+            renderAutopilotStatus(data);
+            return data;
+        };
+
+        const loadAutopilotOffers = async () => {
+            const data = await apiFetch("/api/autopilot/offers");
+            renderAutopilotOffers(data);
+            renderLandingLinks(data);
+            return data;
+        };
+
+        const loadAutopilotLeads = async () => {
+            const data = await apiFetch("/api/autopilot/leads");
+            renderAutopilotLeads(data);
+            return data;
+        };
+
+        const loadAutopilotMetrics = async () => {
+            const data = await apiFetch("/api/autopilot/metrics");
+            renderAutopilotMetrics(data);
+            return data;
+        };
+
+        const loadAutopilotApprovals = async () => {
+            const data = await apiFetch("/api/agent/actions?status=draft&limit=50");
+            const approvals = Array.isArray(data) ? data.filter((item) => String(item.type || '').startsWith('safe_')) : [];
+            renderAutopilotApprovals(approvals);
+            return approvals;
+        };
+
+        const refreshAutopilot = async () => {
+            try {
+                await Promise.all([
+                    loadAutopilotStatus(),
+                    loadAutopilotOffers(),
+                    loadAutopilotLeads(),
+                    loadAutopilotMetrics(),
+                    loadAutopilotApprovals()
+                ]);
+                setStatus("revenueStatus", "Updated", "success");
+            } catch (error) {
+                setStatus("revenueStatus", error.message, true);
+            }
+        };
+
+        const updateExportButtons = () => {
+            const isFree = appState.planCode === "free";
+            if (exportProjectsBtn) {
+                exportProjectsBtn.disabled = isFree;
+                exportProjectsBtn.classList.toggle("disabled", isFree);
+                exportProjectsBtn.title = isFree ? "Upgrade to export" : "Export projects as CSV";
+            }
+            if (exportOrdersBtn) {
+                exportOrdersBtn.disabled = isFree;
+                exportOrdersBtn.classList.toggle("disabled", isFree);
+                exportOrdersBtn.title = isFree ? "Upgrade to export" : "Export orders as CSV";
+            }
+            if (exportProjectsHint) {
+                exportProjectsHint.style.display = isFree ? "inline" : "none";
+            }
+            if (exportOrdersHint) {
+                exportOrdersHint.style.display = isFree ? "inline" : "none";
+            }
+        };
+
+        const debounce = (fn, delay) => {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn(...args), delay);
+            };
+        };
+
+        const buildQuery = (params) => {
+            const search = new URLSearchParams();
+            Object.entries(params).forEach(([key, value]) => {
+                if (value === undefined || value === null || value === '') return;
+                search.set(key, value);
+            });
+            const query = search.toString();
+            return query ? `?${query}` : '';
+        };
+
+        const loadOnboarding = async () => {
+            try {
+                const data = await apiFetch("/api/user/onboarding");
+                appState.onboardingCompleted = Boolean(data.completed);
+                return data;
+            } catch (error) {
+                return null;
+            }
+        };
+
+        const renderOnboarding = (data) => {
+            if (!data || !onboardingWidget || !onboardingList) return;
+            const steps = data.steps || {};
+            const completedSteps = data.completedSteps || 0;
+            const totalSteps = data.totalSteps || 5;
+            onboardingWidget.style.display = data.completed ? "none" : "flex";
+            if (onboardingProgress) {
+                onboardingProgress.textContent = `${completedSteps}/${totalSteps} complete`;
+            }
+
+            const items = [
+                { key: "projects", label: "Create your first project" },
+                { key: "leads", label: "Capture your first lead" },
+                { key: "clients", label: "Create your first client" },
+                { key: "providers", label: "Create your first provider" },
+                { key: "orders", label: "Create your first order" },
+                { key: "aiProject", label: "Try AI Project" }
+            ];
+
+            const optional = { key: "pwa", label: "Install the PWA (optional)" };
+            const pwaInstalled = window.matchMedia("(display-mode: standalone)").matches || localStorage.getItem("pwaInstalled") === "true";
+
+            onboardingList.innerHTML = items.map((item) => {
+                const done = Boolean(steps[item.key]);
+                return `<li class="${done ? "done" : ""}"><span>${item.label}</span><span class="tag">${done ? "Done" : "Pending"}</span></li>`;
+            }).join("") +
+            `<li class="${pwaInstalled ? "done" : ""}"><span>${optional.label}</span><span class="tag">${pwaInstalled ? "Done" : "Optional"}</span></li>`;
+
+            if (!data.completed && completedSteps >= totalSteps) {
+                completeOnboarding?.click();
+            }
+
+            if (!data.completed && data.counts?.projects === 0) {
+                onboardingModal?.classList.add("open");
+            }
+        };
+
+        const triggerConfetti = () => {
+            if (!confetti) return;
+            confetti.classList.add("active");
+            setTimeout(() => confetti.classList.remove("active"), 1600);
+        };
+
+        const refreshOnboarding = async () => {
+            const data = await loadOnboarding();
+            if (data) {
+                renderOnboarding(data);
+            }
+        };
+
+        const initCollapseToggles = () => {
+            document.querySelectorAll("[data-toggle]").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const targetId = button.dataset.toggle;
+                    const target = document.getElementById(targetId);
+                    if (!target) return;
+                    const isCollapsed = target.classList.toggle("collapsed");
+                    button.textContent = isCollapsed ? "Expand" : "Collapse";
+                });
+            });
+        };
+
+        const apiFetch = async (path, options = {}) => {
+            const meta = options.meta || {};
+            const { meta: _meta, ...fetchOptions } = options;
+            const tenantId = getTenantId();
+            const baseUrl = 'http://localhost:3007';
+            const token = localStorage.getItem('token');
+            const response = await fetch(baseUrl + path, {
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+                    ...(tenantId ? { "X-Tenant-Id": tenantId } : {}),
+                    ...(fetchOptions.headers || {})
+                },
+                ...fetchOptions
+            });
+            const body = await response.json().catch(() => ({}));
+
+            if (response.status === 401) {
+                redirectToLogin();
+                const error = new Error(body.message || "Unauthorized");
+                error.code = "unauthorized";
+                throw error;
+            }
+
+            if (response.status === 403 && (body.error === "Upgrade required" || body.message === "Upgrade required")) {
+                const entityKey = meta.entity || getEntityFromPath(path);
+                const entityLabel = entityLabelMap[entityKey] || entityKey;
+                const current = body.current ?? "?";
+                const limit = body.limit ?? "?";
+                const planCode = String(body.plan_code || "free").toUpperCase();
+                showGlobalStatus(
+                    `<div>Upgrade required: ${planCode} plan limit reached for ${entityLabel}.</div>` +
+                    `<div>Current: ${current} / Limit: ${limit}. <a href="/pricing">Go to Pricing</a>.</div>`,
+                    "warning"
+                );
+                const error = new Error(body.message || body.error || "Upgrade required");
+                error.code = "upgrade";
+                error.details = body;
+                throw error;
+            }
+
+            if (!response.ok || !body.ok) {
+                const endpoint = String(path).split("?")[0];
+                showGlobalStatus(`Request failed for ${endpoint}: ${body.message || body.error || response.statusText}.`);
+                throw new Error(body.message || body.error || "Request failed");
+            }
+            return body.data;
+        };
+
+        const loadSession = async () => {
+            try {
+                const data = await apiFetch("/api/auth/me");
+                if (accountEmail) {
+                    accountEmail.textContent = data.user?.email || "Account";
+                }
+                const planName = data.plan?.name || data.plan?.code || "Free";
+                const planCode = (data.plan?.code || "").toLowerCase();
+                appState.planCode = planCode || "free";
+                appState.planName = planName;
+                appState.isAdmin = ["admin", "superadmin"].includes(data.user?.role);
+                const memberships = Array.isArray(data.memberships) ? data.memberships : [];
+                const storedTenantId = getStoredTenantId();
+                const resolvedTenantId = data.activeTenantId || storedTenantId || memberships[0]?.tenantId || null;
+                appState.tenantId = resolvedTenantId ? Number(resolvedTenantId) : null;
+                appState.memberships = memberships;
+                appState.tenantRole = memberships.find((membership) => String(membership.tenantId) === String(appState.tenantId))?.role || null;
+                if (appState.tenantId) {
+                    setStoredTenantId(appState.tenantId);
+                }
+                renderTenantSwitch();
+                if (accountPlan) {
+                    setPlanBadge(accountPlan, planCode || "free", planName);
+                }
+                if (upgradeLink) {
+                    upgradeLink.style.display = planCode === "free" ? "inline-flex" : "none";
+                }
+                if (adminLink) {
+                    adminLink.style.display = appState.isAdmin ? "inline-flex" : "none";
+                }
+                updateExportButtons();
+                toggleBusinessUI(isBusinessPlan());
+                return data;
+            } catch (error) {
+                if (error.code === "unauthorized") {
+                    return null;
+                }
+                setStatus("statsStatus", error.message, true);
+                return null;
+            }
+        };
+
+        const formatMoney = (value) => {
+            const numberValue = Number(value) || 0;
+            return `$${numberValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+        };
+
+        const formatCount = (value) => Number(value || 0).toLocaleString();
+
+        const formatTimestamp = (value) => {
+            if (!value) return "-";
+            const raw = String(value);
+            const normalized = raw.includes("T") ? raw : `${raw.replace(" ", "T")}Z`;
+            const parsed = new Date(normalized);
+            if (!Number.isNaN(parsed.getTime())) {
+                return parsed.toLocaleString();
+            }
+            return raw;
+        };
+
+        const isBusinessPlan = () => appState.planCode === "business";
+
+        const toggleBusinessUI = (isBusiness) => {
+            renderSectionNav(isBusiness);
+            document.querySelectorAll(".business-only").forEach((el) => {
+                el.style.display = isBusiness ? "" : "none";
+            });
+            if (businessUpsell) {
+                businessUpsell.style.display = isBusiness ? "none" : "flex";
+            }
+            if (installCommandBtn) {
+                const canInstall = isBusiness && appState.isAdmin;
+                installCommandBtn.disabled = !canInstall;
+                installCommandBtn.classList.toggle("disabled", !canInstall);
+                installCommandBtn.title = canInstall ? "Generate install command" : "Admin required";
+            }
+        };
+
+        const renderAgentStatus = (data) => {
+            if (agentOnlineCount) agentOnlineCount.textContent = formatCount(data?.online_count || 0);
+            if (agentTotalCount) agentTotalCount.textContent = formatCount(data?.total_count || 0);
+            if (agentLastSeen) agentLastSeen.textContent = formatTimestamp(data?.last_seen_at);
+        };
+
+        const renderApprovals = (data) => {
+            if (pendingApprovalsCount) {
+                pendingApprovalsCount.textContent = formatCount(data?.pending_count || 0);
+            }
+            if (!pendingApprovalsList) return;
+            const items = Array.isArray(data?.items) ? data.items : [];
+            if (!items.length) {
+                pendingApprovalsList.innerHTML = '<div class="status">No pending approvals.</div>';
+                return;
+            }
+            pendingApprovalsList.innerHTML = items.map((item) => {
+                const title = escapeHtml(item.type || "Approval");
+                const entity = escapeHtml(item.entity || "General");
+                const createdAt = escapeHtml(formatTimestamp(item.created_at));
+                return `
+                    <div class="widget-list-item">
+                        <h4>${title}</h4>
+                        <div class="meta"><span>${entity}</span><span>${createdAt}</span></div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const renderWebhookHealth = (data) => {
+            const statusValue = String(data?.status || "ok").toLowerCase();
+            const statusLabel = statusValue === "warn" ? "WARN" : "OK";
+            if (webhookStatusBadge) {
+                webhookStatusBadge.textContent = statusLabel;
+                webhookStatusBadge.classList.toggle("ok", statusValue !== "warn");
+                webhookStatusBadge.classList.toggle("warn", statusValue === "warn");
+            }
+            const lastInbound = formatTimestamp(data?.last_inbound_at);
+            const failures = formatCount(data?.failures_last_24h || 0);
+            if (webhookLastInbound) webhookLastInbound.textContent = lastInbound;
+            if (webhookFailures) webhookFailures.textContent = failures;
+            if (webhooksHealthList) {
+                webhooksHealthList.innerHTML = `
+                    <div class="list-item">
+                        <h4>${statusLabel} inbound</h4>
+                        <div class="list-meta">Last inbound: ${escapeHtml(lastInbound)}</div>
+                        <div class="status">Failures (24h): ${escapeHtml(failures)}</div>
+                    </div>
+                `;
+            }
+        };
+
+        const renderUsageSnapshot = (data) => {
+            if (usageAiCalls) usageAiCalls.textContent = formatCount(data?.ai_calls || 0);
+            if (usageExports) usageExports.textContent = formatCount(data?.exports || 0);
+            if (usageAutopilot) usageAutopilot.textContent = formatCount(data?.autopilot_cycles || 0);
+            if (usageImports) usageImports.textContent = formatCount(data?.imports || 0);
+        };
+
+        const renderAuditRecent = (rows) => {
+            if (!auditRecentList) return;
+            const list = Array.isArray(rows) ? rows : [];
+            if (!list.length) {
+                auditRecentList.innerHTML = '<div class="status">No recent audit events.</div>';
+                return;
+            }
+            auditRecentList.innerHTML = list.slice(0, 8).map((row) => {
+                const title = `${escapeHtml(row.entity || "event")} · ${escapeHtml(row.action || "update")}`;
+                const meta = `Entity ID: ${escapeHtml(String(row.entity_id || "n/a"))}`;
+                const createdAt = escapeHtml(formatTimestamp(row.created_at));
+                return `
+                    <div class="list-item">
+                        <h4>${title}</h4>
+                        <div class="list-meta">${meta}</div>
+                        <div class="status">${createdAt}</div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const loadAgentStatus = async () => {
+            try {
+                const data = await apiFetch("/api/agent/status");
+                renderAgentStatus(data);
+            } catch (error) {
+                if (agentLastSeen) agentLastSeen.textContent = "-";
+            }
+        };
+
+        const loadApprovals = async () => {
+            try {
+                const data = await apiFetch("/api/approvals?status=pending");
+                renderApprovals(data);
+            } catch (error) {
+                if (pendingApprovalsList) {
+                    pendingApprovalsList.innerHTML = '<div class="status">Failed to load approvals.</div>';
+                }
+            }
+        };
+
+        const loadWebhooksHealth = async () => {
+            try {
+                const data = await apiFetch("/api/webhooks/health");
+                renderWebhookHealth(data);
+                if (webhooksStatus) {
+                    webhooksStatus.textContent = "Updated";
+                }
+            } catch (error) {
+                if (webhooksStatus) {
+                    webhooksStatus.textContent = error.message;
+                }
+            }
+        };
+
+        const loadUsageSnapshot = async () => {
+            try {
+                const data = await apiFetch("/api/usage");
+                renderUsageSnapshot(data);
+            } catch (error) {
+                // ignore
+            }
+        };
+
+        const loadAuditRecent = async () => {
+            try {
+                const data = await apiFetch("/api/audit/recent");
+                renderAuditRecent(data);
+                if (auditStatus) {
+                    auditStatus.textContent = "Updated";
+                }
+            } catch (error) {
+                if (auditStatus) {
+                    auditStatus.textContent = error.message;
+                }
+            }
+        };
+
+        const loadBusinessPanel = async () => {
+            const isBusiness = isBusinessPlan();
+            toggleBusinessUI(isBusiness);
+            if (!isBusiness) return;
+            await Promise.all([
+                loadAgentStatus(),
+                loadApprovals(),
+                loadWebhooksHealth(),
+                loadUsageSnapshot(),
+                loadAuditRecent()
+            ]);
+        };
+
+        const scrollToSection = (sectionId, bodyId) => {
+            if (bodyId) {
+                const body = $(bodyId);
+                if (body) {
+                    body.classList.remove("collapsed");
+                }
+            }
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        };
+
+        const copyToClipboard = async (text) => {
+            if (!text) return false;
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(text);
+                return true;
+            }
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            const ok = document.execCommand("copy");
+            document.body.removeChild(textarea);
+            return ok;
+        };
+
+        const loadStats = async () => {
+            try {
+                const data = await apiFetch("/api/stats");
+                $("statProjects").textContent = data.totalProjects || 0;
+                $("statOrders").textContent = data.totalOrders || 0;
+                $("statActiveOrders").textContent = data.activeOrders || 0;
+                $("statLeads").textContent = data.totalLeads || 0;
+                $("statClients").textContent = data.clients || 0;
+                $("statProviders").textContent = data.providers || 0;
+                $("statAiRequests").textContent = data.aiRequests || 0;
+                $("statMrr").textContent = formatMoney(data.totalMRR || 0);
+                $("statNetRevenue").textContent = formatMoney(data.netRevenue || 0);
+                $("statAvgPayout").textContent = `${data.avgProviderPayout || 0}%`;
+                clearGlobalStatus();
+                setStatus("statsStatus", `Updated ${new Date().toLocaleTimeString()}`);
+            } catch (error) {
+                setStatus("statsStatus", error.message, true);
+            }
+        };
+
+        const renderList = (items, containerId, type, options = {}) => {
+            const container = $(containerId);
+            if (!container) return;
+            if (!items.length) {
+                const emptyLabel = options.query ? "No results" : `No ${type} yet.`;
+                container.innerHTML = `<div class="status">${emptyLabel}</div>`;
+                return;
+            }
+
+            container.innerHTML = items.map((item) => {
+                const meta = [];
+                const isDeleted = Boolean(item.deletedAt);
+                if (type === "projects") {
+                    meta.push(`Status: ${escapeHtml(item.status || "")}`);
+                    meta.push(`Progress: ${escapeHtml(item.progress ?? 0)}%`);
+                    meta.push(`Due: ${escapeHtml(item.due || "n/a")}`);
+                }
+                if (type === "clients") {
+                    meta.push(`MRR: ${escapeHtml(formatMoney(item.mrr || 0))}`);
+                    meta.push(`Status: ${escapeHtml(item.status || "")}`);
+                }
+                if (type === "leads") {
+                    if (item.company) {
+                        meta.push(`Company: ${escapeHtml(item.company)}`);
+                    }
+                    if (item.email) {
+                        meta.push(`Email: ${escapeHtml(item.email)}`);
+                    }
+                    if (item.phone) {
+                        meta.push(`Phone: ${escapeHtml(item.phone)}`);
+                    }
+                    meta.push(`Status: ${escapeHtml(item.status || "")}`);
+                    if (item.source) {
+                        meta.push(`Source: ${escapeHtml(item.source)}`);
+                    }
+                }
+                if (type === "providers") {
+                    const services = Array.isArray(item.services) ? item.services.join(", ") : item.services;
+                    meta.push(`Services: ${escapeHtml(services || "")}`);
+                    meta.push(`Payout: ${escapeHtml(item.payoutRate ?? 0)}%`);
+                }
+                if (type === "orders") {
+                    meta.push(`Status: ${escapeHtml(item.status || "")}`);
+                    meta.push(`Priority: ${escapeHtml(item.priority || "")}`);
+                }
+                if (isDeleted) {
+                    meta.unshift(`Deleted`);
+                }
+
+                const note = item.notes || item.description;
+                const actions = isDeleted
+                    ? `<button class="btn-small" data-action="restore" data-type="${type}" data-id="${item.id}">Restore</button>`
+                    : `<button class="btn-small" data-action="edit" data-type="${type}" data-id="${item.id}">Edit</button>
+                       <button class="btn-small" data-action="delete" data-type="${type}" data-id="${item.id}">Delete</button>`;
+                return `
+                    <div class="list-item ${isDeleted ? "deleted" : ""}">
+                        <h4>${escapeHtml(item.name || item.company || item.title || item.email || item.phone || "Untitled")}</h4>
+                        ${note ? `<div class="status">${escapeHtml(note)}</div>` : ""}
+                        <div class="list-meta">${meta.join(" | ")}</div>
+                        <div class="list-actions">
+                            ${actions}
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        const loadCollection = async (type, containerId, statusId) => {
+            try {
+                const params = {
+                    includeDeleted: appState.showDeleted[type] ? "true" : "",
+                    q: type === "projects" ? appState.projectQuery : ""
+                };
+                const url = `/api/${type}${buildQuery(params)}`;
+                const response = await apiFetch(url, { meta: { entity: type } });
+                // Handle both array response and {items: []} format
+                const items = Array.isArray(response) ? response : (response.projects || response.orders || response[type] || []);
+                renderList(items, containerId, type, { query: params.q });
+                clearGlobalStatus();
+                setStatus(statusId, `Loaded ${items.length} ${type}`);
+                return items;
+            } catch (error) {
+                setStatus(statusId, error.message, true);
+                return [];
+            }
+        };
+
+        const resetForm = (formId, hiddenId, cancelId) => {
+            const form = $(formId);
+            if (form) form.reset();
+            if (hiddenId) $(hiddenId).value = "";
+            if (cancelId) $(cancelId).textContent = "Cancel edit";
+        };
+
+        const bindCrud = (config) => {
+            const form = $(config.formId);
+            const hiddenId = $(config.hiddenId);
+            const cancelBtn = $(config.cancelId);
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const payload = config.getPayload();
+                const isUpdate = Boolean(hiddenId.value);
+                const eventPayload = {
+                    entity: config.type,
+                    formId: config.formId,
+                    action: isUpdate ? "update" : "create",
+                    fields: Object.keys(payload)
+                };
+                if (config.type === "orders" || config.type === "leads") {
+                    eventPayload.values = payload;
+                    eventPayload.actionMode = "draft";
+                }
+                trackEvent("ui.form_submit", eventPayload);
+                try {
+                    if (hiddenId.value) {
+                        await apiFetch(`/api/${config.type}/${hiddenId.value}`, {
+                            method: "PUT",
+                            body: JSON.stringify(payload),
+                            meta: { entity: config.type }
+                        });
+                    } else {
+                        await apiFetch(`/api/${config.type}`, {
+                            method: "POST",
+                            body: JSON.stringify(payload),
+                            meta: { entity: config.type }
+                        });
+                    }
+                    resetForm(config.formId, config.hiddenId, config.cancelId);
+                    await config.load();
+                    await loadStats();
+                    clearGlobalStatus();
+                    setStatus(config.statusId, `${config.type} saved.`, "success");
+                    refreshOnboarding();
+                } catch (error) {
+                    setStatus(config.statusId, error.message, true);
+                    trackEvent("ui.form_error", {
+                        entity: config.type,
+                        formId: config.formId,
+                        error: error.message
+                    });
+                }
+            });
+
+            cancelBtn.addEventListener("click", () => {
+                resetForm(config.formId, config.hiddenId, config.cancelId);
+                setStatus(config.statusId, "Edit canceled.");
+            });
+        };
+
+        const handleListClick = async (event) => {
+            const btn = event.target.closest("button");
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const type = btn.dataset.type;
+            const id = btn.dataset.id;
+            if (!action || !type || !id) return;
+
+            if (action === "delete") {
+                const confirmDelete = confirm(`Delete ${type} #${id}?`);
+                if (!confirmDelete) return;
+                try {
+                    await apiFetch(`/api/${type}/${id}`, { method: "DELETE", meta: { entity: type } });
+                    await loaders[type]();
+                    await loadStats();
+                    refreshOnboarding();
+                    clearGlobalStatus();
+                } catch (error) {
+                    setStatus(statusMap[type], error.message, true);
+                }
+                return;
+            }
+
+            if (action === "restore") {
+                try {
+                    await apiFetch(`/api/${type}/${id}/restore`, { method: "POST", meta: { entity: type } });
+                    await loaders[type]();
+                    await loadStats();
+                    refreshOnboarding();
+                    clearGlobalStatus();
+                } catch (error) {
+                    setStatus(statusMap[type], error.message, true);
+                }
+                return;
+            }
+
+            if (action === "edit") {
+                const items = cache[type] || [];
+                const item = items.find((entry) => String(entry.id) === String(id));
+                if (!item) return;
+                populateForms[type](item);
+                setStatus(statusMap[type], `Editing ${type} #${id}`);
+            }
+        };
+
+        const cache = {
+            projects: [],
+            leads: [],
+            clients: [],
+            providers: [],
+            orders: []
+        };
+
+        const statusMap = {
+            projects: "projectsStatus",
+            leads: "leadsStatus",
+            clients: "clientsStatus",
+            providers: "providersStatus",
+            orders: "ordersStatus"
+        };
+
+        const loaders = {
+            projects: async () => { cache.projects = await loadCollection("projects", "projectsList", "projectsStatus"); },
+            leads: async () => { cache.leads = await loadCollection("leads", "leadsList", "leadsStatus"); },
+            clients: async () => { cache.clients = await loadCollection("clients", "clientsList", "clientsStatus"); },
+            providers: async () => { cache.providers = await loadCollection("providers", "providersList", "providersStatus"); },
+            orders: async () => { cache.orders = await loadCollection("orders", "ordersList", "ordersStatus"); }
+        };
+
+        const populateForms = {
+            projects: (item) => {
+                $("projectId").value = item.id;
+                $("projectName").value = item.name || "";
+                $("projectCategory").value = item.category || "";
+                $("projectStatus").value = item.status || "";
+                $("projectProgress").value = item.progress ?? 0;
+                $("projectDue").value = item.due || "";
+                $("projectNotes").value = item.notes || "";
+            },
+            leads: (item) => {
+                $("leadId").value = item.id;
+                $("leadName").value = item.name || "";
+                $("leadCompany").value = item.company || "";
+                $("leadEmail").value = item.email || "";
+                $("leadPhone").value = item.phone || "";
+                $("leadSource").value = item.source || "";
+                $("leadStatus").value = item.status || "new";
+                $("leadNotes").value = item.notes || "";
+            },
+            clients: (item) => {
+                $("clientId").value = item.id;
+                $("clientName").value = item.name || "";
+                $("clientMrr").value = item.mrr ?? 0;
+                $("clientStatus").value = item.status || "active";
+                $("clientNotes").value = item.notes || "";
+            },
+            providers: (item) => {
+                $("providerId").value = item.id;
+                $("providerName").value = item.name || "";
+                $("providerServices").value = Array.isArray(item.services) ? item.services.join(", ") : (item.services || "");
+                $("providerPayout").value = item.payoutRate ?? 0;
+            },
+            orders: (item) => {
+                $("orderId").value = item.id;
+                $("orderTitle").value = item.title || "";
+                $("orderDescription").value = item.description || "";
+                $("orderStatus").value = item.status || "";
+                $("orderPriority").value = item.priority || "Medium";
+            }
+        };
+
+        bindCrud({
+            type: "projects",
+            formId: "projectForm",
+            hiddenId: "projectId",
+            cancelId: "projectCancel",
+            statusId: "projectsStatus",
+            getPayload: () => ({
+                name: $("projectName").value.trim(),
+                category: $("projectCategory").value.trim(),
+                status: $("projectStatus").value.trim(),
+                progress: Number($("projectProgress").value),
+                due: $("projectDue").value || null,
+                notes: $("projectNotes").value.trim()
+            }),
+            load: loaders.projects
+        });
+
+        bindCrud({
+            type: "leads",
+            formId: "leadForm",
+            hiddenId: "leadId",
+            cancelId: "leadCancel",
+            statusId: "leadsStatus",
+            getPayload: () => ({
+                name: $("leadName").value.trim(),
+                company: $("leadCompany").value.trim(),
+                email: $("leadEmail").value.trim(),
+                phone: $("leadPhone").value.trim(),
+                source: $("leadSource").value.trim(),
+                status: $("leadStatus").value,
+                notes: $("leadNotes").value.trim()
+            }),
+            load: loaders.leads
+        });
+
+        bindCrud({
+            type: "clients",
+            formId: "clientForm",
+            hiddenId: "clientId",
+            cancelId: "clientCancel",
+            statusId: "clientsStatus",
+            getPayload: () => ({
+                name: $("clientName").value.trim(),
+                mrr: Number($("clientMrr").value),
+                status: $("clientStatus").value,
+                notes: $("clientNotes").value.trim()
+            }),
+            load: loaders.clients
+        });
+
+        bindCrud({
+            type: "providers",
+            formId: "providerForm",
+            hiddenId: "providerId",
+            cancelId: "providerCancel",
+            statusId: "providersStatus",
+            getPayload: () => ({
+                name: $("providerName").value.trim(),
+                services: $("providerServices").value,
+                payoutRate: Number($("providerPayout").value)
+            }),
+            load: loaders.providers
+        });
+
+        bindCrud({
+            type: "orders",
+            formId: "orderForm",
+            hiddenId: "orderId",
+            cancelId: "orderCancel",
+            statusId: "ordersStatus",
+            getPayload: () => ({
+                title: $("orderTitle").value.trim(),
+                description: $("orderDescription").value.trim(),
+                status: $("orderStatus").value.trim(),
+                priority: $("orderPriority").value
+            }),
+            load: loaders.orders
+        });
+
+        document.addEventListener("click", (event) => {
+            if (event.target.closest("#projectsList, #leadsList, #clientsList, #providersList, #ordersList")) {
+                handleListClick(event);
+            }
+        });
+
+        if (projectSearch) {
+            const runSearch = debounce(() => {
+                appState.projectQuery = projectSearch.value.trim();
+                loaders.projects();
+            }, 250);
+            projectSearch.addEventListener("input", runSearch);
+        }
+
+        const bindShowDeleted = (type, checkboxId) => {
+            const checkbox = $(checkboxId);
+            if (!checkbox) return;
+            checkbox.addEventListener("change", () => {
+                appState.showDeleted[type] = checkbox.checked;
+                loaders[type]();
+            });
+        };
+
+        bindShowDeleted("projects", "projectsShowDeleted");
+        bindShowDeleted("leads", "leadsShowDeleted");
+        bindShowDeleted("clients", "clientsShowDeleted");
+        bindShowDeleted("providers", "providersShowDeleted");
+        bindShowDeleted("orders", "ordersShowDeleted");
+
+        if (exportProjectsBtn) {
+            exportProjectsBtn.addEventListener("click", () => {
+                if (appState.planCode === "free") {
+                    showGlobalStatus("Upgrade required to export projects. <a href=\"/pricing\">Go to Pricing</a>.", "warning");
+                    return;
+                }
+                window.open("/api/projects/export", "_blank");
+            });
+        }
+
+        if (exportOrdersBtn) {
+            exportOrdersBtn.addEventListener("click", () => {
+                if (appState.planCode === "free") {
+                    showGlobalStatus("Upgrade required to export orders. <a href=\"/pricing\">Go to Pricing</a>.", "warning");
+                    return;
+                }
+                window.open("/api/orders/export", "_blank");
+            });
+        }
+
+        if (openOnboarding && onboardingModal) {
+            openOnboarding.addEventListener("click", () => onboardingModal.classList.add("open"));
+        }
+        if (closeOnboarding && onboardingModal) {
+            closeOnboarding.addEventListener("click", () => onboardingModal.classList.remove("open"));
+        }
+        if (onboardingModal) {
+            onboardingModal.addEventListener("click", (event) => {
+                if (event.target === onboardingModal) {
+                    onboardingModal.classList.remove("open");
+                }
+            });
+        }
+        if (completeOnboarding) {
+            completeOnboarding.addEventListener("click", async () => {
+                try {
+                    await apiFetch("/api/user/onboarding", {
+                        method: "POST",
+                        body: JSON.stringify({ completed: true })
+                    });
+                    onboardingModal?.classList.remove("open");
+                    onboardingWidget.style.display = "none";
+                    triggerConfetti();
+                } catch (error) {
+                    setStatus("statsStatus", error.message, true);
+                }
+            });
+        }
+        if (seedDemoBtn) {
+            seedDemoBtn.addEventListener("click", async () => {
+                setStatus("statsStatus", "Generating demo data...");
+                try {
+                    const result = await apiFetch("/api/demo/seed", { method: "POST" });
+                    await Promise.all([loadStats(), loaders.projects(), loaders.leads(), loaders.clients(), loaders.providers(), loaders.orders()]);
+                    refreshOnboarding();
+                    showGlobalStatus(result.message || "Demo data ready.", "success");
+                } catch (error) {
+                    showGlobalStatus(error.message, "error");
+                }
+            });
+        }
+
+        $("aiProjectForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            setStatus("aiStatus", "Generating project plan...");
+            try {
+                const idea = $("aiIdea").value.trim();
+                trackEvent("ui.form_submit", {
+                    entity: "ai-project",
+                    formId: "aiProjectForm",
+                    action: "create",
+                    fields: ["idea"]
+                });
+                const data = await apiFetch("/api/ai-project", {
+                    method: "POST",
+                    body: JSON.stringify({ idea })
+                });
+                $("aiProjectOutput").textContent = JSON.stringify(data, null, 2);
+                await loadStats();
+                await refreshOnboarding();
+                setStatus("aiStatus", "AI project generated.");
+            } catch (error) {
+                setStatus("aiStatus", error.message, true);
+            }
+        });
+
+        $("aiChatForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            setStatus("aiStatus", "Sending message...");
+            try {
+                const message = $("aiMessage").value.trim();
+                trackEvent("ui.form_submit", {
+                    entity: "ai-chat",
+                    formId: "aiChatForm",
+                    action: "create",
+                    fields: ["message"]
+                });
+                const data = await apiFetch("/api/chat", {
+                    method: "POST",
+                    body: JSON.stringify({ message })
+                });
+                $("aiChatOutput").textContent = data.reply || JSON.stringify(data, null, 2);
+                await loadStats();
+                setStatus("aiStatus", "AI reply received.");
+            } catch (error) {
+                setStatus("aiStatus", error.message, true);
+            }
+        });
+
+        $("refreshStats").addEventListener("click", loadStats);
+        $("refreshAll").addEventListener("click", async () => {
+            await Promise.all([
+                loadStats(),
+                loaders.projects(),
+                loaders.leads(),
+                loaders.clients(),
+                loaders.providers(),
+                loaders.orders(),
+                loadBusinessPanel()
+            ]);
+        });
+
+        if (installCommandBtn) {
+            installCommandBtn.addEventListener("click", async () => {
+                if (installCommandStatus) {
+                    installCommandStatus.textContent = "Generating...";
+                }
+                try {
+                    const data = await apiFetch("/api/agent/install-command", {
+                        method: "POST",
+                        body: JSON.stringify({})
+                    });
+                    const command = data?.command || "";
+                    const copied = await copyToClipboard(command);
+                    if (installCommandStatus) {
+                        installCommandStatus.textContent = copied ? "Copied!" : "Copy failed";
+                        setTimeout(() => {
+                            if (installCommandStatus) installCommandStatus.textContent = "";
+                        }, 2400);
+                    }
+                } catch (error) {
+                    if (installCommandStatus) {
+                        installCommandStatus.textContent = error.message;
+                    }
+                }
+            });
+        }
+
+        if (openLocalAutopilot) {
+            openLocalAutopilot.addEventListener("click", () => {
+                scrollToSection("revenue", "revenueBody");
+            });
+        }
+
+        if (openApprovalsTab) {
+            openApprovalsTab.addEventListener("click", () => {
+                scrollToSection("approvals", "revenueBody");
+            });
+        }
+
+        if (openWebhooksTab) {
+            openWebhooksTab.addEventListener("click", () => {
+                scrollToSection("webhooks", "webhooksBody");
+            });
+        }
+
+        if (openAuditTab) {
+            openAuditTab.addEventListener("click", () => {
+                scrollToSection("audit", "auditBody");
+            });
+        }
+
+        if (refreshWebhooks) {
+            refreshWebhooks.addEventListener("click", loadWebhooksHealth);
+        }
+
+        if (refreshAudit) {
+            refreshAudit.addEventListener("click", loadAuditRecent);
+        }
+
+        if (openAgentConsole && agentConsole) {
+            openAgentConsole.addEventListener("click", async () => {
+                agentConsole.classList.add("open");
+                if (agentState.lastCorrelationId) {
+                    try {
+                        await loadAgentThread(agentState.lastCorrelationId);
+                    } catch (error) {
+                        setStatus("agentConsoleStatus", error.message, "error");
+                    }
+                }
+            });
+        }
+
+        if (agentClose && agentConsole) {
+            agentClose.addEventListener("click", () => {
+                agentConsole.classList.remove("open");
+            });
+        }
+
+        if (agentReplay) {
+            agentReplay.addEventListener("click", async () => {
+                if (!agentState.lastEventId) return;
+                setStatus("agentConsoleStatus", "Replaying conversation...");
+                try {
+                    await dispatchAgentEvent({ eventId: agentState.lastEventId });
+                    setStatus("agentConsoleStatus", "Replay complete.", "success");
+                } catch (error) {
+                    setStatus("agentConsoleStatus", error.message, "error");
+                }
+            });
+        }
+
+        if (agentActions) {
+            agentActions.addEventListener("click", async (event) => {
+                const button = event.target.closest("button[data-action='execute']");
+                if (!button) return;
+                const actionId = button.dataset.id;
+                if (!actionId) return;
+                setStatus("agentConsoleStatus", "Executing action...");
+                try {
+                    await apiFetch("/api/agent/actions/execute", {
+                        method: "POST",
+                        body: JSON.stringify({ actionId: Number(actionId) })
+                    });
+                    if (agentState.lastCorrelationId) {
+                        await loadAgentThread(agentState.lastCorrelationId);
+                    }
+                    setStatus("agentConsoleStatus", "Action executed.", "success");
+                } catch (error) {
+                    setStatus("agentConsoleStatus", error.message, "error");
+                }
+            });
+        }
+
+        if (autopilotToggle) {
+            autopilotToggle.addEventListener("change", async () => {
+                const enabled = autopilotToggle.checked;
+                setStatus("revenueStatus", enabled ? "Enabling..." : "Disabling...");
+                try {
+                    await apiFetch("/api/autopilot/enable", {
+                        method: "POST",
+                        body: JSON.stringify({ enabled })
+                    });
+                    await loadAutopilotStatus();
+                    setStatus("revenueStatus", enabled ? "Enabled" : "Disabled", "success");
+                } catch (error) {
+                    autopilotToggle.checked = !enabled;
+                    setStatus("revenueStatus", error.message, true);
+                }
+            });
+        }
+
+        if (autopilotRun) {
+            autopilotRun.addEventListener("click", async () => {
+                setStatus("revenueStatus", "Running cycle...");
+                try {
+                    await apiFetch("/api/autopilot/tick", { method: "POST", body: JSON.stringify({}) });
+                    await refreshAutopilot();
+                    setStatus("revenueStatus", "Cycle complete", "success");
+                } catch (error) {
+                    setStatus("revenueStatus", error.message, true);
+                }
+            });
+        }
+
+        if (autopilotRefresh) {
+            autopilotRefresh.addEventListener("click", refreshAutopilot);
+        }
+
+        if (autopilotApprovals) {
+            autopilotApprovals.addEventListener("click", async (event) => {
+                const button = event.target.closest("button[data-action='execute']");
+                if (!button) return;
+                const actionId = button.dataset.id;
+                if (!actionId) return;
+                setStatus("revenueStatus", "Approving...");
+                try {
+                    await apiFetch("/api/agent/actions/execute", {
+                        method: "POST",
+                        body: JSON.stringify({ actionId: Number(actionId) })
+                    });
+                    await refreshAutopilot();
+                    setStatus("revenueStatus", "Approved", "success");
+                } catch (error) {
+                    setStatus("revenueStatus", error.message, true);
+                }
+            });
+        }
+
+        if (tenantSelect) {
+            tenantSelect.addEventListener("change", async () => {
+                const nextTenantId = tenantSelect.value;
+                if (!nextTenantId) return;
+                const previousTenantId = appState.tenantId;
+                appState.tenantId = Number(nextTenantId);
+                appState.tenantRole = appState.memberships.find((membership) => String(membership.tenantId) === String(nextTenantId))?.role || null;
+                setStoredTenantId(nextTenantId);
+                try {
+                    await apiFetch("/api/tenants/active", {
+                        method: "POST",
+                        body: JSON.stringify({ tenantId: nextTenantId })
+                    });
+                    await Promise.all([loadStats(), loaders.projects(), loaders.leads(), loaders.clients(), loaders.providers(), loaders.orders()]);
+                    await refreshOnboarding();
+                    await loadBusinessPanel();
+                    clearGlobalStatus();
+                } catch (error) {
+                    appState.tenantId = previousTenantId;
+                    appState.tenantRole = appState.memberships.find((membership) => String(membership.tenantId) === String(previousTenantId))?.role || null;
+                    setStoredTenantId(previousTenantId);
+                    renderTenantSwitch();
+                    showGlobalStatus(error.message, "error");
+                }
+            });
+        }
+
+        const logoutBtn = $("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                try {
+                    await fetch("http://localhost:3007/api/auth/logout", { method: "POST", credentials: "include" });
+                } catch (error) {
+                    // ignore
+                }
+                localStorage.removeItem("token");
+                localStorage.removeItem("activeTenantId");
+                localStorage.removeItem("tenantId");
+                window.location.href = "/login";
+            });
+        }
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(() => {});
+        }
+
+        const init = async () => {
+            // Check if logged in first
+            const token = localStorage.getItem('token');
+            
+            // Show sample projects even when not logged in
+            const sampleProjects = [
+                { id: 1, name: 'Portal Global Platform', description: 'Unified portal management platform for modern projects', status: 'active', budget: '150000', createdAt: '2024-01-15' },
+                { id: 2, name: 'AI Project Generator', description: 'AI-powered project planning and estimation tool', status: 'planning', budget: '75000', createdAt: '2024-02-20' },
+                { id: 3, name: 'E-Commerce Integration', description: 'Online store integration with payment systems', status: 'active', budget: '45000', createdAt: '2024-03-10' },
+                { id: 4, name: 'Mobile App Development', description: 'Cross-platform mobile application', status: 'pending', budget: '120000', createdAt: '2024-04-01' }
+            ];
+            renderList(sampleProjects, 'projectsList', 'projects', {});
+            
+            if (!token) {
+                console.log('Not logged in, showing sample projects');
+                setStatus('projectsStatus', `Showing ${sampleProjects.length} sample projects (login for more)`);
+                return;
+            }
+            const session = await loadSession();
+            if (!session) return;
+            trackEvent("ui.page_view", {
+                page: window.location.pathname,
+                title: document.title
+            });
+            await initAgentConsole();
+            initCollapseToggles();
+            updateExportButtons();
+            refreshOnboarding();
+            await loadStats();
+            await loaders.projects();
+            await loaders.leads();
+            await loaders.clients();
+            await loaders.providers();
+            await loaders.orders();
+            await refreshAutopilot();
+            await loadBusinessPanel();
+        };
+
+        init();
+
+        // Check if user is logged in on page load
+        const savedToken = localStorage.getItem('token');
+        const savedUser = localStorage.getItem('user');
+        if (savedToken && savedUser) {
+            try {
+                const user = JSON.parse(savedUser);
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('accountEmail').style.display = 'inline';
+                document.getElementById('accountEmail').textContent = user.email;
+                document.getElementById('accountPlan').style.display = 'inline';
+                document.getElementById('upgradeLink').style.display = 'inline';
+                document.getElementById('logoutBtn').style.display = 'inline';
+            } catch (e) {
+                console.log('Invalid user data');
+            }
+        }
+
+        // Login/Register Modal Functions
+        const API_URL = 'http://localhost:3007';
+        
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+        
+        function showRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        
+        function closeModals() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        async function doLogin(email, password) {
+            try {
+                const res = await fetch(API_URL + '/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    closeModals();
+                    document.getElementById('loginBtn').style.display = 'none';
+                    document.getElementById('accountEmail').style.display = 'inline';
+                    document.getElementById('accountEmail').textContent = data.user.email;
+                    document.getElementById('accountPlan').style.display = 'inline';
+                    document.getElementById('upgradeLink').style.display = 'inline';
+                    document.getElementById('logoutBtn').style.display = 'inline';
+                    alert('Login successful! Loading data...');
+                    // Reload page to initialize with auth
+                    window.location.reload();
+                } else {
+                    alert(data.error || 'Login failed!');
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        async function doRegister(email, password, firstName, lastName) {
+            try {
+                const res = await fetch(API_URL + '/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, firstName, lastName, role: 'client' })
+                });
+                const data = await res.json();
+                
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    closeModals();
+                    alert('Registration successful!');
+                    window.location.reload();
+                } else {
+                    alert(data.error || 'Registration failed!');
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.reload();
+        });
+    </script>
+
+    <!-- Login Modal -->
+    <div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#1a1a2e; padding:40px; border-radius:16px; max-width:400px; width:90%; border:1px solid #333;">
+            <h2 style="color:#fff; font-size:24px; margin-bottom:20px;">Login to Portal</h2>
+            <input type="email" id="loginEmail" placeholder="Email" style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">
+            <input type="password" id="loginPassword" placeholder="Password" style="width:100%; padding:12px; margin-bottom:16px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">
+            <button onclick="doLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)" style="width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">Login</button>
+            <p style="color:#888; margin-top:16px; text-align:center;">
+                No account? <a href="#" onclick="showRegisterModal()" style="color:#667eea;">Register</a>
+            </p>
+            <button onclick="closeModals()" style="width:100%; padding:10px; margin-top:8px; background:transparent; color:#666; border:none; cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#1a1a2e; padding:40px; border-radius:16px; max-width:400px; width:90%; border:1px solid #333;">
+            <h2 style="color:#fff; font-size:24px; margin-bottom:20px;">Register</h2>
+            <input type="text" id="regFirstName" placeholder="First Name" style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">
+            <input type="text" id="regLastName" placeholder="Last Name" style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">
+            <input type="email" id="regEmail" placeholder="Email" style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">
+            <input type="password" id="regPassword" placeholder="Password" style="width:100%; padding:12px; margin-bottom:16px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">
+            <button onclick="doRegister(document.getElementById('regEmail').value, document.getElementById('regPassword').value, document.getElementById('regFirstName').value, document.getElementById('regLastName').value)" style="width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">Register</button>
+            <p style="color:#888; margin-top:16px; text-align:center;">
+                Already have account? <a href="#" onclick="showLoginModal()" style="color:#667eea;">Login</a>
+            </p>
+            <button onclick="closeModals()" style="width:100%; padding:10px; margin-top:8px; background:transparent; color:#666; border:none; cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <script src="/static/js/portal.js" defer></script>
+    <script src="/static/js/pwa-banner.js" defer></script>
+</body>
+</html>

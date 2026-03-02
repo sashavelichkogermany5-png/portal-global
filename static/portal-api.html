@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL GLOBAL - Backend API</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; margin-bottom: 30px; font-size: 2.5rem; }
+        h1 span { color: #00d9ff; }
+        .card { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 20px; backdrop-filter: blur(10px); }
+        .card h2 { color: #00d9ff; margin-bottom: 15px; font-size: 1.3rem; }
+        .status { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; }
+        .status.online { background: #00c853; }
+        .status.offline { background: #ff1744; }
+        .btn { background: #00d9ff; color: #1a1a2e; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px; margin-bottom: 10px; }
+        .btn:hover { background: #00b8d4; }
+        .btn.secondary { background: #ff6d00; }
+        input, select { padding: 10px; border-radius: 6px; border: 1px solid #333; background: #222; color: #fff; margin-right: 10px; margin-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .order { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 15px; }
+        .order-type { display: inline-block; background: #00d9ff; color: #000; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .order-status { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; }
+        .order-status.pending { background: #ff9800; }
+        .order-status.in_progress { background: #2196f3; }
+        .order-status.completed { background: #00c853; }
+        .order-status.cancelled { background: #f44336; }
+        .order-price { font-size: 1.5rem; color: #00d9ff; margin: 10px 0; }
+        .order-desc { color: #aaa; font-size: 0.9rem; }
+        pre { background: #111; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; }
+        #loginForm, #appContent { display: none; }
+        .api-list { list-style: none; }
+        .api-list li { padding: 8px 0; border-bottom: 1px solid #333; }
+        .api-list code { background: #333; padding: 2px 6px; border-radius: 3px; color: #00d9ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PORTAL <span>GLOBAL</span> API</h1>
+        
+        <div class="card" id="statusCard">
+            <h2>Server Status <span id="serverStatus" class="status offline">Checking...</span></h2>
+            <p>API URL: <strong id="apiUrl"></strong></p>
+        </div>
+
+        <div class="card" id="loginForm">
+            <h2>🔐 Login</h2>
+            <input type="email" id="email" placeholder="Email" value="demo@portal.global">
+            <input type="password" id="password" placeholder="Password" value="demo123">
+            <button class="btn" onclick="login()">Login</button>
+            <button class="btn secondary" onclick="register()">Register</button>
+        </div>
+
+        <div id="appContent">
+            <div class="card">
+                <h2>👤 User Info</h2>
+                <p>Welcome, <strong id="userName"></strong> (<span id="userRole"></span>)</p>
+                <button class="btn secondary" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="card">
+                <h2>📋 Create Order</h2>
+                <select id="orderType">
+                    <option value="delivery">Delivery</option>
+                    <option value="technical">Technical</option>
+                    <option value="cleaning">Cleaning</option>
+                    <option value="assistance">Assistance</option>
+                </select>
+                <input type="text" id="orderDesc" placeholder="Description" style="width: 300px;">
+                <input type="number" id="orderPrice" placeholder="Price" value="50">
+                <input type="text" id="orderDest" placeholder="Destination">
+                <button class="btn" onclick="createOrder()">Create</button>
+            </div>
+
+            <div class="card">
+                <h2>📦 Orders <button class="btn" onclick="loadOrders()">Refresh</button></h2>
+                <div id="ordersList" class="grid"></div>
+            </div>
+
+            <div class="card">
+                <h2>🔗 API Endpoints</h2>
+                <ul class="api-list">
+                    <li><code>POST /api/auth/register</code> - Register new user</li>
+                    <li><code>POST /api/auth/login</code> - Login</li>
+                    <li><code>GET /api/users/me</code> - Get current user</li>
+                    <li><code>GET /api/orders</code> - List orders</li>
+                    <li><code>POST /api/orders</code> - Create order</li>
+                    <li><code>PUT /api/orders/:id/status</code> - Update order status</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>📝 API Response</h2>
+                <pre id="apiResponse">No requests yet</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3001';
+        let token = localStorage.getItem('token');
+        let user = JSON.parse(localStorage.getItem('user') || 'null');
+
+        document.getElementById('apiUrl').textContent = API_URL;
+
+        function showResponse(data) {
+            document.getElementById('apiResponse').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function apiRequest(endpoint, options = {}) {
+            try {
+                const headers = { 'Content-Type': 'application/json', ...options.headers };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+                
+                const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
+                const data = await res.json();
+                showResponse(data);
+                return data;
+            } catch (err) {
+                showResponse({ error: err.message });
+                return { error: err.message };
+            }
+        }
+
+        async function checkStatus() {
+            const res = await fetch(API_URL);
+            const status = document.getElementById('serverStatus');
+            status.textContent = res.ok ? 'Online' : 'Offline';
+            status.className = 'status ' + (res.ok ? 'online' : 'offline');
+        }
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const data = await apiRequest('/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            });
+            if (data.token) {
+                token = data.token;
+                user = data.user;
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+                showApp();
+            }
+        }
+
+        async function register() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const data = await apiRequest('/api/auth/register', {
+                method: 'POST',
+                body: JSON.stringify({ email, password, firstName: 'User', lastName: 'Test', role: 'client' })
+            });
+            if (data.token) {
+                token = data.token;
+                user = data.user;
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+                showApp();
+            }
+        }
+
+        function logout() {
+            token = null;
+            user = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('appContent').style.display = 'none';
+        }
+
+        function showApp() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('appContent').style.display = 'block';
+            document.getElementById('userName').textContent = user.firstName + ' ' + user.lastName;
+            document.getElementById('userRole').textContent = user.role;
+            loadOrders();
+        }
+
+        async function loadOrders() {
+            const data = await apiRequest('/api/orders');
+            const list = document.getElementById('ordersList');
+            if (data.orders && data.orders.length) {
+                list.innerHTML = data.orders.map(o => `
+                    <div class="order">
+                        <span class="order-type">${o.type}</span>
+                        <span class="order-status ${o.status}">${o.status}</span>
+                        <div class="order-price">€${o.price}</div>
+                        <p class="order-desc">${o.description}</p>
+                        <p style="color: #666; font-size: 0.8rem;">${o.destination || 'No destination'}</p>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = '<p>No orders yet</p>';
+            }
+        }
+
+        async function createOrder() {
+            const type = document.getElementById('orderType').value;
+            const description = document.getElementById('orderDesc').value;
+            const price = document.getElementById('orderPrice').value;
+            const destination = document.getElementById('orderDest').value;
+            
+            const data = await apiRequest('/api/orders', {
+                method: 'POST',
+                body: JSON.stringify({ type, description, price, destination })
+            });
+            if (!data.error) loadOrders();
+        }
+
+        // Init
+        checkStatus();
+        if (token && user) {
+            showApp();
+        } else {
+            document.getElementById('loginForm').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

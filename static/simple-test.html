@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL GLOBAL - Simple Test</title>
+    <style>
+        :root {
+            --bg: #0b1112;
+            --card: #121c1f;
+            --ink: #f3f7f5;
+            --accent: #4fb3a5;
+            --border: rgba(255,255,255,0.08);
+        }
+        body {
+            font-family: system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            padding: 40px;
+        }
+        .btn {
+            padding: 12px 24px;
+            margin: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-secondary { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+        
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .toast {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-top: 10px;
+            animation: slideIn 0.3s ease;
+            min-width: 250px;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Page - Keine externen Abhängigkeiten</h1>
+    
+    <button class="btn btn-primary" onclick="showToast('Success', 'Alles funktioniert!', 'success')">✓ Success Toast</button>
+    <button class="btn btn-primary" onclick="showToast('Error', 'Etwas ist schiefgelaufen', 'error')">✕ Error Toast</button>
+    <button class="btn btn-secondary" onclick="toggleTheme()">🌙 Theme Toggle</button>
+    
+    <div id="toast-container" class="toast-container"></div>
+    
+    <script>
+        let isDark = true;
+        
+        function showToast(title, message, type) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<strong>${title}</strong><br><small>${message}</small>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        function toggleTheme() {
+            isDark = !isDark;
+            document.documentElement.style.setProperty('--bg', isDark ? '#0b1112' : '#f8fafc');
+            document.documentElement.style.setProperty('--card', isDark ? '#121c1f' : '#ffffff');
+            document.documentElement.style.setProperty('--ink', isDark ? '#f3f7f5' : '#0f172a');
+            showToast('Theme', isDark ? 'Dunkel' : 'Hell', 'info');
+        }
+        
+        console.log('Test page loaded!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# Caddyfile for PORTAL Global
+# Replace your-domain.com with your actual domain
+
+your-domain.com {
+    # Enable TLS automatically
+    tls your-email@example.com
+
+    # Proxy to Express server
+    reverse_proxy localhost:3000
+
+    # Health check endpoint for load balancers
+    @health {
+        path /api/health
+    }
+    respond @health 200 {
+        body {"ok":true}
+    }
+
+    # Static files caching
+    @static {
+        path /static/*
+        path /uploads/*
+    }
+    handle @static {
+        cache {
+            max_age 1h
+        }
+        reverse_proxy localhost:3000
+    }
+
+    # SPA fallback for /app
+    @app {
+        path /app/*
+    }
+    handle @app {
+        reverse_proxy localhost:3000
+    }
+
+    # Default to Express
+    handle {
+        reverse_proxy localhost:3000
+    }
+}

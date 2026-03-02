@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0b1112">
+    <title>PORTAL GLOBAL Mobile</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg: #0b1112;
+            --surface: #121c1f;
+            --surface-2: #0f171a;
+            --text: #f3f7f5;
+            --text-muted: #9bb0b0;
+            --accent: #4fb3a5;
+            --accent-2: #f2c46d;
+            --border: rgba(255,255,255,0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+        
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-2: #f1f5f9;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(0,0,0,0.08);
+        }
+        
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        
+        body {
+            padding-bottom: 80px;
+        }
+        
+        /* Header */
+        .app-header {
+            position: sticky;
+            top: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .app-logo {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .app-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent), #38b2ac);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .card-title {
+            font-size: 17px;
+            font-weight: 600;
+        }
+        
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 12px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #38b2ac);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+        }
+        
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+        
+        .nav-item.active {
+            color: var(--accent);
+        }
+        
+        .nav-icon {
+            font-size: 22px;
+        }
+        
+        /* List */
+        .list {
+            padding: 12px;
+        }
+        
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--surface);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .list-item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .list-item-content {
+            flex: 1;
+        }
+        
+        .list-item-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .list-item-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        /* Badge */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-active {
+            background: rgba(79,179,165,0.2);
+            color: var(--accent);
+        }
+        
+        .badge-pending {
+            background: rgba(242,196,109,0.2);
+            color: var(--accent-2);
+        }
+        
+        /* Progress */
+        .progress {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+        
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #38b2ac);
+            border: none;
+            color: white;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(79,179,165,0.4);
+            cursor: pointer;
+            z-index: 99;
+        }
+        
+        .fab:active {
+            transform: scale(0.95);
+        }
+        
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            left: 12px;
+            right: 12px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .toast {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Status */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        /* Pull refresh */
+        .refresh-indicator {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-logo">
+            <div class="app-logo-icon">⚡</div>
+            <span>PORTAL</span>
+        </div>
+        <button class="btn-icon" onclick="toggleTheme()">🌙</button>
+    </header>
+    
+    <div class="stats-row">
+        <div class="stat-item">
+            <div class="stat-value" id="stat-projects">0</div>
+            <div class="stat-label">Projekte</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="stat-clients">0</div>
+            <div class="stat-label">Kunden</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="stat-orders">0</div>
+            <div class="stat-label">Orders</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="stat-ai">0</div>
+            <div class="stat-label">KI</div>
+        </div>
+    </div>
+    
+    <div class="toast-container" id="toast-container"></div>
+    
+    <div class="list" id="content">
+        <div class="refresh-indicator">↓ Ziehen zum Aktualisieren</div>
+    </div>
+    
+    <button class="fab" onclick="createProject()">+</button>
+    
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-tab="projects">
+            <span class="nav-icon">📊</span>
+            <span>Projekte</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="clients">
+            <span class="nav-icon">👥</span>
+            <span>Kunden</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="orders">
+            <span class="nav-icon">📦</span>
+            <span>Orders</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="ai">
+            <span class="nav-icon">🤖</span>
+            <span>KI</span>
+        </a>
+    </nav>
+
+    <script>
+        const API = 'http://localhost:3000';
+        let token = localStorage.getItem('portal_token');
+        
+        function initTheme() {
+            const saved = localStorage.getItem('portal_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        }
+        
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('portal_theme', next);
+        }
+        
+        function toast(title, message) {
+            const container = document.getElementById('toast-container');
+            const div = document.createElement('div');
+            div.className = 'toast';
+            div.innerHTML = `<strong>${title}</strong><span style="margin-left:auto;color:var(--text-muted)">${message}</span>`;
+            container.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+        
+        async function api(endpoint) {
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            
+            const res = await fetch(`${API}${endpoint}`, { headers });
+            const data = await res.json();
+            return data.data || [];
+        }
+        
+        async function loadData() {
+            try {
+                const [projects, clients, orders] = await Promise.all([
+                    api('/api/projects'),
+                    api('/api/clients'),
+                    api('/api/orders')
+                ]);
+                
+                document.getElementById('stat-projects').textContent = projects.length;
+                document.getElementById('stat-clients').textContent = clients.length;
+                document.getElementById('stat-orders').textContent = orders.length;
+                
+                renderProjects(projects);
+            } catch (e) {
+                console.error(e);
+                toast('Fehler', 'Daten konnten nicht geladen werden');
+            }
+        }
+        
+        function renderProjects(projects) {
+            const content = document.getElementById('content');
+            
+            if (!projects.length) {
+                content.innerHTML = `
+                    <div style="text-align:center;padding:40px;color:var(--text-muted)">
+                        <p style="font-size:48px;margin-bottom:16px">📋</p>
+                        <p>Keine Projekte</p>
+                        <button class="btn btn-primary" style="margin-top:16px" onclick="createProject()">+ Projekt erstellen</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            content.innerHTML = projects.map(p => `
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">${p.name}</div>
+                            <div class="card-subtitle">${p.category || 'general'}</div>
+                        </div>
+                        <span class="badge ${p.status === 'active' ? 'badge-active' : 'badge-pending'}">${p.status || 'Pending'}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-fill" style="width:${p.progress || 0}%"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)">
+                        <span>Fortschritt</span>
+                        <span>${p.progress || 0}%</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function createProject() {
+            const name = prompt('Projektname:');
+            if (name) {
+                toast('✓ Erfolg', 'Projekt "' + name + '" erstellt');
+                loadData();
+            }
+        }
+        
+        // Tab navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.onclick = (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            };
+        });
+        
+        // Init
+        if (!token) {
+            token = prompt('Token eingeben:');
+            if (token) localStorage.setItem('portal_token', token);
+        }
+        
+        initTheme();
+        loadData();
+    </script>
+</body>
+</html>

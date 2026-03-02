@@ -1,0 +1,5 @@
+﻿# Replace yourdomain.com with your real domain
+yourdomain.com {
+  encode gzip
+  reverse_proxy localhost:3000
+}

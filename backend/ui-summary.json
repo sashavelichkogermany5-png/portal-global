@@ -1,0 +1,230 @@
+{
+  "generatedAt": "2026-02-09T21:17:07.114Z",
+  "total": 205,
+  "nav": [
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012Z\u0013R\u00120 Dashboard",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn.active",
+      "class": "nav-btn active"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u001d\u0013^\u0012\u0002\u0012Y\u0013R\u0012W\u0013\u0018\u0012\u0018\u0013R\u0012\u000f Projects",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013\u001a\u0012О©╫\u0013^\u0012\u0002\u0012\u001c AI",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012Z\u0013\u001a\u0012О©╫ Orders",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\"\u0013\u001a\u0012О©╫ Pricing",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012О©╫\u0013\u0019\u0012R Clients",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\"\u0013\u0018\u0012О©╫ Providers",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013R\u0012\u0006\u0013\u0018\u0012\"\u0013^\u0012\u0002\u0012\u001c\u0013R\u0012W\u0013\u0018\u0012\u0018\u0013R\u0012\u000f Compliance",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012О©╫\u0013\u001a\u0012О©╫ Account",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u000e\u0013\u001a\u0012О©╫\u0013\u0018\u0012\u0002\u0013\u0018\u0012_\u0013^\u0012\u0002\u0012\u000e\u0013\u0018\u0012\u001d Cabinet",
+      "file": "unified_portal.html",
+      "selector": "button.nav-btn",
+      "class": "nav-btn"
+    },
+    {
+      "text": "П÷⌠┼ Dashboard",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷≈┌О╦▐ Projects",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷╓√ AI Assistant",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷⌠╕ Orders",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "Б ║ Automation",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷▓╟ Pricing",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷▒╔ Clients",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷╓² Providers",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "Б √О╦▐ Compliance",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷▒╓ Account",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "П÷┤╥П÷┤╨ Cabinet",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    },
+    {
+      "text": "Dashboard",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.hover:text-white.transition",
+      "class": "nav-btn hover:text-white transition text-left"
+    },
+    {
+      "text": "Orders",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.hover:text-white.transition",
+      "class": "nav-btn hover:text-white transition text-left"
+    },
+    {
+      "text": "Automation",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.hover:text-white.transition",
+      "class": "nav-btn hover:text-white transition text-left"
+    },
+    {
+      "text": "Pricing",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.hover:text-white.transition",
+      "class": "nav-btn hover:text-white transition text-left"
+    },
+    {
+      "text": "Б √О╦▐ Legal",
+      "file": "deepseek_html_20260204_12faa6.html",
+      "selector": "button.nav-btn.hover:text-white.transition",
+      "class": "nav-btn hover:text-white transition text-left"
+    },
+    {
+      "text": "Dashboard",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.w-full.text-left",
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center"
+    },
+    {
+      "text": "Projects",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.w-full.text-left",
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center"
+    },
+    {
+      "text": "AI Assistant",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.w-full.text-left",
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center"
+    },
+    {
+      "text": "Orders",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.w-full.text-left",
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center"
+    },
+    {
+      "text": "Pricing",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.w-full.text-left",
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center"
+    },
+    {
+      "text": "Clients",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.w-full.text-left",
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center"
+    },
+    {
+      "text": "Client Portal",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.w-full.text-left",
+      "class": "nav-btn w-full text-left p-4 glass rounded-lg flex items-center"
+    },
+    {
+      "text": "П÷╓√ AI",
+      "file": "deepseek_html_20260204_436a56.html",
+      "selector": "button.nav-btn.text-gray-300.hover:text-white",
+      "class": "nav-btn text-gray-300 hover:text-white transition"
+    }
+  ],
+  "countsByFile": {
+    "index.html": 3,
+    "unified_portal.html": 20,
+    "deepseek_html_20260204_12faa6.html": 37,
+    "deepseek_html_20260204_436a56.html": 67,
+    "deepseek_html_20260204_d3242a.html": 78
+  },
+  "countsBySection": {
+    "dashboard": 10,
+    "projects": 13,
+    "ai": 22,
+    "orders": 15,
+    "pricing": 6,
+    "clients": 7,
+    "providers": 3,
+    "compliance": 4,
+    "account": 3,
+    "cabinet": 3,
+    "other": 119
+  }
+}

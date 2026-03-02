@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global - Unified Platform</title>
+    
+    <!-- R :R РїС—Р…RR0R РїС—Р…R R R R&R РїС—Р…R R&R R&R^R РїС—Р… RRSR^YR R РїС—Р…R  -->
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --success: #4CAF50;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --dark: #0f0f0f;
+            --dark-light: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* R :R РїС—Р…RR0R РїС—Р…R R R R&R РїС—Р…R R&R R&R РїС—Р…RR R R&R РїС—Р…R R R R R РїС—Р…R^ R RR */
+        .unified-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: transparent;
+        }
+
+        /* R :RRSR R&R "R R R R&R "R ^ R R "R R&R^YR РїС—Р…R R&R^Y */
+        .main-content {
+            margin-top: 70px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* R RR РїС—Р…R R^ R R  */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* R :R РїС—Р…RR0R РїС—Р…R R R R&R РїС—Р…R R&R R&R^R РїС—Р… RRSR^YR R РїС—Р…R  R R РїС—Р… R R RRSR РїС—Р…R^РїС—Р… R^[R РїС—Р…R ^R РїС—Р…R "R R  */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .metric-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        /* R R R&R R РїС—Р…R РїС—Р…R^ R R  */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* R :R^YR РїС—Р…R^R R R^R R R R^R ^ R R R РїС—Р…R РїС—Р…R ^R R& */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .nav-buttons {
+                gap: 0.25rem;
+            }
+            
+            .nav-btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- R :R РїС—Р…RR0R РїС—Р…R R R R&R РїС—Р…R R&R R&R РїС—Р…RR R R&R РїС—Р…R R R R R РїС—Р…R^ R RR -->
+    <nav class="unified-nav">
+        <div class="nav-logo">PORTAL Global</div>
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('dashboard')">_^ZR0 Dashboard</button>
+            <button class="nav-btn" onclick="showSection('projects')">_^^YRWR Projects</button>
+            <button class="nav-btn" onclick="showSection('ai')">_РїС—Р…^ AI</button>
+            <button class="nav-btn" onclick="showSection('orders')">_^ZРїС—Р… Orders</button>
+            <button class="nav-btn" onclick="showSection('pricing')">_^"РїС—Р… Pricing</button>
+            <button class="nav-btn" onclick="showSection('clients')">_^РїС—Р…R Clients</button>
+            <button class="nav-btn" onclick="showSection('providers')">_^"РїС—Р… Providers</button>
+            <button class="nav-btn" onclick="showSection('compliance')">R"^RWR Compliance</button>
+            <button class="nav-btn" onclick="showSection('account')">_^РїС—Р…РїС—Р… Account</button>
+            <button class="nav-btn" onclick="showSection('cabinet')">_^РїС—Р…_^ Cabinet</button>
+        </div>
+    </nav>
+
+    <!-- R :RRSR R&R "R R R R&R "R ^ R R "R R&R^YR РїС—Р…R R&R^Y -->
+    <div class="main-content">
+        <!-- Dashboard -->
+        <div id="dashboard" class="section active">
+            <div class="mb-8 text-center slide-up">
+                <h1 class="text-5xl font-bold mb-4 gradient-text">Welcome to PORTAL Global</h1>
+                <p class="text-xl text-gray-400">Your intelligent project management platform</p>
+            </div>
+
+            <!-- Business Metrics -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Business Metrics</h2>
+                <button class="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover-lift active:scale-95 flex items-center gap-2 btn-ripple" id="refreshMetrics">
+                    <i class="w-4 h-4" data-lucide="refresh-cw"></i> Refresh
+                </button>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 stagger-animation">
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="trending-up"></i>
+                        </div>
+                        <span class="text-sm font-bold text-green-500 holographic neon-glow bg-green-500/10 px-2 py-1 rounded-full">+15%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">LTV</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="ltv">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="activity"></i>
+                        </div>
+                        <span class="text-sm font-bold text-red-500 holographic neon-glow bg-red-500/10 px-2 py-1 rounded-full">-2%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Churn Rate</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="churn">0%</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="dollar-sign"></i>
+                        </div>
+                        <span class="text-sm font-bold text-blue-500 holographic neon-glow bg-blue-500/10 px-2 py-1 rounded-full">+8%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">ARPU</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="arpu">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover glow-effect">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center pulse-enhanced">
+                            <i class="w-4 h-4 text-white" data-lucide="users"></i>
+                        </div>
+                        <span class="text-sm font-bold text-purple-500 holographic neon-glow bg-purple-500/10 px-2 py-1 rounded-full">+12%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Active Clients</p>
+                    <p class="text-2xl font-bold neon-glow gradient-text" id="activeClients">0</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-4 mt-6 stagger-animation" style="animation-delay: 0.2s;">
+                <div class="metric-card card-3d magnetic-hover">
+                    <div class="flex items-center mb-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-600 rounded flex items-center justify-center mr-2 float-animation">
+                            <i class="w-3 h-3 text-white" data-lucide="trending-up"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">MRR</p>
+                    <p class="text-xl font-bold neon-glow" id="mrr">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover">
+                    <div class="flex items-center mb-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-600 rounded flex items-center justify-center mr-2 float-animation" style="animation-delay: 0.3s;">
+                            <i class="w-3 h-3 text-white" data-lucide="pie-chart"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Net Revenue</p>
+                    <p class="text-xl font-bold neon-glow" id="netRevenue">$0</p>
+                </div>
+                <div class="metric-card card-3d magnetic-hover">
+                    <div class="flex items-center mb-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-orange-500 to-red-600 rounded flex items-center justify-center mr-2 float-animation" style="animation-delay: 0.6s;">
+                            <i class="w-3 h-3 text-white" data-lucide="percent"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-1">Avg Provider Payout</p>
+                    <p class="text-xl font-bold neon-glow" id="avgPayout">0%</p>
+                </div>
+            </div>
+
+            <!-- Original Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-8">
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="briefcase" class="w-8 h-8 text-blue-500"></i>
+                        <span class="text-sm text-green-500">+12%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">24</h3>
+                    <p class="text-gray-400">Active Projects</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="users" class="w-8 h-8 text-green-500"></i>
+                        <span class="text-sm text-green-500">+8%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">156</h3>
+                    <p class="text-gray-400">Team Members</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="check-circle" class="w-8 h-8 text-purple-500"></i>
+                        <span class="text-sm text-green-500">+24%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">89%</h3>
+                    <p class="text-gray-400">Completion Rate</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <i data-lucide="trending-up" class="w-8 h-8 text-orange-500"></i>
+                        <span class="text-sm text-red-500">-3%</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">$2.4M</h3>
+                    <p class="text-gray-400">Revenue</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <div class="glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Project Progress</h3>
+                    <canvas id="progressChart"></canvas>
+                </div>
+                <div class="glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Team Performance</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div id="projects" class="section">
+            <div class="px-6 py-16 glass-dark scroll-mt-24">
+                <div class="max-w-7xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-8">Active Projects</h2>
+                    
+                    <!-- AI Project Generator -->
+                    <div class="glass-dark rounded-2xl p-8 mb-8">
+                        <div class="flex items-center mb-6">
+                            <i data-lucide="sparkles" class="w-6 h-6 text-yellow-500 mr-3"></i>
+                            <h2 class="text-2xl font-bold">AI Project Generator</h2>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Describe your project idea</label>
+                                <textarea 
+                                    id="projectIdea"
+                                    placeholder="Example: Create a mobile app for food delivery with real-time tracking..."
+                                    class="w-full h-32 bg-gray-800 rounded-lg p-4 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+                                ></textarea>
+                                <button onclick="generateAIProject()" class="mt-4 w-full md:w-auto px-6 py-3 gradient-primary rounded-lg font-semibold hover-lift">
+                                    <i data-lucide="zap" class="inline w-4 h-4 mr-2"></i>
+                                    Generate with AI
+                                </button>
+                            </div>
+                            <div id="aiOutput" class="glass rounded-lg p-6 min-h-[200px] flex items-center justify-center">
+                                <div class="text-center text-gray-400">
+                                    <i data-lucide="cpu" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                                    <p>AI-generated project plan will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Templates -->
+                    <div class="mb-8">
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <button onclick="filterProjects('all')" class="px-4 py-2 bg-blue-600 rounded-lg">All Projects</button>
+                            <button onclick="filterProjects('tech')" class="px-4 py-2 glass rounded-lg hover-lift">Technology</button>
+                            <button onclick="filterProjects('business')" class="px-4 py-2 glass rounded-lg hover-lift">Business</button>
+                            <button onclick="filterProjects('creative')" class="px-4 py-2 glass rounded-lg hover-lift">Creative</button>
+                        </div>
+                    </div>
+
+                    <!-- Project Grid -->
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                            <div class="h-40 bg-gradient-to-br from-blue-500 to-purple-600 p-6">
+                                <h3 class="text-xl font-bold">E-Commerce Platform</h3>
+                                <p class="text-blue-100">Technology</p>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                        <span class="text-sm text-gray-400">In Progress</span>
+                                    </div>
+                                    <span class="text-sm font-semibold">75%</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex -space-x-2">
+                                        <img src="https://picsum.photos/seed/user1/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                        <img src="https://picsum.photos/seed/user2/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                        <img src="https://picsum.photos/seed/user3/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    </div>
+                                    <span class="text-sm text-gray-400">Due: Dec 15</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                            <div class="h-40 bg-gradient-to-br from-green-500 to-teal-600 p-6">
+                                <h3 class="text-xl font-bold">Mobile Banking App</h3>
+                                <p class="text-green-100">Finance</p>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                                        <span class="text-sm text-gray-400">Planning</span>
+                                    </div>
+                                    <span class="text-sm font-semibold">25%</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 25%"></div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex -space-x-2">
+                                        <img src="https://picsum.photos/seed/user4/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                        <img src="https://picsum.photos/seed/user5/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    </div>
+                                    <span class="text-sm text-gray-400">Due: Jan 20</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass rounded-xl overflow-hidden hover-lift project-card">
+                            <div class="h-40 bg-gradient-to-br from-orange-500 to-red-600 p-6">
+                                <h3 class="text-xl font-bold">Brand Campaign</h3>
+                                <p class="text-orange-100">Marketing</p>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                                        <span class="text-sm text-gray-400">Review</span>
+                                    </div>
+                                    <span class="text-sm font-semibold">90%</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex -space-x-2">
+                                        <img src="https://picsum.photos/seed/user6/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                        <img src="https://picsum.photos/seed/user7/32/32" class="w-8 h-8 rounded-full border-2 border-gray-800">
+                                    </div>
+                                    <span class="text-sm text-gray-400">Due: Nov 30</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div id="ai" class="section">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-4">AI Assistant</h2>
+                    <p class="text-gray-400">Your intelligent project management companion</p>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="glass-dark rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-700">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 gradient-primary rounded-full flex items-center justify-center mr-3">
+                                <i data-lucide="bot" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">PORTAL AI</h3>
+                                <p class="text-sm text-gray-400">Always here to help</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-96 overflow-y-auto p-6" id="chatMessages">
+                        <div class="chat-bubble chat-ai">
+                            Hello! I'm your AI assistant. I can help you with project planning, task management, and answering questions about your projects. How can I assist you today?
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-gray-700">
+                        <div class="flex items-center space-x-4">
+                            <input 
+                                type="text" 
+                                id="chatInput"
+                                placeholder="Ask me anything about your projects..."
+                                class="flex-1 bg-gray-800 rounded-lg px-4 py-3 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+                                onkeypress="if(event.key === 'Enter') sendMessage()"
+                            ></input>
+                            <button onclick="sendMessage()" class="p-3 gradient-primary rounded-lg hover-lift">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- Orders -->
+        <div id="orders" class="section">
+            <h2 class="text-2xl font-bold mb-4">Orders</h2>
+            <div class="glass rounded-xl p-6">
+                <div class="overflow-x-auto mobile-table">
+                    <table class="w-full">
+                        <thead class="bg-gray-800">
+                            <tr>
+                                <th class="p-3 text-left text-sm">Order #</th>
+                                <th class="p-3 text-left text-sm">Client</th>
+                                <th class="p-3 text-left text-sm">Amount</th>
+                                <th class="p-3 text-left text-sm">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t border-gray-800">
+                                <td class="p-3">#ORD-7842</td>
+                                <td class="p-3">TechCorp Inc.</td>
+                                <td class="p-3">$2,500</td>
+                                <td class="p-3"><span class="px-2 py-1 bg-green-900/30 text-green-400 rounded text-sm">Completed</span></td>
+                            </tr>
+                            <tr class="border-t border-gray-800">
+                                <td class="p-3">#ORD-7843</td>
+                                <td class="p-3">StartupXYZ</td>
+                                <td class="p-3">$800</td>
+                                <td class="p-3"><span class="px-2 py-1 bg-yellow-900/30 text-yellow-400 rounded text-sm">In Progress</span></td>
+                            </tr>
+                            <tr class="border-t border-gray-800">
+                                <td class="p-3">#ORD-7844</td>
+                                <td class="p-3">Global Retail</td>
+                                <td class="p-3">$4,200</td>
+                                <td class="p-3"><span class="px-2 py-1 bg-blue-900/30 text-blue-400 rounded text-sm">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <button class="px-4 py-2 glass rounded-lg hover-lift btn-ripple flex-1 sm:flex-none">
+                        <i class="w-4 h-4 inline" data-lucide="plus"></i>
+                        <span class="ml-2">New Order</span>
+                    </button>
+                    <button class="px-4 py-2 glass rounded-lg hover-lift btn-ripple flex-1 sm:flex-none">
+                        <i class="w-4 h-4 inline" data-lucide="filter"></i>
+                        <span class="ml-2">Filter</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+<!-- Pricing -->
+        <div id="pricing" class="section">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-4">Choose Your Plan</h2>
+                    <p class="text-gray-400">Flexible pricing for teams of all sizes</p>
+                </div>
+
+                <!-- Pricing Calculator -->
+                <div class="glass rounded-2xl p-8 mb-12">
+                    <h3 class="text-xl font-semibold mb-6">Intelligent Pricing Calculator</h3>
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Team Size</label>
+                            <input type="number" id="calcTeamSize" value="10" min="1" max="1000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()"></input>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Projects/Month</label>
+                            <input type="number" id="calcProjects" value="15" min="1" max="1000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()"></input>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Storage (GB)</label>
+                            <input type="number" id="calcStorage" value="50" min="0" max="10000" class="w-full bg-gray-800 rounded-lg px-4 py-2 text-white border border-gray-700" onchange="updatePricing()"></input>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold" id="recommendedPrice">$25/month</p>
+                        <p class="text-gray-400" id="planRecommendation">Professional Plan recommended</p>
+                    </div>
+                </div>
+
+                <!-- Pricing Cards -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="glass rounded-2xl p-8 hover-lift">
+                        <h3 class="text-xl font-bold mb-2">Starter</h3>
+                        <p class="text-3xl font-bold mb-6">$9<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Up to 10 projects</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 15 team members</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Basic analytics</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Email support</li>
+                        </ul>
+                        <button class="w-full py-3 glass rounded-lg font-semibold hover-lift">Start Free Trial</button>
+                    </div>
+
+                    <div class="glass-dark rounded-2xl p-8 hover-lift border-2 border-blue-500 relative">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-blue-500 text-white text-sm rounded-full">RECOMMENDED</div>
+                        <h3 class="text-xl font-bold mb-2">Professional</h3>
+                        <p class="text-3xl font-bold mb-6">$25<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Unlimited projects</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 50 team members</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Advanced analytics</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> AI assistant</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Priority support</li>
+                        </ul>
+                        <button class="w-full py-3 gradient-primary rounded-lg font-semibold hover-lift">Start Free Trial</button>
+                    </div>
+
+                    <div class="glass rounded-2xl p-8 hover-lift">
+                        <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                        <p class="text-3xl font-bold mb-6">$99<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Unlimited everything</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Custom integrations</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> Dedicated manager</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> SLA guarantee</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i> 24/7 support</li>
+                        </ul>
+                        <button class="w-full py-3 glass rounded-lg font-semibold hover-lift">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Clients -->
+        <div id="clients" class="section">
+            <h1 class="text-3xl font-bold mb-6">Clients</h1>
+            <div class="glass p-4">
+                <p>Clients section content</p>
+            </div>
+        </div>
+
+        <!-- Providers -->
+        <div id="providers" class="section">
+            <h1 class="text-3xl font-bold mb-6">Providers</h1>
+            <div class="glass p-4">
+                <p>Providers section content</p>
+            </div>
+        </div>
+
+        <!-- Compliance -->
+        <div id="compliance" class="section">
+            <h1 class="text-3xl font-bold mb-6">Compliance</h1>
+            <div class="glass p-4">
+                <p>Compliance section content</p>
+            </div>
+        </div>
+
+        <!-- Account -->
+        <div id="account" class="section">
+            <h1 class="text-3xl font-bold mb-6">Account</h1>
+            <div class="glass p-4">
+                <p>Account section content</p>
+            </div>
+        </div>
+
+        <!-- Cabinet (Russian) -->
+        <div id="cabinet" class="section">
+            <h1 class="text-3xl font-bold mb-6">R _R :R  R [R R ^T R ^R РїС—Р…R R РїС—Р…R РїС—Р…R "R R </h1>
+            <div class="glass p-4">
+                <p>R  RRRSRRSR R R ^ R R РїС—Р…R РїС—Р…R R R&R РїС—Р…R^Y RRSR РїС—Р…R R^ R RR</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- R RR RRR R R^YR^ -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        // R РїС—Р…R R&R R^ R R РїС—Р…R РїС—Р…R R РїС—Р…R РїС—Р…R^ R RR Lucide icons
+        lucide.createIcons();
+
+        // R РїС—Р…RR R&R R^ R RR R R РїС—Р…RR R R "R R РїС—Р…R РїС—Р…R РїС—Р… RRSR РїС—Р…R R^ R R 
+        function showSection(sectionId) {
+            // R RR RRR^R R R РїС—Р…R РїС—Р…R РїС—Р… R R RRSR РїС—Р… RRSR РїС—Р…R R^ R R 
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // R RРїС—Р…R РїС—Р…R RRR РїС—Р…R РїС—Р…R РїС—Р… active R R РїС—Р…R РїС—Р…RRSRRS RRSR " R R RRSR РїС—Р…R^РїС—Р… R R R&R "R R "R 
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // R _R "R R РїС—Р…R РїС—Р…R^R R R РїС—Р…R РїС—Р…R РїС—Р… R R R^R РїС—Р…RRR РїС—Р…R R&R R&RRR9 RRSR РїС—Р…R R^ R RR9
+            document.getElementById(sectionId).classList.add('active');
+
+            // R ^\R "R РїС—Р…R РїС—Р…R R R РїС—Р…RRR РїС—Р…R РїС—Р… active R R РїС—Р…R РїС—Р…RRSRRS R  R R&R РїС—Р…R РїС—Р…R РїС—Р…R^YR "R ^ R R R&R "R R R РїС—Р…
+            event.target.classList.add('active');
+        }
+
+        // R РїС—Р…RR R&R R^ R RR R R РїС—Р…RR R "R РїС—Р…R R&R "R R R РїС—Р…R РїС—Р…R R&R RR R R РїС—Р…R R&R R&R^R^РїС—Р…
+        function refreshData() {
+            // R ^R R РїС—Р…RRSRR	 R РїС—Р…RR R РїС—Р…R^Y R РїС—Р…R "R R R R РїС—Р… R "R РїС—Р…R R&R "R R R РїС—Р…R РїС—Р…R R&R RR R R РїС—Р…R R&R R&R^R^РїС—Р…
+            console.log('Updating data...');
+        }
+
+        // R РїС—Р…R R&R R^ R R РїС—Р…R РїС—Р…R R РїС—Р…R РїС—Р…R^ R RR
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('PORTAL Global unified platform loaded');
+        });
+    </script>
+</body>
+</html>

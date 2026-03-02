@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global | Cabinet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <meta name="theme-color" content="#0b0f19">
+    <style>
+        :root {
+            --bg: #0b1112;
+            --bg-2: #0f1c1f;
+            --card: #121c1f;
+            --card-2: #0f171a;
+            --ink: #f3f7f5;
+            --muted: #9bb0b0;
+            --accent: #4fb3a5;
+            --accent-2: #f2c46d;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            background: radial-gradient(circle at 15% 10%, rgba(79, 179, 165, 0.22), transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(242, 196, 109, 0.15), transparent 45%),
+                linear-gradient(160deg, var(--bg), var(--bg-2));
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+        .top__inner{max-width:1100px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+        .brand{color:#e9eefc;text-decoration:none;font-weight:700}
+        .nav{display:flex;gap:12px;flex-wrap:wrap}
+        .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
+        .nav a:hover{color:#e9eefc}
+        .tenant-switch{display:flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(8,14,20,.4);color:var(--muted);font-size:12px}
+        .tenant-switch label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+        .tenant-switch select{background:transparent;border:none;color:var(--ink);font-family:inherit;font-size:12px}
+        .tenant-switch select:focus{outline:none}
+        .account{margin-left:auto;display:flex;align-items:center;gap:10px;color:#9fb0d0;font-size:13px}
+        .plan-badge{border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+        .plan-free{border:1px solid rgba(255,255,255,.18);color:#d7dde8;background:rgba(255,255,255,.08)}
+        .plan-pro{border:1px solid rgba(43,108,255,.6);color:#cfe0ff;background:rgba(43,108,255,.2)}
+        .plan-business{border:1px solid rgba(148,82,255,.5);color:#eadcff;background:rgba(148,82,255,.18)}
+        .account .upgrade{display:none;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(79,179,165,.6);color:#e9eefc;font-weight:600;font-size:12px;text-decoration:none}
+        .logout{background:#11182a;border:1px solid rgba(255,255,255,.08);color:#e9eefc;border-radius:10px;padding:8px 10px;cursor:pointer}
+        @media(max-width:560px){.account{margin-left:0}.logout{margin-left:0}}
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .hero {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 4vw, 44px);
+        }
+
+        .hero p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 46px rgba(0, 0, 0, 0.35);
+        }
+
+        .card h2 {
+            font-size: 20px;
+        }
+
+        .card p,
+        .card li,
+        .card td,
+        .card th,
+        .card label {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .kv {
+            display: grid;
+            gap: 8px;
+        }
+
+        .kv span {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            border: 1px solid transparent;
+            background: var(--accent);
+            color: #072b28;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--ink);
+        }
+
+        .status {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .status.error {
+            color: #f3a6a6;
+        }
+
+        .status.success {
+            color: #a9f3d4;
+        }
+
+        .status.warning {
+            color: #f7d28c;
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card-2);
+            color: var(--ink);
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .span-full {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <header class="top">
+      <div class="top__inner">
+        <a class="brand" href="/">PORTAL</a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/app">Dashboard</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/docs">Docs</a>
+          <a href="/help">Help</a>
+          <a href="/cabinet">Cabinet</a>
+          <a href="/account">Account</a>
+          <a href="/admin" id="navAdmin" style="display:none">Admin</a>
+        </nav>
+        <div class="tenant-switch" id="tenantSwitch" style="display:none">
+          <label for="tenantSelect">Tenant</label>
+          <select id="tenantSelect"></select>
+        </div>
+        <div class="account" id="accountInfo">
+          <span id="accountEmail">Loading...</span>
+          <span class="plan-badge plan-free" id="accountPlan">Free</span>
+          <a class="upgrade" id="upgradeLink" href="/pricing">Upgrade</a>
+        </div>
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <div class="page">
+        <section class="hero">
+            <h1>Tenant Cabinet</h1>
+            <p>Manage tenant identity, teammates, and recent activity in one place.</p>
+        </section>
+
+        <section class="grid">
+            <div class="card">
+                <h2>Tenant overview</h2>
+                <div class="kv"><span>Name</span><div id="workspaceName">-</div></div>
+                <div class="kv"><span>Role</span><div id="workspaceRole">-</div></div>
+                <div class="kv"><span>ID</span><div id="workspaceId">-</div></div>
+                <div class="status" id="workspaceStatus"></div>
+            </div>
+            <div class="card">
+                <h2>Rename tenant</h2>
+                <label for="workspaceNameInput">New name</label>
+                <input id="workspaceNameInput" class="input" placeholder="Enter a new tenant name" />
+                <div class="btn-row">
+                    <button class="btn" id="renameWorkspace">Update name</button>
+                    <button class="btn btn-ghost" id="refreshWorkspace">Refresh</button>
+                </div>
+                <div class="status" id="renameStatus"></div>
+            </div>
+        </section>
+
+        <section class="grid" style="margin-top:18px">
+            <div class="card">
+                <h2>Invite teammate</h2>
+                <p>Send an invite to add new teammates. Invites are demo-only for now.</p>
+                <label for="inviteEmail">Email</label>
+                <input id="inviteEmail" class="input" placeholder="teammate@company.com" />
+                <label for="inviteRole">Role</label>
+                <select id="inviteRole" class="input">
+                    <option value="member">Member</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <div class="btn-row">
+                    <button class="btn" id="sendInvite">Send invite</button>
+                </div>
+                <div class="status" id="inviteStatus"></div>
+            </div>
+            <div class="card">
+                <h2>Members</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Teammate</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersBody">
+                        <tr><td colspan="3">Loading members...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="grid" style="margin-top:18px">
+            <div class="card span-full">
+                <h2>Recent activity</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Entity</th>
+                            <th>Action</th>
+                            <th>Id</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditBody">
+                        <tr><td colspan="4">Loading activity...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        const accountEmail = $("accountEmail");
+        const accountPlan = $("accountPlan");
+        const upgradeLink = $("upgradeLink");
+        const navAdmin = $("navAdmin");
+        const tenantSwitch = $("tenantSwitch");
+        const tenantSelect = $("tenantSelect");
+
+        const workspaceName = $("workspaceName");
+        const workspaceRole = $("workspaceRole");
+        const workspaceId = $("workspaceId");
+        const workspaceStatus = $("workspaceStatus");
+        const workspaceNameInput = $("workspaceNameInput");
+        const renameStatus = $("renameStatus");
+        const inviteEmail = $("inviteEmail");
+        const inviteRole = $("inviteRole");
+        const inviteStatus = $("inviteStatus");
+        const membersBody = $("membersBody");
+        const auditBody = $("auditBody");
+
+        const setPlanBadge = (element, planCode, planName) => {
+            if (!element) return;
+            const code = String(planCode || "free").toLowerCase();
+            element.textContent = planName || code.toUpperCase();
+            element.classList.remove("plan-free", "plan-pro", "plan-business");
+            element.classList.add(`plan-${code}`);
+        };
+
+        const getStoredTenantId = () => localStorage.getItem("activeTenantId") || localStorage.getItem("tenantId");
+
+        const setStoredTenantId = (tenantId) => {
+            if (!tenantId) {
+                localStorage.removeItem("activeTenantId");
+                localStorage.removeItem("tenantId");
+                return;
+            }
+            localStorage.setItem("activeTenantId", String(tenantId));
+            localStorage.setItem("tenantId", String(tenantId));
+        };
+
+        const withTenantHeaders = (headers = {}) => {
+            const tenantId = getStoredTenantId();
+            if (!tenantId) return { ...headers };
+            return { ...headers, "X-Tenant-Id": tenantId };
+        };
+
+        const fetchWithTenant = (url, options = {}) => {
+            const headers = withTenantHeaders(options.headers || {});
+            return fetch(url, { credentials: "include", ...options, headers });
+        };
+
+        const renderTenantSwitch = (memberships = [], activeTenantId) => {
+            if (!tenantSwitch || !tenantSelect) return;
+            if (memberships.length <= 1) {
+                tenantSwitch.style.display = "none";
+                return;
+            }
+            tenantSwitch.style.display = "flex";
+            tenantSelect.innerHTML = "";
+            memberships.forEach((membership) => {
+                const option = document.createElement("option");
+                option.value = String(membership.tenantId);
+                const label = membership.tenantName || `Tenant ${membership.tenantId}`;
+                const roleLabel = membership.role ? ` (${membership.role})` : "";
+                option.textContent = `${label}${roleLabel}`;
+                tenantSelect.appendChild(option);
+            });
+            if (activeTenantId) {
+                tenantSelect.value = String(activeTenantId);
+            }
+        };
+
+        const loadAccount = async () => {
+            try {
+                const response = await fetch("/api/auth/me", { credentials: "include" });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    if (accountEmail) accountEmail.textContent = "Account";
+                    if (accountPlan) setPlanBadge(accountPlan, "free", "Free");
+                    if (upgradeLink) upgradeLink.style.display = "inline-flex";
+                    if (navAdmin) navAdmin.style.display = "none";
+                    return null;
+                }
+                const user = body.data?.user || {};
+                const plan = body.data?.plan || {};
+                if (accountEmail) accountEmail.textContent = user.email || "Account";
+                if (accountPlan) setPlanBadge(accountPlan, plan.code || "free", plan.name || plan.code || "Free");
+                if (upgradeLink) upgradeLink.style.display = (plan.code || "free") === "free" ? "inline-flex" : "none";
+                if (navAdmin) navAdmin.style.display = ["admin", "superadmin"].includes(user.role) ? "inline-flex" : "none";
+                const memberships = body.data?.memberships || [];
+                const activeTenantId = body.data?.activeTenantId || getStoredTenantId() || memberships[0]?.tenantId || null;
+                if (activeTenantId) {
+                    setStoredTenantId(activeTenantId);
+                }
+                renderTenantSwitch(memberships, activeTenantId);
+                return user;
+            } catch (error) {
+                if (navAdmin) navAdmin.style.display = "none";
+                return null;
+            }
+        };
+
+        const loadWorkspace = async () => {
+            workspaceStatus.textContent = "";
+            try {
+                const response = await fetchWithTenant("/api/workspace/me");
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Unable to load tenant");
+                }
+                const data = body.data || {};
+                workspaceName.textContent = data.name || "Tenant";
+                workspaceRole.textContent = data.role || "member";
+                workspaceId.textContent = data.id || "-";
+            } catch (error) {
+                workspaceStatus.textContent = error.message;
+                workspaceStatus.classList.add("error");
+            }
+        };
+
+        const loadMembers = async () => {
+            try {
+                const response = await fetchWithTenant("/api/tenants/members");
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Unable to load members");
+                }
+                const members = body.data || [];
+                if (!members.length) {
+                    membersBody.innerHTML = '<tr><td colspan="3">No members yet.</td></tr>';
+                    return;
+                }
+                membersBody.innerHTML = members.map((member) => {
+                    const name = member.name ? `${member.name} (${member.email})` : member.email;
+                    const joined = member.createdAt ? String(member.createdAt).replace("T", " ") : "-";
+                    return `<tr>
+                        <td>${name}</td>
+                        <td><span class="pill">${member.role || "member"}</span></td>
+                        <td>${joined}</td>
+                    </tr>`;
+                }).join("");
+            } catch (error) {
+                membersBody.innerHTML = `<tr><td colspan="3">${error.message}</td></tr>`;
+            }
+        };
+
+        const loadAudit = async () => {
+            try {
+                const response = await fetchWithTenant("/api/audit/recent");
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Unable to load activity");
+                }
+                const rows = body.data || [];
+                if (!rows.length) {
+                    auditBody.innerHTML = '<tr><td colspan="4">No recent activity yet.</td></tr>';
+                    return;
+                }
+                auditBody.innerHTML = rows.map((row) => {
+                    return `<tr>
+                        <td>${row.timestamp || "-"}</td>
+                        <td>${row.entity || "-"}</td>
+                        <td>${row.action || "-"}</td>
+                        <td>${row.entity_id || "-"}</td>
+                    </tr>`;
+                }).join("");
+            } catch (error) {
+                auditBody.innerHTML = `<tr><td colspan="4">${error.message}</td></tr>`;
+            }
+        };
+
+        const renameWorkspace = async () => {
+            const name = workspaceNameInput.value.trim();
+            renameStatus.classList.remove("error", "success");
+            if (name.length < 3) {
+                renameStatus.textContent = "Name must be at least 3 characters.";
+                renameStatus.classList.add("error");
+                return;
+            }
+            renameStatus.textContent = "Updating...";
+            try {
+                const response = await fetchWithTenant("/api/tenants/rename", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name })
+                });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Failed to rename tenant");
+                }
+                renameStatus.textContent = "Tenant updated.";
+                renameStatus.classList.add("success");
+                workspaceName.textContent = body.data?.name || name;
+                workspaceNameInput.value = "";
+            } catch (error) {
+                renameStatus.textContent = error.message;
+                renameStatus.classList.add("error");
+            }
+        };
+
+        const sendInvite = async () => {
+            const email = inviteEmail.value.trim();
+            inviteStatus.classList.remove("error", "success");
+            if (!email || !email.includes("@")) {
+                inviteStatus.textContent = "Enter a valid email address.";
+                inviteStatus.classList.add("error");
+                return;
+            }
+            inviteStatus.textContent = "Sending invite...";
+            try {
+                const response = await fetchWithTenant("/api/tenants/invite", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, role: inviteRole.value })
+                });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Failed to send invite");
+                }
+                inviteStatus.textContent = body.data?.message || "Invite queued.";
+                inviteStatus.classList.add("success");
+                inviteEmail.value = "";
+            } catch (error) {
+                inviteStatus.textContent = error.message;
+                inviteStatus.classList.add("error");
+            }
+        };
+
+        $("renameWorkspace").addEventListener("click", renameWorkspace);
+        $("refreshWorkspace").addEventListener("click", async () => {
+            await loadWorkspace();
+            await loadMembers();
+            await loadAudit();
+        });
+        $("sendInvite").addEventListener("click", sendInvite);
+        if (tenantSelect) {
+            tenantSelect.addEventListener("change", async () => {
+                const nextTenantId = tenantSelect.value;
+                if (!nextTenantId) return;
+                const previousTenantId = getStoredTenantId();
+                setStoredTenantId(nextTenantId);
+                try {
+                    await fetchWithTenant("/api/tenants/active", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ tenantId: nextTenantId })
+                    });
+                    await loadWorkspace();
+                    await loadMembers();
+                    await loadAudit();
+                } catch (error) {
+                    setStoredTenantId(previousTenantId);
+                    renderTenantSwitch([], previousTenantId);
+                    workspaceStatus.textContent = error.message;
+                    workspaceStatus.classList.add("error");
+                }
+            });
+        }
+
+        const logoutBtn = $("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                try {
+                    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+                } catch (error) {
+                    // ignore
+                }
+                localStorage.removeItem("activeTenantId");
+                localStorage.removeItem("tenantId");
+                window.location.href = "/login";
+            });
+        }
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(() => {});
+        }
+
+        const init = async () => {
+            await loadAccount();
+            await loadWorkspace();
+            await loadMembers();
+            await loadAudit();
+        };
+
+        init();
+    </script>
+</body>
+</html>

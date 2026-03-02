@@ -1,0 +1,123 @@
+{
+  "timestamp": "2026-02-10T00:14:49.085Z",
+  "totalFiles": 22,
+  "filesByExtension": {
+    ".html": 15,
+    ".json": 3,
+    ".js": 2,
+    ".txt": 1,
+    ".md": 1
+  },
+  "files": [
+    {
+      "path": "html\\deepseek_html_20260204_12faa6.html",
+      "encoding": "koi8-r",
+      "score": 108861
+    },
+    {
+      "path": "html\\deepseek_html_20260204_436a56.html",
+      "encoding": "cp866",
+      "score": 81630
+    },
+    {
+      "path": "html\\deepseek_html_20260204_d3242a.html",
+      "encoding": "cp866",
+      "score": 70966
+    },
+    {
+      "path": "html\\portal-portal.html",
+      "encoding": "cp866",
+      "score": 39995
+    },
+    {
+      "path": "html\\unified_portal.html",
+      "encoding": "win1251",
+      "score": 38965
+    },
+    {
+      "path": "html\\unified_portal_by_buttons.html",
+      "encoding": "koi8-r",
+      "score": 76599
+    },
+    {
+      "path": "html\\unified_portal_merged.html",
+      "encoding": "koi8-r",
+      "score": 69991
+    },
+    {
+      "path": "index.html",
+      "encoding": "koi8-r",
+      "score": 69991
+    },
+    {
+      "path": "package-lock.json",
+      "encoding": "utf8",
+      "score": 49384
+    },
+    {
+      "path": "routes\\permissions.js",
+      "encoding": "utf8",
+      "score": 8803
+    },
+    {
+      "path": "socket.js",
+      "encoding": "utf8",
+      "score": 6303
+    },
+    {
+      "path": "ui-inventory.json",
+      "encoding": "koi8-r",
+      "score": 57409
+    },
+    {
+      "path": "ui-inventory.txt",
+      "encoding": "koi8-r",
+      "score": 29964
+    },
+    {
+      "path": "ui-map.md",
+      "encoding": "koi8-r",
+      "score": 33047
+    },
+    {
+      "path": "ui-summary.json",
+      "encoding": "koi8-r",
+      "score": 8287
+    },
+    {
+      "path": "html\\deepseek_html_20260204_12faa6.html",
+      "encoding": "cp866",
+      "score": 109689
+    },
+    {
+      "path": "html\\deepseek_html_20260204_436a56.html",
+      "encoding": "cp866",
+      "score": 81630
+    },
+    {
+      "path": "html\\deepseek_html_20260204_d3242a.html",
+      "encoding": "win1251",
+      "score": 70968
+    },
+    {
+      "path": "html\\portal-portal.html",
+      "encoding": "utf8",
+      "score": 39995
+    },
+    {
+      "path": "html\\unified_portal.html",
+      "encoding": "win1251",
+      "score": 39194
+    },
+    {
+      "path": "html\\unified_portal_by_buttons.html",
+      "encoding": "cp866",
+      "score": 76929
+    },
+    {
+      "path": "html\\unified_portal_merged.html",
+      "encoding": "koi8-r",
+      "score": 70068
+    }
+  ]
+}

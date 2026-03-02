@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL GLOBAL - AI Project Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold text-center mb-2">
+            <span class="gradient-text">PORTAL GLOBAL</span>
+            <span class="text-white text-2xl ml-2">AI Project Analyzer</span>
+        </h1>
+        <p class="text-center text-gray-400 mb-8">Lokales AI Modell analysiert deine Projekte</p>
+
+        <!-- Model Status -->
+        <div class="glass rounded-xl p-4 mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div id="modelStatus" class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <span id="modelStatusText" class="text-gray-300">Modell wird geladen...</span>
+            </div>
+            <div class="text-gray-400 text-sm">
+                Modell: <span class="text-purple-400">qwen2.5-coder:7b</span>
+            </div>
+        </div>
+
+        <!-- Project Data -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div class="glass rounded-xl p-6">
+                <h2 class="text-xl font-bold text-purple-400 mb-4">📊 Projekt-Daten</h2>
+                <div id="projectData" class="space-y-3 max-h-64 overflow-y-auto">
+                    <p class="text-gray-500">Lade Projekte...</p>
+                </div>
+            </div>
+            <div class="glass rounded-xl p-6">
+                <h2 class="text-xl font-bold text-purple-400 mb-4">📈 Analyse & Empfehlungen</h2>
+                <div id="analysisResult" class="text-gray-300 whitespace-pre-wrap max-h-64 overflow-y-auto">
+                    Hier erscheint die AI-Analyse...
+                </div>
+            </div>
+        </div>
+
+        <!-- Query Input -->
+        <div class="glass rounded-xl p-6">
+            <h2 class="text-xl font-bold text-purple-400 mb-4">💬 Frage die AI</h2>
+            <div class="flex gap-4">
+                <input type="text" id="queryInput" 
+                    placeholder="z.B. Was sind die wichtigsten Probleme in meinen Projekten?"
+                    class="flex-1 p-4 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-purple-500 outline-none">
+                <button onclick="askAI()" 
+                    class="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 font-bold hover:opacity-90 transition">
+                    Absenden
+                </button>
+            </div>
+            
+            <!-- Quick Questions -->
+            <div class="mt-4 flex flex-wrap gap-2">
+                <button onclick="quickQuestion('Analysiere alle Projekte und give a summary')" 
+                    class="px-4 py-2 rounded-full bg-gray-800 text-sm text-gray-300 hover:bg-gray-700">
+                    📝 Zusammenfassung
+                </button>
+                <button onclick="quickQuestion('Welche Projekte haben das höchste Risiko?')" 
+                    class="px-4 py-2 rounded-full bg-gray-800 text-sm text-gray-300 hover:bg-gray-700">
+                    ⚠️ Risiko-Analyse
+                </button>
+                <button onclick="quickQuestion('Gib mir Empfehlungen zur Ressourcenverteilung')" 
+                    class="px-4 py-2 rounded-full bg-gray-800 text-sm text-gray-300 hover:bg-gray-700">
+                    📊 Ressourcen
+                </button>
+                <button onclick="quickQuestion('Welche Projekte brauchen sofortige Aufmerksamkeit?')" 
+                    class="px-4 py-2 rounded-full bg-gray-800 text-sm text-gray-300 hover:bg-gray-700">
+                    🚨 Prioritäten
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat History -->
+        <div class="glass rounded-xl p-6 mt-6">
+            <h2 class="text-xl font-bold text-purple-400 mb-4">💭 Chat Verlauf</h2>
+            <div id="chatHistory" class="space-y-4 max-h-96 overflow-y-auto">
+                <p class="text-gray-500">Noch keine Nachrichten...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const OLLAMA_URL = 'http://localhost:11434';
+        const PROJECTS_API = 'http://localhost:3007/api/projects';
+        
+        let projects = [];
+        let chatHistory = [];
+
+        // Sample projects for demo
+        const sampleProjects = [
+            { id: 1, name: 'Portal Global Platform', description: 'Unified portal management platform', status: 'active', budget: 150000 },
+            { id: 2, name: 'AI Project Generator', description: 'AI-powered project planning tool', status: 'planning', budget: 75000 },
+            { id: 3, name: 'E-Commerce Integration', description: 'Online store integration', status: 'active', budget: 45000 },
+            { id: 4, name: 'Mobile App Development', description: 'Cross-platform mobile app', status: 'pending', budget: 120000 }
+        ];
+
+        // Check if Ollama is running
+        async function checkOllama() {
+            try {
+                const res = await fetch(OLLAMA_URL + '/api/tags', { method: 'GET' });
+                if (res.ok) {
+                    document.getElementById('modelStatus').className = 'w-3 h-3 rounded-full bg-green-500';
+                    document.getElementById('modelStatusText').textContent = 'Modell bereit!';
+                    loadProjects();
+                }
+            } catch (e) {
+                document.getElementById('modelStatus').className = 'w-3 h-3 rounded-full bg-red-500';
+                document.getElementById('modelStatusText').textContent = 'Ollama nicht gefunden - starte mit "ollama serve"';
+            }
+        }
+
+        // Load projects from API
+        async function loadProjects() {
+            try {
+                const res = await fetch(PROJECTS_API);
+                const data = await res.json();
+                projects = data.projects && data.projects.length > 0 ? data.projects : sampleProjects;
+            } catch (e) {
+                projects = sampleProjects;
+            }
+            displayProjects();
+            // Auto-analyze on load
+            analyzeProjects();
+        }
+
+        // Display projects
+        function displayProjects() {
+            const container = document.getElementById('projectData');
+            container.innerHTML = projects.map(p => `
+                <div class="p-3 rounded-lg bg-gray-800 border border-gray-700">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-bold text-white">${p.name}</span>
+                            <span class="ml-2 px-2 py-0.5 rounded text-xs ${
+                                p.status === 'active' ? 'bg-green-900 text-green-300' :
+                                p.status === 'planning' ? 'bg-yellow-900 text-yellow-300' :
+                                p.status === 'pending' ? 'bg-gray-600 text-gray-300' :
+                                'bg-red-900 text-red-300'
+                            }">${p.status}</span>
+                        </div>
+                        <span class="text-purple-400">${p.budget ? p.budget + '€' : 'N/A'}</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-1">${p.description || 'Keine Beschreibung'}</p>
+                </div>
+            `).join('');
+        }
+
+        // Analyze projects with AI
+        async function analyzeProjects() {
+            const projectSummary = projects.map(p => 
+                `- ${p.name}: Status=${p.status}, Budget=${p.budget || 'N/A'}, Beschreibung=${p.description || 'N/A'}`
+            ).join('\n');
+
+            const prompt = `Du bist ein erfahrener Projektmanager. Analysiere folgende Projekte und gib eine kurze Zusammenfassung mit Empfehlungen:
+
+${projectSummary}
+
+Antworte auf Deutsch.`;
+
+            const result = await askOllama(prompt);
+            document.getElementById('analysisResult').textContent = result;
+        }
+
+        // Ask Ollama
+        async function askOllama(prompt, systemPrompt = null) {
+            const container = document.getElementById('analysisResult');
+            container.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            
+            const messages = [];
+            if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
+            messages.push({ role: 'user', content: prompt });
+
+            try {
+                const res = await fetch(OLLAMA_URL + '/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'qwen2.5-coder:7b',
+                        messages: messages,
+                        stream: false
+                    })
+                });
+                
+                const data = await res.json();
+                return data.message?.content || 'Keine Antwort erhalten';
+            } catch (e) {
+                return 'Fehler: ' + e.message;
+            }
+        }
+
+        // Ask AI button
+        async function askAI() {
+            const input = document.getElementById('queryInput');
+            const query = input.value.trim();
+            if (!query) return;
+
+            // Add to chat history
+            chatHistory.push({ role: 'user', content: query });
+            displayChatHistory();
+
+            // Get response
+            const projectContext = projects.map(p => 
+                `${p.name}: ${p.status}, ${p.budget}€`
+            ).join(' | ');
+
+            const prompt = `Du bist ein Assistent für Projektmanagement. Beantworte die Frage basierend auf diesen Projektdaten: ${projectContext}
+
+Frage: ${query}
+
+Antworte kurz und präzise auf Deutsch.`;
+
+            const response = await askOllama(prompt);
+            
+            chatHistory.push({ role: 'assistant', content: response });
+            displayChatHistory();
+            
+            input.value = '';
+        }
+
+        // Quick question
+        function quickQuestion(question) {
+            document.getElementById('queryInput').value = question;
+            askAI();
+        }
+
+        // Display chat history
+        function displayChatHistory() {
+            const container = document.getElementById('chatHistory');
+            if (chatHistory.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">Noch keine Nachrichten...</p>';
+                return;
+            }
+            
+            container.innerHTML = chatHistory.map(msg => `
+                <div class="p-4 rounded-lg ${msg.role === 'user' ? 'bg-blue-900/30 ml-8' : 'bg-purple-900/30 mr-8'}">
+                    <div class="text-sm text-gray-400 mb-1">${msg.role === 'user' ? 'Du:' : 'AI:'}</div>
+                    <div class="text-white">${msg.content}</div>
+                </div>
+            `).join('');
+            
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Init
+        checkOllama();
+    </script>
+</body>
+</html>

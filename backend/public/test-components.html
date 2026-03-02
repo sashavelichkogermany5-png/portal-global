@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL GLOBAL - Toast & Modal Test</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        body {
+            padding: 40px;
+            background: var(--bg);
+        }
+        .test-section {
+            margin-bottom: 40px;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        h2 {
+            margin-bottom: 16px;
+            color: var(--ink);
+        }
+    </style>
+</head>
+<body>
+    <h1>PORTAL GLOBAL - Components Test</h1>
+    
+    <div class="test-section">
+        <h2>Toast Notifications</h2>
+        <div class="test-buttons">
+            <button class="btn btn-primary" onclick="Portal.toast.success('Success', 'Everything worked!')">Success</button>
+            <button class="btn btn-primary" onclick="Portal.toast.error('Error', 'Something went wrong!')">Error</button>
+            <button class="btn btn-primary" onclick="Portal.toast.warning('Warning', 'Please check this!')">Warning</button>
+            <button class="btn btn-primary" onclick="Portal.toast.info('Info', 'Just for your information')">Info</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Modal Dialogs</h2>
+        <div class="test-buttons">
+            <button class="btn btn-primary" onclick="testModal()">Open Modal</button>
+            <button class="btn btn-secondary" onclick="testAnalyzeModal()">AI Analyze Modal</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Theme Toggle</h2>
+        <div class="test-buttons">
+            <button class="btn btn-secondary" onclick="Portal.theme.toggle()">Toggle Theme 🌙/☀️</button>
+        </div>
+    </div>
+
+    <script src="/static/js/portal.js"></script>
+    <script>
+        function testModal() {
+            Portal.modal.show({
+                title: 'Test Modal',
+                content: `
+                    <p>Dies ist eine Test-Modaldialog.</p>
+                    <p>Sie können beliebigen HTML-Inhalt hier einfügen.</p>
+                `,
+                buttons: [
+                    { label: 'Abbrechen', action: 'cancel', close: true },
+                    { label: 'Bestätigen', action: 'confirm', primary: true, onClick: () => {
+                        Portal.toast.success('Bestätigt', 'Sie haben auf Bestätigen geklickt!');
+                    }}
+                ]
+            });
+        }
+
+        function testAnalyzeModal() {
+            const projectId = 19;
+            Portal.modal.show({
+                title: '🧠 AI Projektanalyse',
+                content: `<div id="analyze-content"><p>Wird geladen...</p></div>`,
+                buttons: [
+                    { label: 'Schließen', action: 'close', close: true }
+                ]
+            });
+            
+            document.getElementById('analyze-content').innerHTML = '<p>📊 Analysiere Projekt...</p>';
+            
+            if (Portal.token) {
+                Portal.projects.analyze(projectId).then(result => {
+                    if (result.data?.analysis) {
+                        document.getElementById('analyze-content').innerHTML = `
+                            <div style="background: var(--bg); padding: 16px; border-radius: 8px;">
+                                <strong>Ergebnis:</strong>
+                                <p style="margin-top: 8px; white-space: pre-wrap;">${result.data.analysis}</p>
+                            </div>
+                        `;
+                    } else {
+                        document.getElementById('analyze-content').innerHTML = '<p>⚠️ Analyse nicht verfügbar</p>';
+                    }
+                }).catch(e => {
+                    document.getElementById('analyze-content').innerHTML = '<p>❌ Fehler bei der Analyse</p>';
+                });
+            } else {
+                document.getElementById('analyze-content').innerHTML = '<p>🔒 Bitte zuerst anmelden</p>';
+            }
+        }
+    </script>
+</body>
+</html>

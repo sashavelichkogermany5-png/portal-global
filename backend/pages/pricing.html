@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL Global | Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <meta name="theme-color" content="#0b0f19">
+    <style>
+        :root {
+            --bg: #0b1112;
+            --bg-2: #0f1c1f;
+            --card: #121c1f;
+            --card-2: #0f171a;
+            --ink: #f3f7f5;
+            --muted: #9bb0b0;
+            --accent: #4fb3a5;
+            --accent-2: #f2c46d;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            background: radial-gradient(circle at 15% 10%, rgba(79, 179, 165, 0.22), transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(242, 196, 109, 0.15), transparent 45%),
+                linear-gradient(160deg, var(--bg), var(--bg-2));
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+        .top__inner{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px}
+        .brand{color:#e9eefc;text-decoration:none;font-weight:700}
+        .nav{display:flex;gap:12px;flex-wrap:wrap}
+        .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
+        .nav a:hover{color:#e9eefc}
+        .auth-link{display:none}
+        .account{margin-left:auto;display:flex;align-items:center;gap:10px;color:#9fb0d0;font-size:13px}
+        .plan-badge{border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+        .plan-free{border:1px solid rgba(255,255,255,.18);color:#d7dde8;background:rgba(255,255,255,.08)}
+        .plan-pro{border:1px solid rgba(43,108,255,.6);color:#cfe0ff;background:rgba(43,108,255,.2)}
+        .plan-business{border:1px solid rgba(148,82,255,.5);color:#eadcff;background:rgba(148,82,255,.18)}
+        .account .upgrade{display:none;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(79,179,165,.6);color:#e9eefc;font-weight:600;font-size:12px;text-decoration:none}
+        .logout{background:#11182a;border:1px solid rgba(255,255,255,.08);color:#e9eefc;border-radius:10px;padding:8px 10px;cursor:pointer}
+        @media(max-width:560px){.account{margin-left:0}.logout{margin-left:0}}
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .hero {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 4vw, 46px);
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .install-note {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .install-banner{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:rgba(17,24,42,.95);border:1px solid rgba(255,255,255,.12);color:#e9eefc;padding:10px 14px;border-radius:14px;display:none;gap:10px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.35);font-size:13px;z-index:20}
+        .install-banner button{border:1px solid rgba(255,255,255,.18);background:transparent;color:#e9eefc;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:12px}
+
+        .plan-grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .plan-card {
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 22px;
+            background: var(--card);
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 16px;
+        }
+
+        .plan-card.featured {
+            border-color: rgba(79, 179, 165, 0.6);
+            box-shadow: 0 24px 50px rgba(79, 179, 165, 0.18);
+        }
+
+        .plan-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .plan-title h2 {
+            font-size: 20px;
+        }
+
+        .plan-price {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .plan-price span {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .plan-features {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .usage-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 12px;
+        }
+
+        .usage-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px;
+            gap: 12px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .usage-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .usage-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .usage-warning {
+            color: var(--accent-2);
+            font-size: 13px;
+        }
+
+        .comparison {
+            margin-top: 24px;
+            overflow-x: auto;
+        }
+
+        .comparison table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 640px;
+            font-size: 14px;
+        }
+
+        .comparison th,
+        .comparison td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .comparison th {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .why-upgrade {
+            margin-top: 24px;
+            display: grid;
+            gap: 10px;
+            color: var(--muted);
+        }
+
+        .btn {
+            border: 1px solid transparent;
+            background: var(--accent);
+            color: #072b28;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(79, 179, 165, 0.2);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--ink);
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(4, 8, 9, 0.75);
+            z-index: 30;
+            padding: 20px;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-card {
+            max-width: 480px;
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 12px;
+        }
+
+        .modal-card.success {
+            border-color: rgba(79, 179, 165, 0.6);
+            box-shadow: 0 22px 45px rgba(79, 179, 165, 0.2);
+        }
+
+        .modal-card p {
+            color: var(--muted);
+        }
+
+    </style>
+</head>
+<body>
+    <header class="top">
+      <div class="top__inner">
+        <a class="brand" href="/">PORTAL</a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/app">Dashboard</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/docs">Docs</a>
+          <a href="/help">Help</a>
+          <a href="/cabinet" id="navAccount">Cabinet</a>
+          <a href="/admin" id="navAdmin" style="display:none">Admin</a>
+          <a href="/login" id="navLogin" class="auth-link">Login</a>
+          <a href="/register" id="navRegister" class="auth-link">Register</a>
+        </nav>
+        <div class="account" id="accountInfo">
+          <span id="accountEmail">Guest</span>
+          <span class="plan-badge plan-free" id="accountPlan">Free</span>
+          <a class="upgrade" id="upgradeLink" href="/pricing">Upgrade</a>
+        </div>
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <div class="page">
+        <section class="hero">
+            <h1>Pricing built for real delivery teams</h1>
+            <p>Select a plan for the demo. Payments are not enabled yet, so every CTA opens a contact note.</p>
+            <p class="install-note">Tip: Install PORTAL as an app (Chrome menu -> Install app).</p>
+        </section>
+
+        <section class="usage-card" id="usageCard">
+            <h2>Usage snapshot</h2>
+            <p class="status" id="usageStatus">Sign in to see your live usage.</p>
+            <div class="usage-row">
+                <span>Projects</span>
+                <div class="usage-bar"><div class="usage-fill" id="usageProjectsFill"></div></div>
+                <span id="usageProjectsValue">-</span>
+            </div>
+            <div class="usage-row">
+                <span>Clients</span>
+                <div class="usage-bar"><div class="usage-fill" id="usageClientsFill"></div></div>
+                <span id="usageClientsValue">-</span>
+            </div>
+            <div class="usage-row">
+                <span>Providers</span>
+                <div class="usage-bar"><div class="usage-fill" id="usageProvidersFill"></div></div>
+                <span id="usageProvidersValue">-</span>
+            </div>
+            <div class="usage-row">
+                <span>Orders</span>
+                <div class="usage-bar"><div class="usage-fill" id="usageOrdersFill"></div></div>
+                <span id="usageOrdersValue">-</span>
+            </div>
+            <div class="usage-warning" id="usageWarning" style="display:none">You're close to the limit. Upgrade to avoid caps.</div>
+        </section>
+
+        <section class="plan-grid">
+            <div class="plan-card">
+                <div class="plan-title">
+                    <h2>Free</h2>
+                    <span class="plan-price">$0 <span>/ demo</span></span>
+                </div>
+                <ul class="plan-features">
+                    <li>Up to 3 active projects</li>
+                    <li>Sample AI prompts</li>
+                    <li>Basic stats snapshot</li>
+                    <li>Single workspace</li>
+                    <li>Community support</li>
+                </ul>
+                <button class="btn btn-ghost" type="button" data-plan="Free" data-free="true">Start free demo</button>
+            </div>
+
+            <div class="plan-card featured">
+                <div class="plan-title">
+                    <h2>Pro</h2>
+                    <span class="plan-price">$49 <span>/ month</span></span>
+                </div>
+                <ul class="plan-features">
+                    <li>Unlimited projects</li>
+                    <li>Advanced AI summaries</li>
+                    <li>Client and provider management</li>
+                    <li>Automation templates</li>
+                    <li>Export-ready reports</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="btn" type="button" data-plan="Pro" data-upgrade="pro">Upgrade to Pro</button>
+            </div>
+
+            <div class="plan-card">
+                <div class="plan-title">
+                    <h2>Business</h2>
+                    <span class="plan-price">$149 <span>/ month</span></span>
+                </div>
+                <ul class="plan-features">
+                    <li>Multi-workspace governance</li>
+                    <li>Custom workflow templates</li>
+                    <li>SSO-ready roadmap</li>
+                    <li>Dedicated onboarding</li>
+                    <li>Audit trail exports</li>
+                    <li>SLA support</li>
+                </ul>
+                <button class="btn btn-ghost" type="button" data-plan="Business">Contact sales</button>
+            </div>
+        </section>
+
+        <section class="comparison">
+            <h2>Feature comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Free</th>
+                        <th>Pro</th>
+                        <th>Business</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Projects</td><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
+                    <tr><td>Clients</td><td>10</td><td>Unlimited</td><td>Unlimited</td></tr>
+                    <tr><td>Providers</td><td>10</td><td>Unlimited</td><td>Unlimited</td></tr>
+                    <tr><td>Orders</td><td>30</td><td>Unlimited</td><td>Unlimited</td></tr>
+                    <tr><td>CSV export</td><td>-</td><td>Included</td><td>Included</td></tr>
+                    <tr><td>Audit-ready logs</td><td>-</td><td>Included</td><td>Included</td></tr>
+                    <tr><td>Advanced controls</td><td>-</td><td>-</td><td>SSO-ready, audit exports</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="why-upgrade">
+            <h2>Why upgrade</h2>
+            <ul>
+                <li>Remove caps and keep projects flowing without interruptions.</li>
+                <li>Unlock CSV exports to share real metrics with stakeholders.</li>
+                <li>Enable business-grade controls for enterprise readiness.</li>
+            </ul>
+        </section>
+    </div>
+
+    <div class="modal" id="ctaModal">
+        <div class="modal-card" id="modalCard">
+            <h3 id="modalPlan">Plan</h3>
+            <p id="modalMessage">Coming soon. Contact us to enable this plan for your team.</p>
+            <button class="btn btn-ghost" type="button" id="closeModal">Close</button>
+        </div>
+    </div>
+
+    <div class="install-banner" id="installBanner">
+        <span>Install PORTAL for faster access.</span>
+        <button id="installBtn" type="button">Install</button>
+        <button id="installDismiss" type="button">Not now</button>
+    </div>
+
+    <script>
+        const modal = document.getElementById("ctaModal");
+        const modalCard = document.getElementById("modalCard");
+        const modalPlan = document.getElementById("modalPlan");
+        const modalMessage = document.getElementById("modalMessage");
+        const closeModal = document.getElementById("closeModal");
+        const accountEmail = document.getElementById("accountEmail");
+        const accountPlan = document.getElementById("accountPlan");
+        const upgradeLink = document.getElementById("upgradeLink");
+        const navAccount = document.getElementById("navAccount");
+        const navAdmin = document.getElementById("navAdmin");
+        const navLogin = document.getElementById("navLogin");
+        const navRegister = document.getElementById("navRegister");
+        const usageStatus = document.getElementById("usageStatus");
+        const usageWarning = document.getElementById("usageWarning");
+        const usageProjectsFill = document.getElementById("usageProjectsFill");
+        const usageClientsFill = document.getElementById("usageClientsFill");
+        const usageProvidersFill = document.getElementById("usageProvidersFill");
+        const usageOrdersFill = document.getElementById("usageOrdersFill");
+        const usageProjectsValue = document.getElementById("usageProjectsValue");
+        const usageClientsValue = document.getElementById("usageClientsValue");
+        const usageProvidersValue = document.getElementById("usageProvidersValue");
+        const usageOrdersValue = document.getElementById("usageOrdersValue");
+
+        const authState = {
+            loggedIn: false,
+            planCode: "free",
+            planName: "Free",
+            isAdmin: false
+        };
+
+        const setPlanBadge = (element, planCode, planName) => {
+            if (!element) return;
+            const code = String(planCode || "free").toLowerCase();
+            element.textContent = planName || code.toUpperCase();
+            element.classList.remove("plan-free", "plan-pro", "plan-business");
+            element.classList.add(`plan-${code}`);
+        };
+
+        const setUsageRow = (fillEl, valueEl, current, limit) => {
+            if (!fillEl || !valueEl) return;
+            if (limit === null || limit === undefined) {
+                fillEl.style.width = "100%";
+                valueEl.textContent = `${current} / Unlimited`;
+                return 0;
+            }
+            const percent = Math.min(100, Math.round((current / limit) * 100));
+            fillEl.style.width = `${percent}%`;
+            valueEl.textContent = `${current} / ${limit}`;
+            return percent / 100;
+        };
+
+        const loadUsage = async () => {
+            if (!authState.loggedIn) {
+                if (usageStatus) usageStatus.textContent = "Sign in to see your live usage.";
+                return;
+            }
+            try {
+                const response = await fetch("/api/subscription/me", { credentials: "include" });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Failed to load usage");
+                }
+                const data = body.data || {};
+                const limits = data.limits || {};
+                const usage = data.usage || {};
+                if (usageStatus) usageStatus.textContent = "";
+                const ratios = [];
+                ratios.push(setUsageRow(usageProjectsFill, usageProjectsValue, usage.projects ?? 0, limits.maxProjects));
+                ratios.push(setUsageRow(usageClientsFill, usageClientsValue, usage.clients ?? 0, limits.maxClients));
+                ratios.push(setUsageRow(usageProvidersFill, usageProvidersValue, usage.providers ?? 0, limits.maxProviders));
+                ratios.push(setUsageRow(usageOrdersFill, usageOrdersValue, usage.orders ?? 0, limits.maxOrders));
+                const nearLimit = ratios.some((ratio) => ratio >= 0.8 && ratio < 1);
+                if (usageWarning) {
+                    usageWarning.style.display = nearLimit ? "block" : "none";
+                }
+            } catch (error) {
+                if (usageStatus) usageStatus.textContent = error.message || "Failed to load usage.";
+            }
+        };
+
+        const updateNavLinks = () => {
+            const returnUrl = encodeURIComponent(`${window.location.pathname}${window.location.search || ""}`);
+            if (navAccount) {
+                navAccount.href = authState.loggedIn
+                    ? "/cabinet"
+                    : `/login?returnUrl=${encodeURIComponent("/cabinet")}`;
+            }
+            if (navAdmin) {
+                navAdmin.style.display = authState.isAdmin ? "inline-flex" : "none";
+            }
+            if (navLogin) {
+                navLogin.href = `/login?returnUrl=${returnUrl}`;
+                navLogin.style.display = authState.loggedIn ? "none" : "inline-flex";
+            }
+            if (navRegister) {
+                navRegister.href = `/register?returnUrl=${returnUrl}`;
+                navRegister.style.display = authState.loggedIn ? "none" : "inline-flex";
+            }
+        };
+
+        const loadAccount = async () => {
+            try {
+                const response = await fetch("/api/auth/me", { credentials: "include" });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                authState.loggedIn = false;
+                authState.planCode = "free";
+                authState.planName = "Free";
+                authState.isAdmin = false;
+                if (accountEmail) accountEmail.textContent = "Guest";
+                if (accountPlan) setPlanBadge(accountPlan, "free", "Free");
+                if (upgradeLink) upgradeLink.style.display = "inline-flex";
+                updateNavLinks();
+                loadUsage();
+                return;
+            }
+
+                const user = body.data?.user || {};
+                const plan = body.data?.plan || {};
+                authState.loggedIn = true;
+                authState.planCode = String(plan.code || "free").toLowerCase();
+                authState.planName = plan.name || plan.code || "Free";
+                authState.isAdmin = user.role === "admin";
+                if (accountEmail) accountEmail.textContent = user.email || "Account";
+                if (accountPlan) setPlanBadge(accountPlan, authState.planCode, authState.planName);
+                if (upgradeLink) {
+                    upgradeLink.style.display = authState.planCode === "free" ? "inline-flex" : "none";
+                }
+                updateNavLinks();
+                loadUsage();
+            } catch (error) {
+                authState.loggedIn = false;
+                authState.isAdmin = false;
+                if (accountEmail) accountEmail.textContent = "Guest";
+                if (accountPlan) setPlanBadge(accountPlan, "free", "Free");
+                if (upgradeLink) upgradeLink.style.display = "inline-flex";
+                updateNavLinks();
+                loadUsage();
+            }
+        };
+
+        const upgradePlan = async (planCode, planLabel) => {
+            try {
+                const response = await fetch("/api/subscription/upgrade", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ plan_code: planCode })
+                });
+                if (response.status === 401) {
+                    window.location.href = "/login?returnUrl=/pricing";
+                    return;
+                }
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Upgrade failed");
+                }
+                if (modalCard) modalCard.classList.add("success");
+                modalPlan.textContent = planLabel || "Plan";
+                modalMessage.textContent = "Upgrade successful. Redirecting to your dashboard...";
+                modal.classList.add("open");
+                setTimeout(() => {
+                    window.location.href = "/app";
+                }, 700);
+            } catch (error) {
+                if (modalCard) modalCard.classList.remove("success");
+                modalPlan.textContent = planLabel || "Plan";
+                modalMessage.textContent = error.message || "Upgrade failed";
+                modal.classList.add("open");
+            }
+        };
+
+        document.querySelectorAll("[data-plan]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const plan = button.dataset.plan || "Plan";
+                const upgradeCode = button.dataset.upgrade;
+                const startFree = button.dataset.free;
+                if (startFree) {
+                    if (!authState.loggedIn) {
+                        window.location.href = "/register?returnUrl=/pricing";
+                        return;
+                    }
+                    if (authState.planCode === "free") {
+                        modalPlan.textContent = "Free";
+                        modalMessage.textContent = "You are already on the Free plan.";
+                        modal.classList.add("open");
+                        return;
+                    }
+                    modalPlan.textContent = authState.planName || "Plan";
+                    modalMessage.textContent = `You are already on the ${authState.planName} plan.`;
+                    modal.classList.add("open");
+                    return;
+                }
+                if (upgradeCode) {
+                    upgradePlan(upgradeCode, plan);
+                    return;
+                }
+                modalPlan.textContent = plan;
+                modalMessage.textContent = `Coming soon. Contact us to enable the ${plan} plan.`;
+                modal.classList.add("open");
+            });
+        });
+
+        closeModal.addEventListener("click", () => {
+            modal.classList.remove("open");
+            if (modalCard) modalCard.classList.remove("success");
+        });
+
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.classList.remove("open");
+                if (modalCard) modalCard.classList.remove("success");
+            }
+        });
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                try {
+                    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+                } catch (error) {
+                    // ignore
+                }
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+            });
+        }
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(() => {});
+        }
+
+        loadAccount();
+    </script>
+    <script src="/static/js/pwa-banner.js" defer></script>
+</body>
+</html>

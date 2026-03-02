@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PORTAL Global | Register</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <meta name="theme-color" content="#0b0f19">
+  <style>
+    :root{--bg:#0b0f19;--card:#11182a;--text:#e9eefc;--muted:#9fb0d0;--btn:#2b6cff;--border:rgba(255,255,255,.08)}
+    *{box-sizing:border-box} body{margin:0;font-family:"Space Grotesk",system-ui;background:var(--bg);color:var(--text)}
+    .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .top__inner{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px}
+    .brand{color:#e9eefc;text-decoration:none;font-weight:700}
+    .nav{display:flex;gap:12px;flex-wrap:wrap}
+    .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
+    .nav a:hover{color:#e9eefc}
+    .wrap{max-width:520px;margin:0 auto;padding:36px 18px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px}
+    h1{margin:0 0 12px;font-size:28px}
+    label{display:block;margin:12px 0 6px;color:var(--muted);font-size:14px}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:#0f1526;color:var(--text)}
+    button{margin-top:16px;width:100%;padding:12px;border-radius:12px;border:1px solid transparent;background:var(--btn);color:#fff;font-weight:600;cursor:pointer}
+    .status{margin-top:10px;color:var(--muted);font-size:13px}
+    .status.error{color:#ffb3b3}
+    .links{margin-top:14px;font-size:13px;color:var(--muted)}
+    .links a{color:#e9eefc;text-decoration:none}
+    .note{margin-top:16px;color:var(--muted);font-size:12px}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top__inner">
+      <a class="brand" href="/">PORTAL</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/app">Dashboard</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/docs">Docs</a>
+        <a href="/help">Help</a>
+        <a href="/cabinet" id="navAccount">Cabinet</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <h1>Create account</h1>
+      <form id="registerForm">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required />
+        <button type="submit">Create account</button>
+        <div class="status" id="status"></div>
+      </form>
+      <div class="links">Already have an account? <a href="/login" id="loginLink">Sign in</a></div>
+      <div class="note">Install the app: browser menu → Add to Home screen.</div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const status = document.getElementById("status");
+    const loginLink = document.getElementById("loginLink");
+    const navAccount = document.getElementById("navAccount");
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get("returnUrl");
+    const safeReturnUrl = returnUrl && returnUrl.startsWith("/") ? returnUrl : "/app";
+
+    if (loginLink) {
+      loginLink.href = `/login?returnUrl=${encodeURIComponent(safeReturnUrl)}`;
+    }
+    if (navAccount) {
+      navAccount.href = `/login?returnUrl=${encodeURIComponent("/cabinet")}`;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      status.textContent = "Creating account...";
+      status.classList.remove("error");
+      try {
+        const payload = {
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value
+        };
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload)
+        });
+        const body = await response.json().catch(() => ({}));
+        if (!response.ok || !body.ok) {
+          throw new Error(body.message || body.error || "Registration failed");
+        }
+        const activeTenantId = body.activeTenantId || body.data?.activeTenantId;
+        if (activeTenantId) {
+          localStorage.setItem("activeTenantId", String(activeTenantId));
+          localStorage.setItem("tenantId", String(activeTenantId));
+          fetch("/api/events", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Tenant-Id": activeTenantId
+            },
+            body: JSON.stringify({
+              type: "user.register",
+              source: "ui",
+              payload: { page: window.location.pathname }
+            }),
+            keepalive: true
+          }).catch(() => {});
+        }
+        window.location.href = safeReturnUrl;
+      } catch (error) {
+        status.textContent = error.message;
+        status.classList.add("error");
+      }
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(()=>{});
+    }
+  </script>
+</body>
+</html>
