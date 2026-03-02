@@ -4078,6 +4078,10 @@ const parseAllowedOrigins = (value) => value
 
 const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS || '');
 const devAllowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173'];
+const isLocalOrigin = (origin) => (
+    /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+    || /^http:\/\/\[::1\](:\d+)?$/.test(origin)
+);
 const activeAllowedOrigins = isProd
     ? allowedOrigins
     : (allowedOrigins.length > 0 ? allowedOrigins : devAllowedOrigins);
@@ -4085,6 +4089,10 @@ const activeAllowedOrigins = isProd
 const corsOptions = {
     origin: (origin, callback) => {
         if (!origin) {
+            return callback(null, true);
+        }
+
+        if (!isProd && isLocalOrigin(origin)) {
             return callback(null, true);
         }
 
