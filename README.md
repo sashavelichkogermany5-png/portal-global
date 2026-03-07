@@ -5,6 +5,21 @@
 - Describes file upload UI/UX and supported file types.
 # PORTAL - File Upload Feature
 
+## Rollback (tags)
+To rollback to a known good state:
+
+```bash
+git fetch --tags
+git checkout backup-20260307-0030
+```
+
+To return to latest main:
+
+```bash
+git checkout main
+git pull
+```
+
 ## 🚀 Quick Start
 
 1. **Install dependencies:**
