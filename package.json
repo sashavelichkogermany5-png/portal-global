@@ -6,9 +6,10 @@
     "scripts": {
         "state": "pwsh -NoProfile -ExecutionPolicy Bypass -File ops/generate-current-state.ps1",
         "start": "node server.js",
-        "worker": "node scripts/worker.js",
+        "worker": "node backend/workers/email-worker.js",
         "daily-report": "node scripts/daily-report.js",
         "test:financial-event": "node scripts/test-financial-event.js",
+        "db:email": "node backend/scripts/apply-email-sql.js",
         "test": "echo \"Tests not configured\" && exit 0",
         "lint": "eslint . --ext .js",
         "lint:fix": "eslint . --ext .js --fix",
@@ -40,8 +41,10 @@
         "chat": "node -e \"fetch(\\\"http://localhost:3000/api/chat\\\",{method:\\\"POST\\\",headers:{\\\"Content-Type\\\":\\\"application/json\\\"},body:JSON.stringify({message:\\\"Hello\\\"})}).then(r=>r.text()).then(console.log).catch(e=>{console.error(e);process.exit(1)})\""
     },
     "dependencies": {
+        "@sendgrid/mail": "^7.7.0",
         "bcrypt": "^5.1.1",
         "compression": "^1.7.4",
+        "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",

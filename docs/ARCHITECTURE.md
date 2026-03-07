@@ -1,4 +1,9 @@
-﻿# PORTAL GLOBAL — Architecture (current)
+﻿# Short summary
+- Runtime: backend server.js, web-next, ports 3000/3001.
+- Auth: session token in SQLite; cookie name; bearer accepted.
+- Roles overview (admin/team, client tenant users, staff).
+- Key rule: tenantId comes from auth/session only.
+# PORTAL GLOBAL — Architecture (current)
 
 ## Runtime
 - Backend: Node.js server at project root (`server.js`)
@@ -18,3 +23,8 @@
 ## Key rule
 All data must be tenant-scoped:
 - tenantId comes from auth/session (not from request body)
+
+Topics: architecture, auth, roles, tenant
+People: none
+Decision type: reference
+Status: active

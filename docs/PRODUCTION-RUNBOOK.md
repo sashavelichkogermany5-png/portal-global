@@ -1,3 +1,9 @@
+# Short summary
+- Port map: only 3000 should be open.
+- Quick start commands for kill ports, ports check, smoke, start server.
+- Community mode rules: allowed public paths and blocked actions.
+- Production checklist and required env vars.
+- Health endpoint /api/health sample response.
 # PORTAL Global - Production Runbook
 
 ## Port Map
@@ -133,3 +139,8 @@ Expected:
 - /api/health -> 200
 - /api/anything -> 401
 ```
+
+Topics: production, ports, community, checklist, health
+People: none
+Decision type: runbook
+Status: active

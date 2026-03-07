@@ -1,3 +1,8 @@
+# Short summary
+- Quick start: npm install, npm run dev, open /orders.
+- Lists agent conversation endpoints and workflows.
+- Documents revenue tracking tables and email worker config.
+- Describes file upload UI/UX and supported file types.
 # PORTAL - File Upload Feature
 
 ## 🚀 Quick Start
@@ -253,3 +258,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Last Updated:** February 2026
 **Version:** 1.0.0
+
+Topics: quickstart, agent, revenue, email, uploads
+People: none
+Decision type: reference
+Status: active

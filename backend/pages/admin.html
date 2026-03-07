@@ -18,6 +18,7 @@
             --ink: #f3f7f5;
             --muted: #9bb0b0;
             --accent: #4fb3a5;
+            --accent-2: #f2c46d;
             --border: rgba(255, 255, 255, 0.08);
             --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
         }
@@ -42,20 +43,12 @@
             text-decoration: none;
         }
 
-        .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
-        .top__inner{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-        .brand{color:#e9eefc;text-decoration:none;font-weight:700}
-        .nav{display:flex;gap:12px;flex-wrap:wrap}
-        .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
-        .nav a:hover{color:#e9eefc}
-        .account{margin-left:auto;display:flex;align-items:center;gap:10px;color:#9fb0d0;font-size:13px}
-        .plan-badge{border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-        .plan-free{border:1px solid rgba(255,255,255,.18);color:#d7dde8;background:rgba(255,255,255,.08)}
-        .plan-pro{border:1px solid rgba(43,108,255,.6);color:#cfe0ff;background:rgba(43,108,255,.2)}
-        .plan-business{border:1px solid rgba(148,82,255,.5);color:#eadcff;background:rgba(148,82,255,.18)}
-        .account .upgrade{display:none;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(79,179,165,.6);color:#e9eefc;font-weight:600;font-size:12px;text-decoration:none}
-        .logout{background:#11182a;border:1px solid rgba(255,255,255,.08);color:#e9eefc;border-radius:10px;padding:8px 10px;cursor:pointer}
-        @media(max-width:560px){.account{margin-left:0}.logout{margin-left:0}}
+        .top {position: sticky; top: 0; z-index: 10; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.08)}
+        .top__inner {max-width: 1100px; margin: 0 auto; padding: 12px 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap}
+        .brand {color: #e9eefc; text-decoration: none; font-weight: 700}
+        .nav {display: flex; gap: 12px; flex-wrap: wrap}
+        .nav a {color: #9fb0d0; text-decoration: none; font-weight: 600; font-size: 14px}
+        .nav a:hover {color: #e9eefc}
 
         .page {
             max-width: 1100px;
@@ -81,7 +74,7 @@
         .grid {
             display: grid;
             gap: 18px;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         }
 
         .card {
@@ -91,17 +84,17 @@
             padding: 22px;
             box-shadow: var(--shadow);
             display: grid;
-            gap: 12px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            gap: 14px;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 24px 46px rgba(0, 0, 0, 0.35);
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
         }
 
         .metric {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 600;
         }
 
@@ -109,133 +102,632 @@
             font-size: 13px;
             color: var(--muted);
         }
+
+        .token-row {
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) auto auto auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .token-row input {
+            background: var(--card-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: var(--ink);
+            font-size: 14px;
+        }
+
+        .token-row button {
+            border-radius: 10px;
+            border: 1px solid rgba(79, 179, 165, 0.6);
+            background: rgba(79, 179, 165, 0.15);
+            color: var(--ink);
+            padding: 9px 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .token-row .secondary {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-row button {
+            border-radius: 10px;
+            border: 1px solid rgba(79, 179, 165, 0.6);
+            background: rgba(79, 179, 165, 0.15);
+            color: var(--ink);
+            padding: 9px 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .pill--ok {
+            border: 1px solid rgba(79, 179, 165, 0.6);
+            color: #dff6f1;
+            background: rgba(79, 179, 165, 0.18);
+        }
+
+        .pill--warn {
+            border: 1px solid rgba(242, 196, 109, 0.6);
+            color: #fff0d2;
+            background: rgba(242, 196, 109, 0.18);
+        }
+
+        .histogram {
+            display: grid;
+            grid-template-columns: repeat(24, minmax(0, 1fr));
+            gap: 4px;
+            align-items: end;
+            height: 90px;
+            margin-top: 6px;
+        }
+
+        .histogram .bar {
+            width: 100%;
+            min-height: 6px;
+            border-radius: 6px 6px 0 0;
+            background: linear-gradient(180deg, rgba(79, 179, 165, 0.9), rgba(79, 179, 165, 0.2));
+        }
+
+        .list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .mono {
+            font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 13px;
+        }
+
+        .feedback-item {
+            display: grid;
+            gap: 6px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .feedback-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .feedback-message {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .empty {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 720px) {
+            .token-row {
+                grid-template-columns: 1fr;
+            }
+            .token-row button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="top">
-      <div class="top__inner">
-        <a class="brand" href="/">PORTAL</a>
-        <nav class="nav">
-          <a href="/">Home</a>
-          <a href="/app">Dashboard</a>
-          <a href="/pricing">Pricing</a>
-          <a href="/docs">Docs</a>
-          <a href="/help">Help</a>
-          <a href="/cabinet">Cabinet</a>
-          <a href="/admin">Admin</a>
-        </nav>
-        <div class="account" id="accountInfo">
-          <span id="accountEmail">Loading...</span>
-          <span class="plan-badge plan-free" id="accountPlan">Free</span>
-          <a class="upgrade" id="upgradeLink" href="/pricing">Upgrade</a>
+        <div class="top__inner">
+            <a class="brand" href="/">PORTAL</a>
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="/app">Dashboard</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/docs">Docs</a>
+                <a href="/help">Help</a>
+                <a href="/admin">Admin</a>
+            </nav>
         </div>
-        <button id="logoutBtn" class="logout">Logout</button>
-      </div>
     </header>
 
     <div class="page">
         <section class="hero">
-            <h1>Admin overview</h1>
-            <p>Global metrics for users, subscriptions, and plan distribution.</p>
+            <h1>Admin pulse</h1>
+            <p>24-hour traffic and feedback snapshot. Requires <span class="mono">DEV_ADMIN_TOKEN</span>.</p>
+            <div style="margin-top:10px; opacity:.85;">Need help? <a href="/docs#support">Support &amp; Feedback</a></div>
+        </section>
+
+        <section class="card">
+            <h2>Admin token</h2>
+            <div class="token-row">
+                <input id="tokenInput" type="password" placeholder="DEV_ADMIN_TOKEN" autocomplete="off" />
+                <button id="tokenSave">Save token</button>
+                <button id="tokenTest">Test token</button>
+                <button id="tokenClear" class="secondary">Clear</button>
+            </div>
+            <div class="status">Tip: open <span class="mono">/admin?token=...</span> to auto-save.</div>
+            <span id="tokenStatus" class="pill pill--warn">Token required</span>
         </section>
 
         <section class="grid">
             <div class="card">
-                <h2>Total users</h2>
-                <div class="metric" id="totalUsers">-</div>
+                <h2>Summary (24h)</h2>
+                <div class="action-row">
+                    <button id="loadSummary">Load Summary</button>
+                </div>
+                <div class="metric-row">
+                    <div>
+                        <div class="metric" id="summaryViews">-</div>
+                        <div class="status">Pageviews</div>
+                    </div>
+                    <div>
+                        <div class="metric" id="summaryUniques">-</div>
+                        <div class="status">Unique IPs (approx)</div>
+                    </div>
+                </div>
+                <div class="histogram" id="summaryHistogram"></div>
+                <div class="status" id="summaryStatus"></div>
             </div>
             <div class="card">
-                <h2>Total subscriptions</h2>
-                <div class="metric" id="totalSubscriptions">-</div>
+                <h2>Top paths</h2>
+                <div class="list" id="topPaths">Loading...</div>
             </div>
             <div class="card">
-                <h2>Projects</h2>
-                <div class="metric" id="totalProjects">-</div>
-            </div>
-            <div class="card">
-                <h2>Orders</h2>
-                <div class="metric" id="totalOrders">-</div>
+                <h2>Analytics quality</h2>
+                <div class="action-row">
+                    <button id="loadQuality">Load Quality</button>
+                    <button id="loadQualityDebug" class="secondary">Load Quality (debug)</button>
+                </div>
+                <div class="metric-row">
+                    <div>
+                        <div class="metric" id="qualityParsed">-</div>
+                        <div class="status">Parsed lines</div>
+                    </div>
+                    <div>
+                        <div class="metric" id="qualityKept">-</div>
+                        <div class="status">Kept lines</div>
+                    </div>
+                    <div>
+                        <div class="metric" id="qualityDropped">-</div>
+                        <div class="status">Dropped lines</div>
+                    </div>
+                </div>
+                <div class="metric-row">
+                    <div>
+                        <div class="metric" id="qualityDeduped">-</div>
+                        <div class="status">Deduped</div>
+                    </div>
+                    <div>
+                        <div class="metric" id="qualityNoise">-</div>
+                        <div class="status">Noise filtered</div>
+                    </div>
+                    <div>
+                        <div class="metric" id="qualityPrivate">-</div>
+                        <div class="status">Private IP excluded</div>
+                    </div>
+                </div>
+                <div class="status" id="qualityStatus"></div>
+                <div class="status" id="qualityCoverage"></div>
+                <div class="list" id="qualityDebug"></div>
             </div>
         </section>
 
         <section class="card" style="margin-top:18px">
-            <h2>Plan distribution</h2>
-            <div id="planDistribution" class="status">Loading...</div>
+            <h2>Last feedback (20)</h2>
+            <div class="action-row">
+                <button id="loadFeedback">Load Feedback</button>
+            </div>
+            <div class="list" id="feedbackList">Loading...</div>
+            <div class="status" id="feedbackStatus"></div>
         </section>
     </div>
 
     <script>
         const $ = (id) => document.getElementById(id);
+        const TOKEN_KEY = "portal_admin_token";
 
-        const setPlanBadge = (element, planCode, planName) => {
-            if (!element) return;
-            const code = String(planCode || "free").toLowerCase();
-            element.textContent = planName || code.toUpperCase();
-            element.classList.remove("plan-free", "plan-pro", "plan-business");
-            element.classList.add(`plan-${code}`);
+        const tokenInput = $("tokenInput");
+        const tokenStatus = $("tokenStatus");
+        const summaryViews = $("summaryViews");
+        const summaryUniques = $("summaryUniques");
+        const summaryHistogram = $("summaryHistogram");
+        const summaryStatus = $("summaryStatus");
+        const topPaths = $("topPaths");
+        const qualityParsed = $("qualityParsed");
+        const qualityKept = $("qualityKept");
+        const qualityDropped = $("qualityDropped");
+        const qualityDeduped = $("qualityDeduped");
+        const qualityNoise = $("qualityNoise");
+        const qualityPrivate = $("qualityPrivate");
+        const qualityStatus = $("qualityStatus");
+        const qualityCoverage = $("qualityCoverage");
+        const qualityDebug = $("qualityDebug");
+        const feedbackList = $("feedbackList");
+        const feedbackStatus = $("feedbackStatus");
+        const loadSummaryButton = $("loadSummary");
+        const loadFeedbackButton = $("loadFeedback");
+        const tokenTestButton = $("tokenTest");
+        const loadQualityButton = $("loadQuality");
+        const loadQualityDebugButton = $("loadQualityDebug");
+
+        const getToken = () => localStorage.getItem(TOKEN_KEY) || "";
+
+        const setToken = (value) => {
+            const token = String(value || "").trim();
+            if (token) {
+                localStorage.setItem(TOKEN_KEY, token);
+            } else {
+                localStorage.removeItem(TOKEN_KEY);
+            }
+            if (tokenInput) {
+                tokenInput.value = token;
+            }
+            updateTokenStatus();
         };
 
-        const loadAccount = async () => {
-            try {
-                const response = await fetch("/api/auth/me", { credentials: "include" });
-                const body = await response.json().catch(() => ({}));
-                if (!response.ok || !body.ok) {
-                    window.location.href = "/login?returnUrl=/admin";
-                    return;
-                }
-                const user = body.data?.user || {};
-                const plan = body.data?.plan || {};
-                $("accountEmail").textContent = user.email || "Account";
-                setPlanBadge($("accountPlan"), plan.code || "free", plan.name || plan.code || "Free");
-                $("upgradeLink").style.display = (plan.code || "free") === "free" ? "inline-flex" : "none";
-            } catch (error) {
-                window.location.href = "/login?returnUrl=/admin";
+        const setTokenStatus = (label, tone) => {
+            tokenStatus.textContent = label;
+            tokenStatus.className = tone === "ok" ? "pill pill--ok" : "pill pill--warn";
+        };
+
+        const updateTokenStatus = () => {
+            const hasToken = Boolean(getToken());
+            if (!hasToken) {
+                setTokenStatus("Token required", "warn");
+                return;
+            }
+            setTokenStatus("Token not tested", "warn");
+        };
+
+        const loadTokenFromQuery = () => {
+            const url = new URL(window.location.href);
+            const token = url.searchParams.get("token");
+            if (token) {
+                setToken(token);
+                url.searchParams.delete("token");
+                window.history.replaceState({}, "", url.pathname + url.search);
             }
         };
 
-        const loadStats = async () => {
+        const buildHeaders = () => {
+            const token = getToken();
+            return token ? { "X-Admin-Token": token } : {};
+        };
+
+        const testToken = async () => {
+            const token = getToken();
+            if (!token) {
+                setTokenStatus("Token required", "warn");
+                return;
+            }
+            setTokenStatus("Testing...", "warn");
             try {
-                const response = await fetch("/api/admin/stats", { credentials: "include" });
+                const response = await fetch("/api/admin/ping", {
+                    headers: buildHeaders()
+                });
+                const body = await response.json().catch(() => ({}));
+                if (response.ok && body.ok) {
+                    setTokenStatus("Token OK", "ok");
+                    return;
+                }
+                setTokenStatus("Invalid token", "warn");
+            } catch (error) {
+                setTokenStatus("Invalid token", "warn");
+            }
+        };
+
+        const renderHistogram = (histogram) => {
+            summaryHistogram.innerHTML = "";
+            if (!Array.isArray(histogram) || histogram.length === 0) {
+                summaryHistogram.innerHTML = '<div class="empty">No data yet.</div>';
+                return;
+            }
+            const max = Math.max(...histogram.map((item) => item.count), 1);
+            histogram.forEach((item) => {
+                const bar = document.createElement("div");
+                bar.className = "bar";
+                bar.style.height = `${Math.round((item.count / max) * 100)}%`;
+                const hour = String(item.hour).padStart(2, "0");
+                bar.title = `${hour}:00 · ${item.count}`;
+                summaryHistogram.appendChild(bar);
+            });
+        };
+
+        const renderTopPaths = (items) => {
+            if (!Array.isArray(items) || items.length === 0) {
+                topPaths.innerHTML = '<div class="empty">No data yet.</div>';
+                return;
+            }
+            topPaths.innerHTML = "";
+            items.forEach((item) => {
+                const row = document.createElement("div");
+                row.className = "list-item";
+                const pathEl = document.createElement("div");
+                pathEl.className = "mono";
+                pathEl.textContent = item.path || "-";
+                const countEl = document.createElement("div");
+                countEl.textContent = item.count ?? 0;
+                row.appendChild(pathEl);
+                row.appendChild(countEl);
+                topPaths.appendChild(row);
+            });
+        };
+
+        const renderQuality = (summary = {}, meta = {}) => {
+            if (!qualityParsed || !qualityStatus) return;
+            const quality = summary.quality;
+            const coverage = summary.coverage || {};
+            if (!quality) {
+                qualityParsed.textContent = "-";
+                qualityKept.textContent = "-";
+                qualityDropped.textContent = "-";
+                qualityDeduped.textContent = "-";
+                qualityNoise.textContent = "-";
+                qualityPrivate.textContent = "-";
+                qualityStatus.textContent = "Quality metrics unavailable.";
+                if (qualityCoverage) {
+                    qualityCoverage.textContent = "";
+                }
+                if (qualityDebug) {
+                    qualityDebug.innerHTML = "";
+                }
+                return;
+            }
+
+            qualityParsed.textContent = quality.parsedLines ?? 0;
+            qualityKept.textContent = quality.keptLines ?? 0;
+            qualityDropped.textContent = quality.droppedLines ?? 0;
+            qualityDeduped.textContent = quality.deduped ?? 0;
+            qualityNoise.textContent = quality.noiseCount ?? 0;
+            qualityPrivate.textContent = quality.privateIpExcluded ?? 0;
+
+            const mode = coverage.mode || meta.mode || "rolling";
+            const days = coverage.requestedDays || meta.days || 1;
+            const span = coverage.spanHours ?? 0;
+            const earliest = coverage.earliestTs
+                ? new Date(coverage.earliestTs).toLocaleString()
+                : "n/a";
+            const latest = coverage.latestTs
+                ? new Date(coverage.latestTs).toLocaleString()
+                : "n/a";
+            qualityStatus.textContent = `Window: ${mode} · days=${days} · span ${span}h`;
+            if (qualityCoverage) {
+                qualityCoverage.textContent = `Range: ${earliest} → ${latest}`;
+            }
+        };
+
+        const renderQualityDebug = (debugInfo) => {
+            if (!qualityDebug) return;
+            qualityDebug.innerHTML = "";
+            if (!debugInfo) {
+                qualityDebug.innerHTML = '<div class="empty">Debug not loaded.</div>';
+                return;
+            }
+
+            const sections = [
+                { title: "Top noise paths", items: debugInfo.topNoisePaths || [], label: "path" },
+                { title: "Dropped reasons", items: debugInfo.droppedReasons || [], label: "reason" },
+                { title: "Dedup keys", items: debugInfo.dedupTopKeys || [], label: "key" }
+            ];
+
+            sections.forEach((section) => {
+                const header = document.createElement("div");
+                header.className = "status";
+                header.textContent = section.title;
+                qualityDebug.appendChild(header);
+
+                if (!section.items.length) {
+                    const empty = document.createElement("div");
+                    empty.className = "empty";
+                    empty.textContent = "No data.";
+                    qualityDebug.appendChild(empty);
+                    return;
+                }
+
+                section.items.forEach((item) => {
+                    const row = document.createElement("div");
+                    row.className = "list-item";
+                    const label = document.createElement("div");
+                    label.className = "mono";
+                    label.textContent = item[section.label] || "-";
+                    const count = document.createElement("div");
+                    count.textContent = item.count ?? 0;
+                    row.appendChild(label);
+                    row.appendChild(count);
+                    qualityDebug.appendChild(row);
+                });
+            });
+        };
+
+        const renderFeedback = (items) => {
+            if (!Array.isArray(items) || items.length === 0) {
+                feedbackList.innerHTML = '<div class="empty">No feedback yet.</div>';
+                return;
+            }
+            feedbackList.innerHTML = "";
+            items.forEach((item) => {
+                const row = document.createElement("div");
+                row.className = "feedback-item";
+                const meta = document.createElement("div");
+                meta.className = "status";
+                const date = item.ts ? new Date(item.ts) : null;
+                const dateText = date && !Number.isNaN(date.getTime())
+                    ? date.toLocaleString()
+                    : "Unknown time";
+                const pageText = item.page ? ` · ${item.page}` : "";
+                meta.textContent = `${dateText}${pageText}`;
+                const message = document.createElement("div");
+                message.className = "feedback-message";
+                message.textContent = item.message || "";
+                row.appendChild(meta);
+                row.appendChild(message);
+                feedbackList.appendChild(row);
+            });
+        };
+
+        const loadSummaryAndPaths = async (options = {}) => {
+            const debug = Boolean(options.debug);
+            const token = getToken();
+            if (!token) {
+                summaryStatus.textContent = "Set DEV_ADMIN_TOKEN to load summary.";
+                summaryViews.textContent = "-";
+                summaryUniques.textContent = "-";
+                renderHistogram([]);
+                renderTopPaths([]);
+                if (qualityStatus) {
+                    qualityStatus.textContent = "Set DEV_ADMIN_TOKEN to load quality.";
+                }
+                if (qualityCoverage) {
+                    qualityCoverage.textContent = "";
+                }
+                if (qualityDebug) {
+                    qualityDebug.innerHTML = "";
+                }
+                return;
+            }
+
+            summaryStatus.textContent = "Loading...";
+            try {
+                const debugParam = debug ? "&debug=1" : "";
+                const response = await fetch(`/api/admin/analytics/summary?days=1${debugParam}` , {
+                    headers: buildHeaders()
+                });
                 if (response.status === 401 || response.status === 403) {
-                    window.location.href = "/app";
+                    summaryStatus.textContent = "Admin token required for analytics.";
+                    renderHistogram([]);
+                    renderTopPaths([]);
+                    if (qualityStatus) {
+                        qualityStatus.textContent = "Admin token required for quality.";
+                    }
                     return;
                 }
                 const body = await response.json().catch(() => ({}));
                 if (!response.ok || !body.ok) {
-                    throw new Error(body.message || body.error || "Failed to load stats");
+                    throw new Error(body.message || body.error || "Failed to load summary");
                 }
                 const data = body.data || {};
-                $("totalUsers").textContent = data.totalUsers ?? 0;
-                $("totalSubscriptions").textContent = data.totalSubscriptions ?? 0;
-                $("totalProjects").textContent = data.totalProjects ?? 0;
-                $("totalOrders").textContent = data.totalOrders ?? 0;
-                const distribution = (data.planDistribution || [])
-                    .map((item) => `${(item.plan_code || "").toUpperCase()}: ${item.count}`)
-                    .join(" | ");
-                $("planDistribution").textContent = distribution || "No active subscriptions.";
+                const summary = data.summary || {};
+                summaryViews.textContent = summary.total ?? data.totals?.pageviews ?? 0;
+                summaryUniques.textContent = summary.uniqueIps ?? data.uniqueIpsApprox ?? 0;
+                renderHistogram(data.histogram || []);
+                renderTopPaths(data.topPaths || []);
+                const mode = summary.coverage?.mode || data.mode || "rolling";
+                summaryStatus.textContent = `Last ${data.days || 1} day(s) · ${mode}`;
+                renderQuality(summary, data);
+                renderQualityDebug(summary.debug);
             } catch (error) {
-                $("planDistribution").textContent = error.message;
+                summaryStatus.textContent = error.message;
             }
         };
 
-        const logoutBtn = $("logoutBtn");
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", async () => {
-                try {
-                    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-                } catch (error) {
-                    // ignore
+        const loadFeedback = async () => {
+            const token = getToken();
+            if (!token) {
+                feedbackStatus.textContent = "Set DEV_ADMIN_TOKEN to load feedback.";
+                renderFeedback([]);
+                return;
+            }
+            feedbackStatus.textContent = "Loading...";
+            try {
+                const response = await fetch("/api/admin/feedback?limit=20", {
+                    headers: buildHeaders()
+                });
+                if (response.status === 401 || response.status === 403) {
+                    feedbackStatus.textContent = "Admin token required for feedback.";
+                    renderFeedback([]);
+                    return;
                 }
-                window.location.href = "/login";
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.ok) {
+                    throw new Error(body.message || body.error || "Failed to load feedback");
+                }
+                const data = body.data || {};
+                renderFeedback(data.items || []);
+                feedbackStatus.textContent = data.source ? `Source: ${data.source}` : "";
+            } catch (error) {
+                feedbackStatus.textContent = error.message;
+            }
+        };
+
+        const loadAll = async () => {
+            await loadSummaryAndPaths();
+            await loadFeedback();
+        };
+
+        $("tokenSave").addEventListener("click", () => {
+            setToken(tokenInput.value);
+            loadAll();
+        });
+
+        $("tokenClear").addEventListener("click", () => {
+            setToken("");
+            loadAll();
+        });
+
+        if (tokenTestButton) {
+            tokenTestButton.addEventListener("click", () => {
+                testToken();
             });
         }
 
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(() => {});
+        if (loadSummaryButton) {
+            loadSummaryButton.addEventListener("click", () => {
+                loadSummaryAndPaths();
+            });
         }
 
-        loadAccount();
-        loadStats();
+        if (loadQualityButton) {
+            loadQualityButton.addEventListener("click", () => {
+                loadSummaryAndPaths();
+            });
+        }
+
+        if (loadQualityDebugButton) {
+            loadQualityDebugButton.addEventListener("click", () => {
+                loadSummaryAndPaths({ debug: true });
+            });
+        }
+
+        if (loadFeedbackButton) {
+            loadFeedbackButton.addEventListener("click", () => {
+                loadFeedback();
+            });
+        }
+
+        loadTokenFromQuery();
+        updateTokenStatus();
+        loadAll();
     </script>
 </body>
 </html>

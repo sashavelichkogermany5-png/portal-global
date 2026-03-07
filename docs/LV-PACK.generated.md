@@ -1,6 +1,6 @@
 # PORTAL GLOBAL - LV PACK (generated)
 
-- Generated: **2026-03-02 00:59:03**
+- Generated: **2026-03-06 23:02:06**
 - Repo root: C:\Users\user\portal-global
 
 ## What this file is
@@ -20,7 +20,6 @@ portal-global\
   C:\Users\user\portal-global\.github\
     C:\Users\user\portal-global\.github\workflows\
   C:\Users\user\portal-global\.venv-aider311\
-    C:\Users\user\portal-global\.venv-aider311\Include\
     C:\Users\user\portal-global\.venv-aider311\Lib\
       C:\Users\user\portal-global\.venv-aider311\Lib\site-packages\
         C:\Users\user\portal-global\.venv-aider311\Lib\site-packages\__pycache__\
@@ -256,12 +255,14 @@ portal-global\
   C:\Users\user\portal-global\backend\
     C:\Users\user\portal-global\backend\agent\
     C:\Users\user\portal-global\backend\autopilot\
-    C:\Users\user\portal-global\backend\docs\
+    C:\Users\user\portal-global\backend\db\
+      C:\Users\user\portal-global\backend\db\sql\
+    C:\Users\user\portal-global\backend\email\
+    C:\Users\user\portal-global\backend\financial\
     C:\Users\user\portal-global\backend\html\
     C:\Users\user\portal-global\backend\intake\
     C:\Users\user\portal-global\backend\lib\
     C:\Users\user\portal-global\backend\local-runner\
-    C:\Users\user\portal-global\backend\logs\
     C:\Users\user\portal-global\backend\metrics\
     C:\Users\user\portal-global\backend\middleware\
     C:\Users\user\portal-global\backend\modules\
@@ -269,48 +270,54 @@ portal-global\
     C:\Users\user\portal-global\backend\public\
       C:\Users\user\portal-global\backend\public\css\
       C:\Users\user\portal-global\backend\public\icons\
-      C:\Users\user\portal-global\backend\public\images\
       C:\Users\user\portal-global\backend\public\js\
     C:\Users\user\portal-global\backend\routes\
     C:\Users\user\portal-global\backend\scripts\
     C:\Users\user\portal-global\backend\src\
-      C:\Users\user\portal-global\backend\src\config\
       C:\Users\user\portal-global\backend\src\middleware\
-      C:\Users\user\portal-global\backend\src\models\
-      C:\Users\user\portal-global\backend\src\routes\
-      C:\Users\user\portal-global\backend\src\services\
       C:\Users\user\portal-global\backend\src\utils\
-    C:\Users\user\portal-global\backend\tests\
-    C:\Users\user\portal-global\backend\uploads\
-  C:\Users\user\portal-global\config\
+    C:\Users\user\portal-global\backend\utils\
+    C:\Users\user\portal-global\backend\workers\
   C:\Users\user\portal-global\data\
     C:\Users\user\portal-global\data\autopilot\
   C:\Users\user\portal-global\database\
   C:\Users\user\portal-global\db\
     C:\Users\user\portal-global\db\migrations\
+  C:\Users\user\portal-global\deploy\
   C:\Users\user\portal-global\docs\
+    C:\Users\user\portal-global\docs\ga-test\
+      C:\Users\user\portal-global\docs\ga-test\backup\
+        C:\Users\user\portal-global\docs\ga-test\backup\docs\
+      C:\Users\user\portal-global\docs\ga-test\baseline\
+        C:\Users\user\portal-global\docs\ga-test\baseline\docs\
+      C:\Users\user\portal-global\docs\ga-test\variant-a\
+        C:\Users\user\portal-global\docs\ga-test\variant-a\docs\
+      C:\Users\user\portal-global\docs\ga-test\variant-b\
+        C:\Users\user\portal-global\docs\ga-test\variant-b\docs\
+      C:\Users\user\portal-global\docs\ga-test\variant-c\
+        C:\Users\user\portal-global\docs\ga-test\variant-c\docs\
+      C:\Users\user\portal-global\docs\ga-test\variant-d\
+        C:\Users\user\portal-global\docs\ga-test\variant-d\docs\
+      C:\Users\user\portal-global\docs\ga-test\variant-e\
+        C:\Users\user\portal-global\docs\ga-test\variant-e\docs\
     C:\Users\user\portal-global\docs\proxy-examples\
   C:\Users\user\portal-global\frontend\
-    C:\Users\user\portal-global\frontend\public\
     C:\Users\user\portal-global\frontend\src\
-      C:\Users\user\portal-global\frontend\src\components\
       C:\Users\user\portal-global\frontend\src\contexts\
       C:\Users\user\portal-global\frontend\src\hooks\
       C:\Users\user\portal-global\frontend\src\lib\
       C:\Users\user\portal-global\frontend\src\pages\
-      C:\Users\user\portal-global\frontend\src\types\
-      C:\Users\user\portal-global\frontend\src\utils\
-  C:\Users\user\portal-global\html\
   C:\Users\user\portal-global\logs\
     C:\Users\user\portal-global\logs\archive\
+    C:\Users\user\portal-global\logs\audit-clean\
   C:\Users\user\portal-global\middleware\
   C:\Users\user\portal-global\ops\
     C:\Users\user\portal-global\ops\agent\
     C:\Users\user\portal-global\ops\bin\
-    C:\Users\user\portal-global\ops\logs\
-    C:\Users\user\portal-global\ops\queue\
+    C:\Users\user\portal-global\ops\ga\
+      C:\Users\user\portal-global\ops\ga\backup\
+    C:\Users\user\portal-global\ops\snapshots\
     C:\Users\user\portal-global\ops\tmp\
-  C:\Users\user\portal-global\portal-global\
   C:\Users\user\portal-global\routes\
   C:\Users\user\portal-global\scripts\
   C:\Users\user\portal-global\services\
@@ -323,7 +330,6 @@ portal-global\
     C:\Users\user\portal-global\static\icons\
     C:\Users\user\portal-global\static\js\
   C:\Users\user\portal-global\test\
-  C:\Users\user\portal-global\uploads\
   C:\Users\user\portal-global\web-next\
     C:\Users\user\portal-global\web-next\app\
       C:\Users\user\portal-global\web-next\app\(portal)\
@@ -340,106 +346,104 @@ portal-global\
       C:\Users\user\portal-global\web-next\app\register\
     C:\Users\user\portal-global\web-next\components\
     C:\Users\user\portal-global\web-next\pages\
-      C:\Users\user\portal-global\web-next\pages\admin\
-        C:\Users\user\portal-global\web-next\pages\admin\tenants\
       C:\Users\user\portal-global\web-next\pages\admin__legacy\
         C:\Users\user\portal-global\web-next\pages\admin__legacy\tenants\
     C:\Users\user\portal-global\web-next\public\
       C:\Users\user\portal-global\web-next\public\uploads\
-    C:\Users\user\portal-global\web-next\uploads\
-  C:\Users\user\portal-global\workers\
 ```
 
 ## Live node listeners (best effort)
 ```
-  3000  0.0.0.0          pid:5512
-  3001  ::               pid:1964
+  3000  0.0.0.0          pid:41408
+  3001  ::               pid:54600
 ```
 
 ## package.json (truncated)
 ```json
 {
-    "name":  "portal-global",
-    "version":  "1.0.0",
-    "description":  "Unified Portal Management Platform",
-    "main":  "server.js",
-    "scripts":  {
-    "state": "pwsh -NoProfile -ExecutionPolicy Bypass -File ops/generate-current-state.ps1",
-                    "start":  "node server.js",
-                    "worker":  "node scripts/worker.js",
-                    "daily-report":  "node scripts/daily-report.js",
-                    "test:financial-event":  "node scripts/test-financial-event.js",
-                    "test":  "echo \"Tests not configured\" && exit 0",
-                    "lint":  "eslint . --ext .js",
-                    "lint:fix":  "eslint . --ext .js --fix",
-                    "fix:encoding":  "node backend/fix-encoding.js",
-                    "extract:ui":  "node backend/extract-ui.js",
-                    "build:map":  "node backend/build-ui-map.js",
-                    "dev:backend":  "cmd /V:ON /C \"if not defined BACKEND_PORT set BACKEND_PORT=3000 && set PORT=!BACKEND_PORT! && nodemon server.js\"",
-                    "dev:frontend":  "cmd /V:ON /C \"if not defined WEB_PORT set WEB_PORT=3001 && if not defined BACKEND_PORT set BACKEND_PORT=3000 && if not defined NEXT_PUBLIC_API_BASE_URL set NEXT_PUBLIC_API_BASE_URL=http://localhost:!BACKEND_PORT! && cd web-next && npm run dev -- --port !WEB_PORT!\"",
-                    "dev:web":  "cmd /V:ON /C \"if not defined WEB_PORT set WEB_PORT=3001 && if not defined BACKEND_PORT set BACKEND_PORT=3000 && if not defined NEXT_PUBLIC_API_BASE_URL set NEXT_PUBLIC_API_BASE_URL=http://localhost:!BACKEND_PORT! && cd web-next && npm run dev -- --port !WEB_PORT!\"",
-                    "dev:legacy":  "cd backend && npm run dev",
-                    "build":  "node -e \"console.log('No build step required.')\"",
-                    "build:backend":  "node -e \"console.log('No backend build step required.')\"",
-                    "build:frontend":  "node -e \"console.log('No frontend build step required.')\"",
-                    "start:backend":  "node server.js",
-                    "start:web":  "node -e \"console.log('No separate web start; use npm start.')\"",
-                    "db:migrate":  "cd backend && npm run db:migrate",
-                    "db:seed":  "cd backend && npm run db:seed",
-                    "db:reset":  "cd backend && npm run db:reset",
-                    "pipes:init":  "node pipes/scripts/init_pipes.js",
-                    "pipes:json":  "node pipes/scripts/import_csv_to_json.js",
-                    "pipes:totals":  "node pipes/scripts/calc_totals.js",
-                    "pipes:listings":  "node pipes/scripts/generate_listings.js",
-                    "pipes:all":  "npm run pipes:init && npm run pipes:json && npm run pipes:totals && npm run pipes:listings",
-                    "dev":  "concurrently \"npm run dev:backend\" \"npm run dev:web\"",
-                    "start:prod":  "node server.js",
-                    "health":  "node ops/healthcheck.js",
-                    "ports":  "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/scan-ports.ps1",
-                    "smoke":  "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/smoke.ps1",
-                    "chat":  "node -e \"fetch(\\\"http://localhost:3000/api/chat\\\",{method:\\\"POST\\\",headers:{\\\"Content-Type\\\":\\\"application/json\\\"},body:JSON.stringify({message:\\\"Hello\\\"})}).then(r=>r.text()).then(console.log).catch(e=>{console.error(e);process.exit(1)})\""
-                },
-    "dependencies":  {
-                         "bcrypt":  "^5.1.1",
-                         "compression":  "^1.7.4",
-                         "cors":  "^2.8.5",
-                         "dotenv":  "^16.3.1",
-                         "express":  "^4.18.2",
-                         "express-rate-limit":  "^6.7.0",
-                         "express-validator":  "^7.0.1",
-                         "helmet":  "^7.0.0",
-                         "iconv-lite":  "^0.6.3",
-                         "jsdom":  "^22.1.0",
-                         "jsonwebtoken":  "^9.0.3",
-                         "morgan":  "^1.10.0",
-                         "multer":  "^1.4.5-lts.1",
-                         "nodemailer":  "^6.9.16",
-                         "socket.io":  "^4.7.0",
-                         "sqlite3":  "^5.1.7",
-                         "validator":  "^13.9.0"
-                     },
-    "devDependencies":  {
-                            "concurrently":  "^9.2.1",
-                            "eslint":  "^8.47.0",
-                            "nodemon":  "^3.1.11",
-                            "prettier":  "^3.0.2"
-                        },
-    "keywords":  [
-                     "portal",
-                     "management",
-                     "dashboard",
-                     "projects",
-                     "ai",
-                     "express",
-                     "nodejs"
-                 ],
-    "author":  "PORTAL GLOBAL Team",
-    "license":  "MIT",
-    "engines":  {
-                    "node":  ">=18.0.0"
-                }
+    "name": "portal-global",
+    "version": "1.0.0",
+    "description": "Unified Portal Management Platform",
+    "main": "server.js",
+    "scripts": {
+        "state": "pwsh -NoProfile -ExecutionPolicy Bypass -File ops/generate-current-state.ps1",
+        "start": "node server.js",
+        "worker": "node backend/workers/email-worker.js",
+        "daily-report": "node scripts/daily-report.js",
+        "test:financial-event": "node scripts/test-financial-event.js",
+        "db:email": "node backend/scripts/apply-email-sql.js",
+        "test": "echo \"Tests not configured\" && exit 0",
+        "lint": "eslint . --ext .js",
+        "lint:fix": "eslint . --ext .js --fix",
+        "fix:encoding": "node backend/fix-encoding.js",
+        "extract:ui": "node backend/extract-ui.js",
+        "build:map": "node backend/build-ui-map.js",
+        "dev:backend": "cmd /V:ON /C \"if not defined BACKEND_PORT set BACKEND_PORT=3000 && set PORT=!BACKEND_PORT! && nodemon server.js\"",
+        "dev:frontend": "cmd /V:ON /C \"if not defined WEB_PORT set WEB_PORT=3001 && if not defined BACKEND_PORT set BACKEND_PORT=3000 && if not defined NEXT_PUBLIC_API_BASE_URL set NEXT_PUBLIC_API_BASE_URL=http://localhost:!BACKEND_PORT! && cd web-next && npm run dev -- --port !WEB_PORT!\"",
+        "dev:web": "cmd /V:ON /C \"if not defined WEB_PORT set WEB_PORT=3001 && if not defined BACKEND_PORT set BACKEND_PORT=3000 && if not defined NEXT_PUBLIC_API_BASE_URL set NEXT_PUBLIC_API_BASE_URL=http://localhost:!BACKEND_PORT! && cd web-next && npm run dev -- --port !WEB_PORT!\"",
+        "dev:legacy": "cd backend && npm run dev",
+        "build": "node -e \"console.log('No build step required.')\"",
+        "build:backend": "node -e \"console.log('No backend build step required.')\"",
+        "build:frontend": "node -e \"console.log('No frontend build step required.')\"",
+        "start:backend": "node server.js",
+        "start:web": "node -e \"console.log('No separate web start; use npm start.')\"",
+        "db:migrate": "cd backend && npm run db:migrate",
+        "db:seed": "cd backend && npm run db:seed",
+        "db:reset": "cd backend && npm run db:reset",
+        "pipes:init": "node pipes/scripts/init_pipes.js",
+        "pipes:json": "node pipes/scripts/import_csv_to_json.js",
+        "pipes:totals": "node pipes/scripts/calc_totals.js",
+        "pipes:listings": "node pipes/scripts/generate_listings.js",
+        "pipes:all": "npm run pipes:init && npm run pipes:json && npm run pipes:totals && npm run pipes:listings",
+        "dev": "concurrently \"npm run dev:backend\" \"npm run dev:web\"",
+        "start:prod": "node server.js",
+        "health": "node ops/healthcheck.js",
+        "ports": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/scan-ports.ps1",
+        "smoke": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/smoke.ps1",
+        "chat": "node -e \"fetch(\\\"http://localhost:3000/api/chat\\\",{method:\\\"POST\\\",headers:{\\\"Content-Type\\\":\\\"application/json\\\"},body:JSON.stringify({message:\\\"Hello\\\"})}).then(r=>r.text()).then(console.log).catch(e=>{console.error(e);process.exit(1)})\""
+    },
+    "dependencies": {
+        "@sendgrid/mail": "^7.7.0",
+        "bcrypt": "^5.1.1",
+        "compression": "^1.7.4",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "express-rate-limit": "^6.7.0",
+        "express-validator": "^7.0.1",
+        "helmet": "^7.0.0",
+        "iconv-lite": "^0.6.3",
+        "jsdom": "^22.1.0",
+        "jsonwebtoken": "^9.0.3",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
+        "nodemailer": "^8.0.1",
+        "socket.io": "^4.7.0",
+        "sqlite3": "^5.1.7",
+        "validator": "^13.9.0"
+    },
+    "devDependencies": {
+        "concurrently": "^9.2.1",
+        "eslint": "^8.47.0",
+        "nodemon": "^3.1.11",
+        "prettier": "^3.0.2"
+    },
+    "keywords": [
+        "portal",
+        "management",
+        "dashboard",
+        "projects",
+        "ai",
+        "express",
+        "nodejs"
+    ],
+    "author": "PORTAL GLOBAL Team",
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0"
+    }
 }
-
 
 ```
 
@@ -528,6 +532,12 @@ SESSION_COOKIE_NAME=portal_session
 SESSION_TTL_DAYS=7
 
 # ============================================================
+# SUPPORT / HELP
+# ============================================================
+SUPPORT_EMAIL=portal.global.project@gmail.com
+VIDEO_GUIDE_URL=
+
+# ============================================================
 # DEV/PROD OVERRIDES
 # ============================================================
 # For local dev, uncomment:
@@ -538,6 +548,11 @@ SESSION_TTL_DAYS=7
 
 ## README (truncated)
 ```md
+# Short summary
+- Quick start: npm install, npm run dev, open /orders.
+- Lists agent conversation endpoints and workflows.
+- Documents revenue tracking tables and email worker config.
+- Describes file upload UI/UX and supported file types.
 # PORTAL - File Upload Feature
 
 ## 🚀 Quick Start
@@ -794,10 +809,20 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 **Last Updated:** February 2026
 **Version:** 1.0.0
 
+Topics: quickstart, agent, revenue, email, uploads
+People: none
+Decision type: reference
+Status: active
+
 ```
 
 ## docs/PROJECT-STATE.md (truncated)
 ```md
+# Short summary
+- Project summary: monorepo with Express backend and web-next UI.
+- Canonical state: PROJECT-STATE + AGENTS; CURRENT-STATE missing.
+- Mission status with last pass and next action.
+- Pointers to dev, architecture, autopilot, and risks.
 # PROJECT-STATE
 
 ## A) Summary
@@ -900,32 +925,10 @@ curl.exe "http://localhost:<BACKEND_PORT>/api/autopilot/status" -b .cookies.txt
 - Multiple UI surfaces exist; web-next is the single source of truth for new work.
 - `frontend/` is deprecated due to mismatched API endpoints and missing imports.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Topics: project-state, mission, dev, architecture, autopilot
+People: none
+Decision type: status
+Status: active
 
 ```
 

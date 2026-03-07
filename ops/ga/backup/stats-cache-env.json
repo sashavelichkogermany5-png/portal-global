@@ -1,0 +1,17 @@
+{
+  "updatedAt": "2026-03-03T21:47:45.553Z",
+  "previous": {
+    "STATS_CACHE_TTL_MS": {
+      "present": true,
+      "value": "250"
+    },
+    "USAGE_CACHE_TTL_MS": {
+      "present": true,
+      "value": "2000"
+    }
+  },
+  "newValues": {
+    "STATS_CACHE_TTL_MS": "5000",
+    "USAGE_CACHE_TTL_MS": "5000"
+  }
+}

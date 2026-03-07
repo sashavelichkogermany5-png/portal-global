@@ -1,3 +1,8 @@
+# Short summary
+- Security policy and vuln reporting guidance.
+- Known issue: sqlite3 pulls tar advisory during install only.
+- Mitigation: monitor sqlite3 releases.
+- Audits run periodically; last reviewed 2026-03-02.
 # Security Policy
 
 ## Reporting a Vulnerability
@@ -14,3 +19,8 @@ contact the maintainers privately with details and reproduction steps.
 ## Audits
 - Dependency audits are run periodically with `npm audit`.
 - Last reviewed: 2026-03-02.
+
+Topics: security, vuln, audits, sqlite3
+People: none
+Decision type: policy
+Status: active

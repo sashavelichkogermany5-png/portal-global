@@ -1,0 +1,119 @@
+{
+  "baseline": {
+    "AUTH_ME_TTL_MS": 120000,
+    "AUTH_CACHE_TTL_MS": 120000,
+    "AUTH_CACHE_MAX_SIZE": 100
+  },
+  "best": {
+    "generation": 1,
+    "candidate": {
+      "AUTH_ME_TTL_MS": 60000,
+      "AUTH_CACHE_TTL_MS": 30000,
+      "AUTH_CACHE_MAX_SIZE": 500
+    },
+    "medianMs": 0.5717,
+    "p95Ms": 0.8724,
+    "meanMs": 0.5722950000000001
+  },
+  "results": [
+    {
+      "generation": 0,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 120000,
+        "AUTH_CACHE_TTL_MS": 120000,
+        "AUTH_CACHE_MAX_SIZE": 100
+      },
+      "medianMs": 0.6892,
+      "p95Ms": 1.2772,
+      "meanMs": 0.785095
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 15000,
+        "AUTH_CACHE_TTL_MS": 120000,
+        "AUTH_CACHE_MAX_SIZE": 50
+      },
+      "medianMs": 0.7397,
+      "p95Ms": 1.5439,
+      "meanMs": 0.748645
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 60000,
+        "AUTH_CACHE_TTL_MS": 0,
+        "AUTH_CACHE_MAX_SIZE": 100
+      },
+      "medianMs": 0.668,
+      "p95Ms": 0.9462,
+      "meanMs": 0.6715149999999999
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 60000,
+        "AUTH_CACHE_TTL_MS": 30000,
+        "AUTH_CACHE_MAX_SIZE": 50
+      },
+      "medianMs": 0.6134,
+      "p95Ms": 1.054,
+      "meanMs": 0.6429950000000001
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 15000,
+        "AUTH_CACHE_TTL_MS": 120000,
+        "AUTH_CACHE_MAX_SIZE": 200
+      },
+      "medianMs": 0.6332,
+      "p95Ms": 0.8301,
+      "meanMs": 0.612715
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 60000,
+        "AUTH_CACHE_TTL_MS": 30000,
+        "AUTH_CACHE_MAX_SIZE": 50
+      },
+      "medianMs": 0.6332,
+      "p95Ms": 0.9046,
+      "meanMs": 0.636175
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 15000,
+        "AUTH_CACHE_TTL_MS": 120000,
+        "AUTH_CACHE_MAX_SIZE": 200
+      },
+      "medianMs": 0.6613,
+      "p95Ms": 1.2829,
+      "meanMs": 0.7001899999999999
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 15000,
+        "AUTH_CACHE_TTL_MS": 120000,
+        "AUTH_CACHE_MAX_SIZE": 50
+      },
+      "medianMs": 0.6351,
+      "p95Ms": 1.0206,
+      "meanMs": 0.65455
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "AUTH_ME_TTL_MS": 60000,
+        "AUTH_CACHE_TTL_MS": 30000,
+        "AUTH_CACHE_MAX_SIZE": 500
+      },
+      "medianMs": 0.5717,
+      "p95Ms": 0.8724,
+      "meanMs": 0.5722950000000001
+    }
+  ]
+}

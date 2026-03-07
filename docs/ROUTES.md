@@ -1,3 +1,8 @@
+# Short summary
+- Catalogs upload, agent, autopilot, and revenue endpoints.
+- Lists request/response, auth, and code locations.
+- Includes worker/report commands (daily-report, worker, test event).
+- Notes supporting routes like /api/health.
 # API Routes (agent + revenue + upload)
 
 ## Upload
@@ -55,3 +60,8 @@ Commands (no HTTP endpoint):
 - `web-next/next.config.js`
 - `scripts/daily-report.js`
 - `scripts/worker.js`
+
+Topics: api, routes, agent, autopilot, revenue, upload
+People: none
+Decision type: reference
+Status: active

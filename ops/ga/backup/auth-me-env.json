@@ -1,0 +1,22 @@
+{
+  "updatedAt": "2026-03-03T21:11:40.430Z",
+  "previous": {
+    "AUTH_ME_TTL_MS": {
+      "present": true,
+      "value": "120000"
+    },
+    "AUTH_CACHE_TTL_MS": {
+      "present": true,
+      "value": "120000"
+    },
+    "AUTH_CACHE_MAX_SIZE": {
+      "present": true,
+      "value": "100"
+    }
+  },
+  "newValues": {
+    "AUTH_ME_TTL_MS": "60000",
+    "AUTH_CACHE_TTL_MS": "30000",
+    "AUTH_CACHE_MAX_SIZE": "500"
+  }
+}

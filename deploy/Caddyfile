@@ -1,0 +1,51 @@
+{$PORTAL_DOMAIN:portal.tld} {
+  encode zstd gzip
+
+  @static path /static/* /uploads/* /legacy/* /favicon.ico /manifest.webmanifest /sw.js
+  header @static Cache-Control "public, max-age=86400, s-maxage=86400, immutable"
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "no-referrer-when-downgrade"
+    Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+    Cross-Origin-Opener-Policy "same-origin"
+    Cross-Origin-Resource-Policy "same-origin"
+  }
+
+  rate_limit {
+    zone api {
+      key {remote_host}
+      events 120
+      window 1m
+    }
+    zone authme {
+      key {remote_host}
+      events 30
+      window 1m
+    }
+  }
+
+  @health path /health
+  handle @health {
+    rewrite * /api/health
+    reverse_proxy {$PORTAL_UPSTREAM:127.0.0.1:3000}
+  }
+
+  @authme path /api/auth/me
+  handle @authme {
+    rate_limit authme
+    reverse_proxy {$PORTAL_UPSTREAM:127.0.0.1:3000}
+  }
+
+  @api path /api/*
+  handle @api {
+    rate_limit api
+    reverse_proxy {$PORTAL_UPSTREAM:127.0.0.1:3000}
+  }
+
+  handle {
+    reverse_proxy {$PORTAL_UPSTREAM:127.0.0.1:3000}
+  }
+}

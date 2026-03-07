@@ -1,3 +1,9 @@
+# Short summary
+- Port map after cleanup; only 3000 running.
+- Architecture diagram for single entry point.
+- Community mode config and runbook for localhost.
+- Gateway design proposal for unified 3000.
+- Protection rules and rate limiting.
 # Localhost Inventory
 
 ## Port Map (After Cleanup)
@@ -218,3 +224,8 @@ PORT=3000 npm start
 cd portal-global
 npm run dev  # starts both backend + web
 ```
+
+Topics: localhost, ports, community, gateway, protection
+People: none
+Decision type: runbook
+Status: active

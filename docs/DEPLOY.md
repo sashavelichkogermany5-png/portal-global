@@ -1,3 +1,9 @@
+# Short summary
+- Production env vars for backend and web (NODE_ENV, PORT, DATABASE_PATH).
+- Start backend: npm install, set NODE_ENV=production, npm run start:prod.
+- Start web: web-next build and start on 3001.
+- Health check via npm run health.
+- Notes on CORS and cookie settings.
 # DEPLOY
 
 ## Environment variables
@@ -50,3 +56,8 @@ npm run health
 - CORS is controlled by `ALLOWED_ORIGINS` and allows credentials.
 - In production, cookies are issued as `SameSite=None; Secure` to support cross-domain login.
 - Demo data is created only in the admin tenant and is tagged `demo/autofill` for safe removal.
+
+Topics: deploy, production, env, web-next, health
+People: none
+Decision type: runbook
+Status: active

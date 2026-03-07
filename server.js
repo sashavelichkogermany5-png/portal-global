@@ -1,4 +1,5 @@
 ﻿const express = require('express');
+const cookieParser = require("cookie-parser");
 const path = require('path');
 const fs = require('fs');
 const helmet = require('helmet');
@@ -48,7 +49,24 @@ const { computePricing, pricingConfig } = require('./backend/local-runner/pricin
 const { createLocalRunnerEngine } = require('./backend/local-runner/engine');
 const { createLocalRunnerRouter } = require('./backend/local-runner/routes');
 const metricsStorage = require('./backend/metrics/storage');
-const { communityGuard, errorHandler, requestLogger } = require('./backend/middleware/community');
+const {
+    communityGuard,
+    errorHandler,
+    requestLogger,
+    getAdminToken,
+    isAdminTokenValid
+} = require('./backend/middleware/community');
+const {
+    normalizeIpFromReq,
+    normalizeIp,
+    isPrivateIp,
+    normalizePath,
+    hashUA,
+    makeDedupCache,
+    classifyNoise,
+    safeParseNdjsonLine,
+    redactKey
+} = require('./backend/utils/analyticsQuality');
 
 const loadEnv = () => {
     const envPath = path.join(__dirname, '.env');
@@ -68,7 +86,165 @@ const loadEnv = () => {
 
 loadEnv();
 
+const SUPPORT_EMAIL_FALLBACK = 'portal.global.project@gmail.com';
+const SUPPORT_BLOCK_MARKER = '<!-- SUPPORT_BLOCK -->';
+const VIDEO_GUIDE_MARKER = '{{VIDEO_GUIDE_URL}}';
+
+// Quick sanity checks:
+// - GET / contains "Support & Feedback"
+// - GET /docs contains ids: video-guide, feedback, support
+// - GET /app (guest) shows help hint + Email Support button
+const supportBlockHTML = (options = {}) => {
+    // Keep email out of raw HTML to reduce scraping.
+    // SUPPORT_EMAIL can be set to something like support@yourdomain.com later.
+    const supportEmail = process.env.SUPPORT_EMAIL || SUPPORT_EMAIL_FALLBACK;
+    const videoGuideUrl = process.env.VIDEO_GUIDE_URL || '';
+    const hintText = options.hintText
+        || 'Need help getting access? Email Support and include your workspace name or invite email.';
+    const hintStyle = options.showHint ? '' : 'display:none;';
+
+    // If env already contains full email, we still avoid printing it directly in HTML by splitting.
+    const [userPart, domainPart] = String(supportEmail).split('@');
+    const safeUser = userPart || 'portal.global.project';
+    const safeDomain = domainPart || 'gmail.com';
+
+    // Video guide: if VIDEO_GUIDE_URL not set, keep docs anchor.
+    const guideHref = videoGuideUrl ? videoGuideUrl : '/docs#video-guide';
+
+    return `
+<section class="pg-support" style="margin:28px 0; padding:16px; border:1px solid rgba(255,255,255,.12); border-radius:12px;">
+  <h2 style="margin:0 0 8px 0;">Support &amp; Feedback</h2>
+  <p id="pgSupportHint" style="margin:0 0 12px 0; line-height:1.4; ${hintStyle}">${hintText}</p>
+  <p style="margin:0 0 12px 0; line-height:1.4;">
+    Support: <span id="pgSupportEmail"></span><br/>
+    Response time: 24-48 hours<br/>
+    For bugs: include a screenshot, time, and the page URL.
+  </p>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <a id="pgEmailSupport"
+       href="#"
+       style="display:inline-block; padding:10px 14px; border:1px solid rgba(255,255,255,.18); border-radius:10px; text-decoration:none;">
+      Email Support
+    </a>
+
+    <a href="${guideHref}"
+       style="display:inline-block; padding:10px 14px; border:1px solid rgba(255,255,255,.18); border-radius:10px; text-decoration:none;">
+      Watch Video Guide
+    </a>
+
+    <a href="/docs#feedback"
+       style="display:inline-block; padding:10px 14px; border:1px solid rgba(255,255,255,.18); border-radius:10px; text-decoration:none;">
+      Send Feedback
+    </a>
+  </div>
+</section>
+
+<script>
+(function () {
+  const user = ${JSON.stringify(safeUser)};
+  const domain = ${JSON.stringify(safeDomain)};
+  const email = user + "@" + domain;
+
+  const subject = encodeURIComponent("PORTAL Global Support");
+  const body = encodeURIComponent(
+    "Hi!\n\n" +
+    "Page URL:\n" +
+    "Time (local):\n" +
+    "What I did:\n" +
+    "What I expected:\n" +
+    "What happened:\n\n" +
+    "Screenshot (attach):\n"
+  );
+
+  const mailto = "mailto:" + email + "?subject=" + subject + "&body=" + body;
+
+  const emailSpan = document.getElementById("pgSupportEmail");
+  const emailLink = document.getElementById("pgEmailSupport");
+
+  if (emailSpan) emailSpan.textContent = email;
+  if (emailLink) emailLink.href = mailto;
+})();
+</script>
+`;
+};
+
+const injectSupportBlock = (html, options = {}) => {
+    const supportHtml = supportBlockHTML(options);
+    if (html.includes(SUPPORT_BLOCK_MARKER)) {
+        return html.replace(SUPPORT_BLOCK_MARKER, supportHtml);
+    }
+    return html.replace('</body>', `${supportHtml}\n</body>`);
+};
+
+const injectVideoGuideUrl = (html) => {
+    const rawUrl = String(process.env.VIDEO_GUIDE_URL || '').trim();
+    const guideUrl = rawUrl || '#';
+    return html.split(VIDEO_GUIDE_MARKER).join(guideUrl);
+};
+
+const renderGuestAppPage = () => {
+    const hintText = 'You are viewing as a guest or do not have an active tenant yet.';
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PORTAL Global | Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <meta name="theme-color" content="#0b0f19">
+  <style>
+    :root{--bg:#0b0f19;--card:#11182a;--text:#e9eefc;--muted:#9fb0d0;--border:rgba(255,255,255,.08)}
+    *{box-sizing:border-box} body{margin:0;font-family:"Space Grotesk",system-ui;background:var(--bg);color:var(--text)}
+    .top{position:sticky;top:0;z-index:10;background:rgba(11,15,25,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .top__inner{max-width:980px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .brand{color:#e9eefc;text-decoration:none;font-weight:700}
+    .nav{display:flex;gap:12px;flex-wrap:wrap}
+    .nav a{color:#9fb0d0;text-decoration:none;font-weight:600;font-size:14px}
+    .nav a:hover{color:#e9eefc}
+    .wrap{max-width:860px;margin:0 auto;padding:36px 18px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px}
+    h1{margin:0 0 10px;font-size:30px}
+    p{margin:0 0 14px;color:var(--muted);line-height:1.6}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .btn{display:inline-block;text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);color:#e9eefc;font-weight:600}
+    .btn.primary{background:#2b6cff;border-color:#2b6cff}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top__inner">
+      <a class="brand" href="/">PORTAL</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/app">Dashboard</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/docs">Docs</a>
+        <a href="/help">Help</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="card">
+      <h1>Dashboard access</h1>
+      <p>${hintText}</p>
+      <p>Sign in to continue, or email Support if you need an invite.</p>
+      <div class="actions">
+        <a class="btn primary" href="/login?returnUrl=%2Fapp">Sign in</a>
+        <a class="btn" href="/docs">View docs</a>
+      </div>
+    </div>
+    ${supportBlockHTML({ showHint: true })}
+  </div>
+</body>
+</html>`;
+};
+
 const app = express();
+app.use(cookieParser());
 const isProd = process.env.NODE_ENV === 'production';
 
 app.set('trust proxy', process.env.TRUST_PROXY || 1);
@@ -90,7 +266,14 @@ const POLLING_INTERVAL_MS = Number(process.env.POLLING_INTERVAL_MS || 5000);
 const RATE_LIMIT_ENABLED = process.env.RATE_LIMIT_ENABLED !== '0' && process.env.RATE_LIMIT_ENABLED !== 'false';
 const AUTH_CACHE_TTL_MS = Number(process.env.AUTH_CACHE_TTL_MS || 120000);
 const AUTH_ME_TTL_MS = Number(process.env.AUTH_ME_TTL_MS || 120000);
+const AUTH_ME_STORM_THRESHOLD = Number(process.env.AUTH_ME_STORM_THRESHOLD || 8);
 const AUTH_CACHE_MAX_SIZE = Number(process.env.AUTH_CACHE_MAX_SIZE || 100);
+const STATS_CACHE_TTL_MS = Number(process.env.STATS_CACHE_TTL_MS || 0);
+const USAGE_CACHE_TTL_MS = Number(process.env.USAGE_CACHE_TTL_MS || 0);
+const STATS_CACHE_MAX_SIZE = Number(process.env.STATS_CACHE_MAX_SIZE || 200);
+const USAGE_CACHE_MAX_SIZE = Number(process.env.USAGE_CACHE_MAX_SIZE || 200);
+const HEALTH_CACHE_TTL_MS = Number(process.env.HEALTH_CACHE_TTL_MS || 0);
+const HEALTH_WINDOW_SIZE = Number(process.env.HEALTH_WINDOW_SIZE || 20);
 
 const SOCKET_MAX_CONNECTIONS_PER_IP = Number(process.env.SOCKET_MAX_CONNECTIONS_PER_IP || 5);
 const SOCKET_PING_TIMEOUT = Number(process.env.SOCKET_PING_TIMEOUT || 20000);
@@ -99,6 +282,33 @@ const DEMO_ORIGIN = process.env.DEMO_ORIGIN || '*';
 const AI_CALL_TIMEOUT_MS = Number(process.env.AI_CALL_TIMEOUT_MS || 30000);
 const BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '512kb';
 const FEEDBACK_RATE_LIMIT_MAX = Number(process.env.FEEDBACK_RATE_LIMIT_MAX || 5);
+const DEV_ADMIN_TOKEN = String(process.env.DEV_ADMIN_TOKEN || '').trim();
+const DATA_DIR = path.join(__dirname, 'data');
+const ANALYTICS_LOG_PATH = process.env.ANALYTICS_LOG_PATH
+    ? path.resolve(process.env.ANALYTICS_LOG_PATH)
+    : path.join(DATA_DIR, 'analytics.ndjson');
+const ANALYTICS_SKIP_PATHS = new Set(['/api/health', '/__status', '/manifest.webmanifest', '/sw.js']);
+const ANALYTICS_SKIP_PREFIXES = ['/static', '/api/admin', '/api/feedback', '/favicon', '/socket.io'];
+const ANALYTICS_LATEST_LIMIT = Number(process.env.ANALYTICS_LATEST_LIMIT || 50);
+const ANALYTICS_TOP_PATHS_LIMIT = Number(process.env.ANALYTICS_TOP_PATHS_LIMIT || 20);
+const ANALYTICS_CHUNK_SIZE = Number(process.env.ANALYTICS_CHUNK_SIZE || 64 * 1024);
+const ANALYTICS_MAX_BYTES = Number(process.env.ANALYTICS_MAX_BYTES || 10 * 1024 * 1024);
+const ANALYTICS_MAX_LINES = Number(process.env.ANALYTICS_MAX_LINES || 200000);
+const ANALYTICS_MAX_LINE_BYTES = Number(process.env.ANALYTICS_MAX_LINE_BYTES || 65536);
+const ANALYTICS_DEDUP_WINDOW_MS = Number(process.env.ANALYTICS_DEDUP_WINDOW_MS || 5000);
+const ANALYTICS_DEDUP_MAX_KEYS = Number(process.env.ANALYTICS_DEDUP_MAX_KEYS || 50000);
+const ANALYTICS_IGNORE_OPTIONS = process.env.ANALYTICS_IGNORE_OPTIONS !== '0'
+    && process.env.ANALYTICS_IGNORE_OPTIONS !== 'false';
+const ANALYTICS_IGNORE_NOISE_PATHS = process.env.ANALYTICS_IGNORE_NOISE_PATHS !== '0'
+    && process.env.ANALYTICS_IGNORE_NOISE_PATHS !== 'false';
+const ANALYTICS_EXCLUDE_PRIVATE_IPS = process.env.ANALYTICS_EXCLUDE_PRIVATE_IPS === '1'
+    || process.env.ANALYTICS_EXCLUDE_PRIVATE_IPS === 'true';
+const ANALYTICS_WINDOW_MODE = String(process.env.ANALYTICS_WINDOW_MODE || 'rolling').trim().toLowerCase();
+const ANALYTICS_NOISE_PATHS = String(process.env.ANALYTICS_NOISE_PATHS
+    || '/api/health,/api/admin/ping,/favicon.ico,/robots.txt')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
 
 const DB_PATH = process.env.DATABASE_PATH
     ? path.resolve(process.env.DATABASE_PATH)
@@ -111,6 +321,13 @@ const { dbRun, dbGet, dbAll } = createDbHelpers(db);
 
 const authCache = new Map();
 const authCacheInFlight = new Map();
+const authMeCache = new Map();
+const authMeInFlight = new Map();
+const authMeStorm = new Map();
+const statsCache = new Map();
+const usageCache = new Map();
+const healthCache = { data: null, timestamp: 0 };
+const healthSamples = { db: [], handler: [] };
 
 const getAuthCache = (userId) => {
     if (!userId) return null;
@@ -138,6 +355,69 @@ const getAuthInFlight = (userId) => {
 const setAuthInFlight = (userId, promise) => {
     authCacheInFlight.set(userId, promise);
     promise.finally(() => authCacheInFlight.delete(userId));
+};
+
+const getShortHash = (value) => {
+    if (!value) return null;
+    return crypto.createHash('sha256').update(String(value)).digest('hex').slice(0, 16);
+};
+
+const getAuthMeKey = (req) => {
+    const tenantId = req.tenantId || req.activeTenantId || 'unknown';
+    const userId = req.user?.id || null;
+    if (userId) return `${tenantId}:user:${userId}`;
+    const token = getSessionToken(req);
+    if (token) return `${tenantId}:token:${getShortHash(token)}`;
+    const ip = req.ip || req.connection?.remoteAddress || req.socket?.remoteAddress || '';
+    return `${tenantId}:ip:${getShortHash(ip) || 'unknown'}`;
+};
+
+const recordAuthMeStorm = (key) => {
+    if (!AUTH_ME_STORM_THRESHOLD || AUTH_ME_STORM_THRESHOLD <= 0) return;
+    const now = Date.now();
+    const bucket = authMeStorm.get(key);
+    if (!bucket || now - bucket.ts > 1000) {
+        authMeStorm.set(key, { ts: now, count: 1 });
+        return;
+    }
+    bucket.count += 1;
+    if (bucket.count === AUTH_ME_STORM_THRESHOLD + 1) {
+        console.warn(`[AUTH_ME_STORM] key=${key} count=${bucket.count}`);
+    }
+};
+
+const getTimedCache = (cache, key, ttlMs) => {
+    if (!ttlMs || ttlMs <= 0) return null;
+    const entry = cache.get(key);
+    if (entry && Date.now() - entry.timestamp < ttlMs) {
+        return entry.data;
+    }
+    cache.delete(key);
+    return null;
+};
+
+const setTimedCache = (cache, key, data, maxSize) => {
+    if (maxSize && cache.size >= maxSize) {
+        const oldestKey = cache.keys().next().value;
+        cache.delete(oldestKey);
+    }
+    cache.set(key, { data, timestamp: Date.now() });
+};
+
+const recordHealthSample = (dbMs, handlerMs) => {
+    if (!Number.isFinite(dbMs) || !Number.isFinite(handlerMs)) return;
+    healthSamples.db.push(dbMs);
+    healthSamples.handler.push(handlerMs);
+    if (healthSamples.db.length > HEALTH_WINDOW_SIZE) healthSamples.db.shift();
+    if (healthSamples.handler.length > HEALTH_WINDOW_SIZE) healthSamples.handler.shift();
+};
+
+const median = (values) => {
+    if (!values.length) return null;
+    const sorted = [...values].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    if (sorted.length % 2) return sorted[mid];
+    return (sorted[mid - 1] + sorted[mid]) / 2;
 };
 
 const AGENT_BUNDLE_DIR = path.join(__dirname, 'ops', 'agent');
@@ -333,6 +613,37 @@ const getRequestPath = (req) => {
 
 const getHeaderValue = (value) => (Array.isArray(value) ? value[0] : value);
 
+const truncateString = (value, maxLength) => {
+    const raw = String(value || '').trim();
+    if (!raw) return null;
+    if (!maxLength || raw.length <= maxLength) return raw;
+    return raw.slice(0, maxLength);
+};
+
+const sanitizeReferer = (value) => {
+    const raw = String(value || '').trim();
+    if (!raw) return null;
+    try {
+        const url = new URL(raw);
+        return truncateString(`${url.origin}${url.pathname}`, 200);
+    } catch (error) {
+        return truncateString(raw.split('?')[0].split('#')[0], 200);
+    }
+};
+
+const normalizeNoisePatterns = (patterns = []) => {
+    return patterns
+        .map((pattern) => String(pattern || '').trim())
+        .filter(Boolean)
+        .map((pattern) => {
+            if (pattern.endsWith('*')) {
+                const prefix = normalizePath(pattern.slice(0, -1));
+                return `${prefix}*`;
+            }
+            return normalizePath(pattern);
+        });
+};
+
 const getBaseUrl = (req) => {
     const forwarded = getHeaderValue(req.headers['x-forwarded-proto']);
     const protocol = forwarded ? String(forwarded).split(',')[0] : req.protocol;
@@ -428,6 +739,319 @@ const parsePagination = (query = {}) => {
     return { page, limit, offset };
 };
 
+const parseAnalyticsDays = (value) => {
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed) || parsed <= 0) return 1;
+    return Math.min(30, Math.floor(parsed));
+};
+
+const parseAnalyticsMode = (value) => {
+    const raw = String(value || '').trim().toLowerCase();
+    return raw === 'calendar' ? 'calendar' : 'rolling';
+};
+
+const parseFeedbackLimit = (value) => {
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed) || parsed <= 0) return 50;
+    return Math.min(200, Math.floor(parsed));
+};
+
+const buildAnalyticsSummary = async ({ days, mode, debug }) => {
+    const summary = { total: 0, uniqueIps: 0 };
+    const uniqueIps = new Set();
+    const pathCounts = new Map();
+    const hourCounts = Array.from({ length: 24 }, () => 0);
+    const latest = [];
+    const windowMode = parseAnalyticsMode(mode || ANALYTICS_WINDOW_MODE);
+    const nowTs = Date.now();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const startOfDayUtc = Date.UTC(
+        new Date(nowTs).getUTCFullYear(),
+        new Date(nowTs).getUTCMonth(),
+        new Date(nowTs).getUTCDate()
+    );
+    const fromTs = windowMode === 'calendar'
+        ? startOfDayUtc - (days - 1) * dayMs
+        : nowTs - days * dayMs;
+    const toTs = nowTs;
+    const quality = {
+        parsedLines: 0,
+        keptLines: 0,
+        droppedLines: 0,
+        deduped: 0,
+        noiseCount: 0,
+        privateIpExcluded: 0
+    };
+    const enableDebug = Boolean(debug);
+    const droppedReasons = new Map();
+    const noisePathCounts = new Map();
+    const dedupKeyCounts = new Map();
+    const noisePatterns = normalizeNoisePatterns(ANALYTICS_NOISE_PATHS);
+    const dedupCache = makeDedupCache({
+        windowMs: ANALYTICS_DEDUP_WINDOW_MS,
+        maxKeys: ANALYTICS_DEDUP_MAX_KEYS
+    });
+    let earliestTs = null;
+    let latestTs = null;
+
+    const bumpCount = (map, key, maxKeys = 200) => {
+        if (!enableDebug || !key) return;
+        if (!map.has(key)) {
+            if (map.size >= maxKeys) return;
+            map.set(key, 1);
+            return;
+        }
+        map.set(key, map.get(key) + 1);
+    };
+
+    const trackDrop = (reason) => {
+        quality.droppedLines += 1;
+        bumpCount(droppedReasons, reason);
+    };
+
+    const trackNoise = (pathN) => {
+        quality.noiseCount += 1;
+        bumpCount(noisePathCounts, pathN || 'unknown');
+    };
+
+    const trackDedup = (key) => {
+        quality.deduped += 1;
+        bumpCount(dedupKeyCounts, redactKey(key));
+    };
+
+    const finalizeSummary = (meta) => {
+        summary.uniqueIps = uniqueIps.size;
+        const topPaths = Array.from(pathCounts.entries())
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, ANALYTICS_TOP_PATHS_LIMIT)
+            .map(([path, count]) => ({ path, count }));
+        const histogram = hourCounts.map((count, hour) => ({ hour, count }));
+        const spanHours = earliestTs !== null && latestTs !== null
+            ? Math.round(((latestTs - earliestTs) / 3600000) * 100) / 100
+            : 0;
+        summary.total = quality.keptLines;
+        summary.quality = { ...quality };
+        summary.coverage = {
+            earliestTs,
+            latestTs,
+            spanHours,
+            requestedDays: days,
+            mode: windowMode,
+            fromTs,
+            toTs
+        };
+        if (enableDebug) {
+            summary.debug = {
+                topNoisePaths: Array.from(noisePathCounts.entries())
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10)
+                    .map(([path, count]) => ({ path, count })),
+                droppedReasons: Array.from(droppedReasons.entries())
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10)
+                    .map(([reason, count]) => ({ reason, count })),
+                dedupTopKeys: Array.from(dedupKeyCounts.entries())
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10)
+                    .map(([key, count]) => ({ key, count }))
+            };
+        }
+        return {
+            summary,
+            totals: { pageviews: summary.total },
+            uniqueIpsApprox: summary.uniqueIps,
+            topPaths,
+            latest,
+            histogram,
+            meta
+        };
+    };
+
+    if (!fs.existsSync(ANALYTICS_LOG_PATH)) {
+        return finalizeSummary({ scannedBytes: 0, scannedLines: 0, truncated: false });
+    }
+
+    let fileHandle = null;
+    let scannedBytes = 0;
+    let scannedLines = 0;
+    let truncated = false;
+    let stop = false;
+
+    const shouldStop = () => scannedBytes >= ANALYTICS_MAX_BYTES || scannedLines >= ANALYTICS_MAX_LINES;
+
+    const processEntry = (entry) => {
+        const tValue = Number(entry?.t);
+        const tsValue = Number.isFinite(tValue)
+            ? tValue
+            : entry?.ts
+                ? Date.parse(entry.ts)
+                : Number.NaN;
+        if (!Number.isFinite(tsValue)) {
+            trackDrop('invalid_ts');
+            return;
+        }
+        if (tsValue < fromTs) {
+            stop = true;
+            return;
+        }
+        if (tsValue > toTs) {
+            bumpCount(droppedReasons, 'future_ts');
+            return;
+        }
+
+        const pathRaw = entry?.pathN || entry?.path || entry?.url || '';
+        const pathN = entry?.pathN || normalizePath(pathRaw);
+        const method = String(entry?.method || 'GET').toUpperCase();
+        const uaRaw = entry?.ua || entry?.userAgent || entry?.['user-agent'] || '';
+        const uaH = entry?.uaH || hashUA(uaRaw);
+        const ipRaw = entry?.ip || entry?.ipTruncated || entry?.ipv6 || '';
+        const ipN = entry?.ipN || normalizeIp(ipRaw);
+        const ipKey = (ipN && /[.:]/.test(ipN)) ? ipN : entry?.ipHash || null;
+
+        const noise = classifyNoise({ method, pathN, ua: uaRaw, noisePaths: noisePatterns });
+        const isNoise = (noise.isMethodNoise && ANALYTICS_IGNORE_OPTIONS)
+            || (noise.isNoisePath && ANALYTICS_IGNORE_NOISE_PATHS)
+            || noise.isEmptyUa;
+        if (isNoise) {
+            trackNoise(pathN);
+            return;
+        }
+
+        if (ANALYTICS_EXCLUDE_PRIVATE_IPS && ipN && isPrivateIp(ipN)) {
+            quality.privateIpExcluded += 1;
+            return;
+        }
+
+        const dedupKey = `${ipKey || 'ip:none'}|${pathN}|${method}|${uaH || 'ua:none'}`;
+        if (dedupCache.seen(dedupKey, tsValue)) {
+            trackDedup(dedupKey);
+            return;
+        }
+
+        quality.keptLines += 1;
+        summary.total += 1;
+        if (ipKey) uniqueIps.add(ipKey);
+        pathCounts.set(pathN, (pathCounts.get(pathN) || 0) + 1);
+        const hour = new Date(tsValue).getHours();
+        if (hour >= 0 && hour < 24) {
+            hourCounts[hour] += 1;
+        }
+        if (latest.length < ANALYTICS_LATEST_LIMIT) {
+            latest.push({
+                ts: entry?.ts || new Date(tsValue).toISOString(),
+                t: tsValue,
+                path: entry?.path || pathN || null,
+                pathN,
+                method,
+                status: entry?.status ?? null,
+                durationMs: entry?.durationMs ?? entry?.duration ?? null,
+                ip: entry?.ip || null,
+                ipN: ipN || null,
+                ipHash: entry?.ipHash || null,
+                userId: entry?.userId || entry?.user_id || null,
+                tenantId: entry?.tenantId || entry?.tenant_id || null,
+                requestId: entry?.requestId || null
+            });
+        }
+        if (earliestTs === null || tsValue < earliestTs) {
+            earliestTs = tsValue;
+        }
+        if (latestTs === null || tsValue > latestTs) {
+            latestTs = tsValue;
+        }
+    };
+
+    try {
+        const stats = await fs.promises.stat(ANALYTICS_LOG_PATH);
+        if (!stats.size) {
+            return finalizeSummary({ scannedBytes: 0, scannedLines: 0, truncated: false });
+        }
+
+        fileHandle = await fs.promises.open(ANALYTICS_LOG_PATH, 'r');
+        let position = stats.size;
+        let buffer = '';
+
+        while (position > 0 && !stop) {
+            if (shouldStop()) {
+                truncated = true;
+                break;
+            }
+            const readSize = Math.min(ANALYTICS_CHUNK_SIZE, position);
+            position -= readSize;
+            const chunk = Buffer.alloc(readSize);
+            const { bytesRead } = await fileHandle.read(chunk, 0, readSize, position);
+            if (!bytesRead) break;
+            scannedBytes += bytesRead;
+            buffer = chunk.toString('utf8', 0, bytesRead) + buffer;
+            const lines = buffer.split(/\r?\n/);
+            buffer = lines.shift() || '';
+
+            for (let i = lines.length - 1; i >= 0; i -= 1) {
+                if (shouldStop()) {
+                    truncated = true;
+                    stop = true;
+                    break;
+                }
+                const trimmed = String(lines[i] || '').trim();
+                if (!trimmed) continue;
+                scannedLines += 1;
+                const parsed = safeParseNdjsonLine(trimmed, ANALYTICS_MAX_LINE_BYTES);
+                if (!parsed.ok) {
+                    trackDrop(parsed.reason || 'invalid_json');
+                    continue;
+                }
+                quality.parsedLines += 1;
+                processEntry(parsed.obj);
+                if (stop) break;
+            }
+        }
+
+        if (!stop && !truncated && buffer.trim() && !shouldStop()) {
+            scannedLines += 1;
+            const parsed = safeParseNdjsonLine(buffer.trim(), ANALYTICS_MAX_LINE_BYTES);
+            if (!parsed.ok) {
+                trackDrop(parsed.reason || 'invalid_json');
+            } else {
+                quality.parsedLines += 1;
+                processEntry(parsed.obj);
+            }
+        }
+    } finally {
+        if (fileHandle) {
+            await fileHandle.close();
+        }
+    }
+
+    return finalizeSummary({ scannedBytes, scannedLines, truncated });
+};
+
+const loadFeedbackFallback = (limit) => {
+    const fallbackPath = path.join(DATA_DIR, 'feedback.ndjson');
+    if (!fs.existsSync(fallbackPath)) return [];
+    const raw = fs.readFileSync(fallbackPath, 'utf8');
+    if (!raw.trim()) return [];
+    const lines = raw.split(/\r?\n/).filter(Boolean);
+    const items = [];
+    for (let i = lines.length - 1; i >= 0 && items.length < limit; i -= 1) {
+        try {
+            const entry = JSON.parse(lines[i]);
+            items.push({
+                id: entry.id || null,
+                ts: entry.ts || null,
+                message: entry.message || '',
+                page: entry.page || null,
+                email: entry.email || null,
+                userId: entry.userId || entry.user_id || null,
+                tenantId: entry.tenantId || entry.tenant_id || null,
+                source: 'file'
+            });
+        } catch (error) {
+            continue;
+        }
+    }
+    return items;
+};
+
 const toSqlTimestamp = (date) => {
     if (!(date instanceof Date)) return null;
     return date.toISOString().replace('T', ' ').slice(0, 19);
@@ -452,6 +1076,56 @@ const parseCookies = (cookieHeader = '') => {
         acc[key] = decodeURIComponent(rest.join('=') || '');
         return acc;
     }, {});
+};
+
+const ensureDataDir = () => {
+    if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+};
+
+const ensureAnalyticsDir = () => {
+    const dir = path.dirname(ANALYTICS_LOG_PATH);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+};
+
+let analyticsStream = null;
+let analyticsStreamFailed = false;
+
+const getAnalyticsStream = () => {
+    if (analyticsStreamFailed) return null;
+    if (analyticsStream) return analyticsStream;
+    try {
+        ensureAnalyticsDir();
+        analyticsStream = fs.createWriteStream(ANALYTICS_LOG_PATH, { flags: 'a' });
+        analyticsStream.on('error', (error) => {
+            analyticsStreamFailed = true;
+            analyticsStream = null;
+            console.error('Analytics log stream error:', error.message);
+        });
+        return analyticsStream;
+    } catch (error) {
+        analyticsStreamFailed = true;
+        console.error('Analytics log stream init error:', error.message);
+        return null;
+    }
+};
+
+const getIpHash = (ip) => {
+    if (!ip) return null;
+    return crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 16);
+};
+
+const resolveAnalyticsTenantId = (req) => {
+    return req.tenantId || req.activeTenantId || null;
+};
+
+const shouldSkipAnalytics = (pathValue) => {
+    if (!pathValue) return true;
+    if (ANALYTICS_SKIP_PATHS.has(pathValue)) return true;
+    return ANALYTICS_SKIP_PREFIXES.some((prefix) => pathValue.startsWith(prefix));
 };
 
 const isLocalRequest = (req) => {
@@ -1284,6 +1958,26 @@ const requireSuperadminApi = (req, res, next) => {
         return sendError(res, 403, 'Forbidden', 'Admin access required');
     }
     return next();
+};
+
+const requireDevAdminToken = (req, res, next) => {
+    const token = getAdminToken(req);
+    if (!isAdminTokenValid(token)) {
+        if (!String(process.env.DEV_ADMIN_TOKEN || '').trim()) {
+            console.warn('DEV_ADMIN_TOKEN not configured. Admin access denied.');
+        }
+        return sendError(res, 401, 'Unauthorized', 'Invalid admin token');
+    }
+    return next();
+};
+
+const requireDevAdmin = (req, res) => {
+    const tok = req.get('X-Admin-Token') || req.query.token || '';
+    if (!process.env.DEV_ADMIN_TOKEN || tok !== process.env.DEV_ADMIN_TOKEN) {
+        res.status(401).json({ ok: false, error: 'Unauthorized' });
+        return false;
+    }
+    return true;
 };
 
 const requireTenant = async (req, res, next) => {
@@ -4113,7 +4807,8 @@ const corsOptions = {
         'X-Webhook-Token',
         'X-Tenant-Id',
         'X-Portal-Key',
-        'X-Portal-Agent'
+        'X-Portal-Agent',
+        'X-Admin-Token'
     ]
 };
 
@@ -4173,8 +4868,126 @@ if (RATE_LIMIT_ENABLED) {
 app.use(express.json({ limit: BODY_SIZE_LIMIT }));
 app.use(express.urlencoded({ extended: true, limit: BODY_SIZE_LIMIT }));
 
+const analyticsLogger = (req, res, next) => {
+    const pathValue = getRequestPath(req);
+    if (shouldSkipAnalytics(pathValue)) {
+        return next();
+    }
+    const pathN = normalizePath(pathValue);
+    const requestId = req.requestId
+        || getHeaderValue(req.headers['x-request-id'])
+        || getHeaderValue(req.headers['x-correlation-id'])
+        || Math.random().toString(36).substring(2, 15);
+    const ip = req.ip || req.connection?.remoteAddress || req.socket?.remoteAddress || '';
+    const ipN = normalizeIpFromReq(req) || normalizeIp(ip);
+    const ipHash = getIpHash(ipN || ip);
+    const uaRaw = req.headers['user-agent'] || '';
+    const ua = truncateString(uaRaw, 120);
+    const uaH = hashUA(uaRaw);
+    const referer = sanitizeReferer(req.headers.referer || req.headers.referrer || null);
+    const start = process.hrtime.bigint();
+
+    res.on('finish', () => {
+        const durationMs = Number((process.hrtime.bigint() - start) / 1000000n);
+        const tenantId = resolveAnalyticsTenantId(req);
+        const t = Date.now();
+        const entry = {
+            ts: new Date().toISOString(),
+            t,
+            path: pathValue,
+            pathN,
+            method: req.method,
+            status: res.statusCode,
+            durationMs,
+            ip: ip || null,
+            ipN: ipN || null,
+            ipHash,
+            userId: req.user?.id || null,
+            ua: ua || null,
+            uaH: uaH || null,
+            referer: referer || null,
+            requestId,
+            tenantId: tenantId || null
+        };
+        const stream = getAnalyticsStream();
+        if (stream) {
+            stream.write(JSON.stringify(entry) + '\n');
+        }
+    });
+
+    next();
+};
+
 // Request logging
 app.use(requestLogger);
+app.use(analyticsLogger);
+
+const devAdminRoutes = express.Router();
+
+devAdminRoutes.get('/ping', requireDevAdminToken, (req, res) => {
+    return sendOk(res, { status: 'ok' });
+});
+
+devAdminRoutes.get('/analytics/summary', requireDevAdminToken, async (req, res) => {
+    try {
+        const days = parseAnalyticsDays(req.query?.days);
+        const mode = parseAnalyticsMode(req.query?.mode || ANALYTICS_WINDOW_MODE);
+        const debug = toBoolean(req.query?.debug, false);
+        const start = process.hrtime.bigint();
+        const summary = await buildAnalyticsSummary({ days, mode, debug });
+        const durationMs = Number((process.hrtime.bigint() - start) / 1000000n);
+        console.log(JSON.stringify({
+            type: 'ADMIN_ANALYTICS_SUMMARY',
+            days,
+            mode,
+            debug,
+            durationMs,
+            scannedBytes: summary.meta?.scannedBytes || 0,
+            scannedLines: summary.meta?.scannedLines || 0,
+            truncated: Boolean(summary.meta?.truncated)
+        }));
+        const payload = {
+            days,
+            mode,
+            summary: summary.summary,
+            topPaths: summary.topPaths,
+            latest: summary.latest,
+            totals: summary.totals,
+            uniqueIpsApprox: summary.uniqueIpsApprox,
+            histogram: summary.histogram
+        };
+        return sendOk(res, payload);
+    } catch (error) {
+        console.error('Analytics summary error:', error);
+        return sendError(res, 500, 'Internal server error', 'Failed to load analytics summary');
+    }
+});
+
+devAdminRoutes.get('/feedback', requireDevAdminToken, async (req, res) => {
+    const limit = parseFeedbackLimit(req.query?.limit);
+    try {
+        const rows = await dbAll(
+            'SELECT id, user_id, tenant_id, message, page, created_at FROM feedback ORDER BY created_at DESC LIMIT ?',
+            [limit]
+        );
+        const items = (rows || []).map((row) => ({
+            id: row.id,
+            ts: row.created_at,
+            message: row.message,
+            page: row.page,
+            userId: row.user_id || null,
+            tenantId: row.tenant_id || null,
+            source: 'db'
+        }));
+        return sendOk(res, { items, limit, source: 'db' });
+    } catch (error) {
+        console.error('Admin feedback DB error:', error);
+        const items = loadFeedbackFallback(limit);
+        return sendOk(res, { items, limit, source: 'file' });
+    }
+});
+
+app.use('/api/admin', devAdminRoutes);
 
 // ========== API ROUTES ==========
 const publicApiRoutes = express.Router();
@@ -4190,6 +5003,38 @@ publicApiRoutes.get('/feature-flags', (req, res) => {
         pollingIntervalMs: POLLING_INTERVAL_MS,
         rateLimitEnabled: RATE_LIMIT_ENABLED
     });
+});
+
+publicApiRoutes.delete('/projects/:id', async (req, res, next) => {
+    if (!COMMUNITY_MODE) {
+        return next();
+    }
+    const token = getAdminToken(req);
+    if (!isAdminTokenValid(token)) {
+        return next();
+    }
+    try {
+        const id = Number(req.params.id);
+        if (!Number.isFinite(id) || id <= 0) {
+            return sendError(res, 400, 'Invalid id', 'Project id is required');
+        }
+        const existing = await dbGet(
+            'SELECT id, tenant_id FROM projects WHERE id = ? AND deleted_at IS NULL',
+            [id]
+        );
+        if (!existing) {
+            return sendError(res, 404, 'Not Found', 'Project not found');
+        }
+        await dbRun(
+            `UPDATE projects SET deleted_at = datetime('now'), updated_at = datetime('now') WHERE id = ? AND tenant_id = ?`,
+            [id, existing.tenant_id]
+        );
+        broadcastEvent('projectDeleted', { id: Number(id) }, existing.tenant_id);
+        return sendOk(res, { id: Number(id) });
+    } catch (error) {
+        console.error('Community admin project delete error:', error);
+        return sendError(res, 500, 'Internal server error', 'Failed to delete project');
+    }
 });
 
 publicApiRoutes.post('/feedback', feedbackLimiter, async (req, res) => {
@@ -4572,66 +5417,133 @@ publicApiRoutes.post('/auth/logout', async (req, res) => {
 
 // Auth: me
 publicApiRoutes.get('/auth/me', authMeLimiter, async (req, res, next) => {
-    const userId = req.user?.id || null;
-    
-    if (userId) {
-        const cached = getAuthCache(userId);
-        if (cached) {
-            return sendOk(res, cached);
-        }
-        
-        let inFlight = getAuthInFlight(userId);
-        if (!inFlight) {
-            inFlight = Promise.resolve();
-            setAuthInFlight(userId, inFlight);
-        }
-        
+    const authMeKey = getAuthMeKey(req);
+    recordAuthMeStorm(authMeKey);
+
+    const microCached = getTimedCache(authMeCache, authMeKey, AUTH_ME_TTL_MS);
+    if (microCached) {
+        return sendOk(res, microCached);
+    }
+
+    const inflight = authMeInFlight.get(authMeKey);
+    if (inflight) {
         try {
-            await inFlight;
-        } catch (e) {}
-        
-        const cachedAfter = getAuthCache(userId);
-        if (cachedAfter) {
-            return sendOk(res, cachedAfter);
+            const payload = await inflight;
+            return sendOk(res, payload);
+        } catch (error) {
+            return sendError(res, 500, 'Internal server error', 'Failed to resolve session');
         }
     }
-    
-    const tenantRole = req.activeMembership?.role || null;
-    const userRole = req.user?.role || tenantRole || null;
-    const email = req.user?.email || null;
-    const isSuperadmin = Boolean(req.user?.isSuperadmin || req.user?.is_superadmin);
-    const responseData = {
-        user: {
-            ...(req.user || {}),
-            role: userRole
-        },
-        userId,
-        email,
-        isSuperadmin,
-        role: userRole,
-        userRole,
-        plan: req.plan,
-        memberships: req.memberships || [],
-        activeTenantId: req.activeTenantId || null,
-        tenantRole,
-        communityMode: COMMUNITY_MODE,
-        autopilotEnabled: AUTOPILOT_ENABLED
+
+    const buildPayload = async () => {
+        const userId = req.user?.id || null;
+
+        if (userId) {
+            const cached = getAuthCache(userId);
+            if (cached) {
+                return cached;
+            }
+        }
+
+        const tenantRole = req.activeMembership?.role || null;
+        const userRole = req.user?.role || tenantRole || null;
+        const email = req.user?.email || null;
+        const isSuperadmin = Boolean(req.user?.isSuperadmin || req.user?.is_superadmin);
+        const responseData = {
+            user: {
+                ...(req.user || {}),
+                role: userRole
+            },
+            userId,
+            email,
+            isSuperadmin,
+            role: userRole,
+            userRole,
+            plan: req.plan,
+            memberships: req.memberships || [],
+            activeTenantId: req.activeTenantId || null,
+            tenantRole,
+            communityMode: COMMUNITY_MODE,
+            autopilotEnabled: AUTOPILOT_ENABLED
+        };
+
+        if (userId) {
+            setAuthCache(userId, responseData);
+        }
+
+        return responseData;
     };
-    
-    if (userId) {
-        setAuthCache(userId, responseData);
+
+    const promise = buildPayload();
+    authMeInFlight.set(authMeKey, promise);
+
+    try {
+        const payload = await promise;
+        if (AUTH_ME_TTL_MS > 0) {
+            setTimedCache(authMeCache, authMeKey, payload, AUTH_CACHE_MAX_SIZE);
+        }
+        return sendOk(res, payload);
+    } catch (error) {
+        return sendError(res, 500, 'Internal server error', 'Failed to resolve session');
+    } finally {
+        authMeInFlight.delete(authMeKey);
     }
-    
-    return sendOk(res, responseData);
 });
 
 // Health check (lightweight)
 publicApiRoutes.get('/health', async (req, res) => {
     try {
-        const start = Date.now();
+        if (HEALTH_CACHE_TTL_MS > 0 && healthCache.data) {
+            const ageMs = Date.now() - healthCache.timestamp;
+            if (ageMs >= 0 && ageMs < HEALTH_CACHE_TTL_MS) {
+                return sendOk(res, healthCache.data);
+            }
+        }
+        const handlerStart = process.hrtime.bigint();
+        const dbStart = process.hrtime.bigint();
         await dbGet('SELECT 1 as ok');
-        const dbTime = Date.now() - start;
-        
+        const dbTime = Number(process.hrtime.bigint() - dbStart) / 1e6;
+        const handlerTime = Number(process.hrtime.bigint() - handlerStart) / 1e6;
+        recordHealthSample(dbTime, handlerTime);
+
+        const payload = {
+            ts: new Date().toISOString(),
+            uptime: process.uptime(),
+            env: process.env.NODE_ENV || 'development',
+            mode: {
+                community: COMMUNITY_MODE,
+                autopilot: AUTOPILOT_ENABLED,
+                rateLimit: RATE_LIMIT_ENABLED
+            },
+            db: { ok: true, latencyMs: Number(dbTime.toFixed(3)) },
+            handlerMs: Number(handlerTime.toFixed(3)),
+            window: {
+                size: HEALTH_WINDOW_SIZE,
+                dbMedianMs: median(healthSamples.db),
+                handlerMedianMs: median(healthSamples.handler)
+            }
+        };
+
+        if (HEALTH_CACHE_TTL_MS > 0) {
+            healthCache.data = payload;
+            healthCache.timestamp = Date.now();
+        }
+
+        return sendOk(res, payload);
+    } catch (error) {
+        return sendError(res, 500, 'Database Error', 'Failed to access the database');
+    }
+});
+
+publicApiRoutes.get('/health/local', async (req, res) => {
+    try {
+        const handlerStart = process.hrtime.bigint();
+        const dbStart = process.hrtime.bigint();
+        await dbGet('SELECT 1 as ok');
+        const dbTime = Number(process.hrtime.bigint() - dbStart) / 1e6;
+        const handlerTime = Number(process.hrtime.bigint() - handlerStart) / 1e6;
+        recordHealthSample(dbTime, handlerTime);
+
         return sendOk(res, {
             ts: new Date().toISOString(),
             uptime: process.uptime(),
@@ -4641,7 +5553,13 @@ publicApiRoutes.get('/health', async (req, res) => {
                 autopilot: AUTOPILOT_ENABLED,
                 rateLimit: RATE_LIMIT_ENABLED
             },
-            db: { ok: true, latencyMs: dbTime }
+            db: { ok: true, latencyMs: Number(dbTime.toFixed(3)) },
+            handlerMs: Number(handlerTime.toFixed(3)),
+            window: {
+                size: HEALTH_WINDOW_SIZE,
+                dbMedianMs: median(healthSamples.db),
+                handlerMedianMs: median(healthSamples.handler)
+            }
         });
     } catch (error) {
         return sendError(res, 500, 'Database Error', 'Failed to access the database');
@@ -5183,6 +6101,15 @@ apiRoutes.post('/agent/suggest', async (req, res) => {
 // System Statistics
 apiRoutes.get('/stats', async (req, res) => {
     try {
+        const cacheKey = String(req.tenantId || 'unknown');
+        const cached = getTimedCache(statsCache, cacheKey, STATS_CACHE_TTL_MS);
+        if (cached) {
+            return sendOk(res, {
+                ...cached,
+                uptime: process.uptime(),
+                memoryUsage: process.memoryUsage()
+            });
+        }
         const [projectCount, orderCount, activeOrders, leadCount, clientCount, providerCount, aiCount, revenueRow, payoutRow] = await Promise.all([
             dbGet('SELECT COUNT(*) as count FROM projects WHERE tenant_id = ? AND deleted_at IS NULL', [req.tenantId]),
             dbGet('SELECT COUNT(*) as count FROM orders WHERE tenant_id = ? AND deleted_at IS NULL', [req.tenantId]),
@@ -5199,7 +6126,7 @@ apiRoutes.get('/stats', async (req, res) => {
         const avgPayout = Number(toNumber(payoutRow?.avgRate, 0).toFixed(1));
         const netRevenue = Number((totalMRR - (avgPayout / 100) * 5000).toFixed(2));
 
-        return sendOk(res, {
+        const payload = {
             totalProjects: projectCount?.count || 0,
             totalOrders: orderCount?.count || 0,
             activeOrders: activeOrders?.count || 0,
@@ -5209,7 +6136,13 @@ apiRoutes.get('/stats', async (req, res) => {
             aiRequests: aiCount?.count || 0,
             totalMRR,
             avgProviderPayout: avgPayout,
-            netRevenue,
+            netRevenue
+        };
+        if (STATS_CACHE_TTL_MS > 0) {
+            setTimedCache(statsCache, cacheKey, payload, STATS_CACHE_MAX_SIZE);
+        }
+        return sendOk(res, {
+            ...payload,
             uptime: process.uptime(),
             memoryUsage: process.memoryUsage()
         });
@@ -5221,6 +6154,11 @@ apiRoutes.get('/stats', async (req, res) => {
 
 apiRoutes.get('/usage', async (req, res) => {
     try {
+        const cacheKey = String(req.tenantId || 'unknown');
+        const cached = getTimedCache(usageCache, cacheKey, USAGE_CACHE_TTL_MS);
+        if (cached) {
+            return sendOk(res, cached);
+        }
         const now = new Date();
         const periodStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0));
         const periodEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1, 0, 0, 0));
@@ -5242,7 +6180,7 @@ apiRoutes.get('/usage', async (req, res) => {
                 [req.tenantId]
             )
         ]);
-        return sendOk(res, {
+        const payload = {
             period: {
                 start: periodStart.toISOString(),
                 end: periodEnd.toISOString(),
@@ -5252,7 +6190,11 @@ apiRoutes.get('/usage', async (req, res) => {
             exports: exportRow?.count || 0,
             autopilot_cycles: autopilotRow?.count || 0,
             imports: importRow?.count || 0
-        });
+        };
+        if (USAGE_CACHE_TTL_MS > 0) {
+            setTimedCache(usageCache, cacheKey, payload, USAGE_CACHE_MAX_SIZE);
+        }
+        return sendOk(res, payload);
     } catch (error) {
         console.error('Usage snapshot error:', error);
         return sendError(res, 500, 'Internal server error', 'Failed to load usage');
@@ -5411,6 +6353,7 @@ apiRoutes.post('/events/financial', async (req, res) => {
         return sendError(res, 500, 'Internal server error', 'Failed to record financial event');
     }
 });
+
 
 // Subscription details
 apiRoutes.get('/subscription/me', async (req, res) => {
@@ -8528,6 +9471,35 @@ apiRoutes.post('/orders/:id/restore', requireRole('member'), async (req, res) =>
 if (RATE_LIMIT_ENABLED) {
     app.use('/api', apiLimiter);
 }
+app.post('/api/dev/payment-received', async (req, res) => {
+    if (!requireDevAdmin(req, res)) return;
+    if (isProd) {
+        return sendError(res, 404, 'Not Found', 'Endpoint disabled in production');
+    }
+    const amountCents = Number(req.body?.amount_cents);
+    if (!Number.isFinite(amountCents)) {
+        return sendError(res, 400, 'Invalid input', 'amount_cents must be a valid number');
+    }
+    const currencyValue = normalizeCurrency(req.body?.currency, DEFAULT_CURRENCY);
+    if (!currencyValue) {
+        return sendError(res, 400, 'Invalid input', 'Currency must be a 3-letter code');
+    }
+    const { onPaymentReceived } = require('./backend/financial/payment-events');
+    try {
+        const event = await onPaymentReceived({
+            amount_cents: Math.round(amountCents),
+            currency: currencyValue,
+            tenant_id: req.body?.tenant_id,
+            user_id: req.body?.user_id,
+            source: 'dev',
+            meta: req.body?.meta || {}
+        });
+        return res.json({ ok: true, event });
+    } catch (error) {
+        const message = String(error?.message || error || 'Failed to record event');
+        return res.status(500).json({ ok: false, error: message });
+    }
+});
 app.use('/api', publicApiRoutes);
 app.post('/api/autopilot/enable', requireAutopilotFallbackAuth, (req, res) => {
     req.url = '/autopilot/enable';
@@ -8584,11 +9556,30 @@ app.get('/sw.js', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'backend', 'index.html'));
+    const htmlPath = path.join(__dirname, 'backend', 'index.html');
+    const raw = fs.readFileSync(htmlPath, 'utf8');
+    const html = injectSupportBlock(raw);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
 });
 
-app.get('/app', requireAuthPage, (req, res) => {
-    res.sendFile(path.join(__dirname, 'backend', 'pages', 'app.html'));
+app.get('/app', async (req, res) => {
+    try {
+        const auth = await loadAuthContext(req);
+        if (!auth) {
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            return res.send(renderGuestAppPage());
+        }
+        const htmlPath = path.join(__dirname, 'backend', 'pages', 'app.html');
+        const raw = fs.readFileSync(htmlPath, 'utf8');
+        const html = injectSupportBlock(raw);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        return res.send(html);
+    } catch (error) {
+        console.error('App page error:', error);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        return res.send(renderGuestAppPage());
+    }
 });
 
 app.get('/autopilot/:slug', requireAuthPage, async (req, res) => {
@@ -8615,7 +9606,16 @@ app.get('/pricing', (req, res) => {
 });
 
 app.get('/docs', (req, res) => {
-    res.sendFile(path.join(__dirname, 'backend', 'pages', 'docs.html'));
+    const htmlPath = path.join(__dirname, 'backend', 'pages', 'docs.html');
+    const raw = fs.readFileSync(htmlPath, 'utf8');
+    const withGuide = injectVideoGuideUrl(raw);
+    const html = injectSupportBlock(withGuide);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+});
+
+app.get('/status', (req, res) => {
+    res.sendFile(path.join(__dirname, 'backend', 'pages', 'status.html'));
 });
 
 app.get('/help', (req, res) => {
@@ -8638,8 +9638,15 @@ app.get('/cabinet', requireAuthPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'backend', 'pages', 'cabinet.html'));
 });
 
-app.get('/admin', requireSuperadminPage, (req, res) => {
+const sendAdminPage = (req, res) => {
     res.sendFile(path.join(__dirname, 'backend', 'pages', 'admin.html'));
+};
+
+app.get('/admin', (req, res, next) => {
+    if (DEV_ADMIN_TOKEN) {
+        return sendAdminPage(req, res);
+    }
+    return requireSuperadminPage(req, res, () => sendAdminPage(req, res));
 });
 
 app.get('/dashboard', requireAuthPage, (req, res) => {
@@ -8680,6 +9687,8 @@ app.use((req, res, next) => {
             '/api/admin/tenants',
             '/api/admin/bootstrap',
             '/api/admin/bootstrap/status',
+            '/api/admin/analytics/summary',
+            '/api/admin/feedback',
             '/api/projects/export',
             '/api/orders/export',
             '/api/projects/:id/restore',
@@ -8922,5 +9931,6 @@ process.on('SIGINT', () => {
 });
 
 module.exports = { app, server };
+
 
 

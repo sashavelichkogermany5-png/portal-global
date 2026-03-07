@@ -1,0 +1,437 @@
+[
+  {
+    "id": "auth-storm",
+    "title": "Auth storm /api/auth/me",
+    "problem": "Снизить шторм запросов /api/auth/me без ломки логики auth",
+    "fitness": [
+      "F1: p95 latency (ms)",
+      "F2: rate-limit hits (count/час)",
+      "F3: повторные запросы от одного клиента (count/мин)"
+    ],
+    "variants": [
+      "A: ничего не менять, только кеш TTL",
+      "B: single-flight на сервере",
+      "C: single-flight + micro-cache на сервере",
+      "D: C + client backoff + min-interval"
+    ],
+    "facts": [
+      "У /api/auth/me уже есть кеш по userId и inFlight",
+      "UI делает частые запросы auth/me при старте",
+      "Есть rate limit на auth/me"
+    ],
+    "scenarios": {
+      "S1": { "F1": 6, "F2": 7, "F3": 6 },
+      "S2": { "F1": 5, "F2": 5, "F3": 5 },
+      "S3": { "F1": 3, "F2": 3, "F3": 3 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + усилить наблюдаемость (storm log) и порог",
+    "result": "Реализовать D: серверный shield + клиентский backoff"
+  },
+  {
+    "id": "autopilot-s3",
+    "title": "Autopilot enable/tick и S3 безопасность",
+    "problem": "Снизить риск неправильных действий автопилота",
+    "fitness": [
+      "F1: число ошибок доступа (count)",
+      "F2: риск tenant-утечки (yes/no)",
+      "F3: воспроизводимость запуска (1-10)"
+    ],
+    "variants": [
+      "A: оставить как есть",
+      "B: убрать service-token fallback",
+      "C: добавить строгий аудит и idempotency ключи",
+      "D: C + rate limits + явные allowlist действий"
+    ],
+    "facts": [
+      "Enable/tick требуют admin или service-token",
+      "Запуски логируются в agent_messages",
+      "TenantId должен быть только из auth/session"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 8, "F3": 7 },
+      "S2": { "F1": 6, "F2": 8, "F3": 6 },
+      "S3": { "F1": 5, "F2": 9, "F3": 6 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + минимизировать изменения интерфейса",
+    "result": "Усилить безопасность: аудит + идемпотентность + allowlist"
+  },
+  {
+    "id": "upload-500",
+    "title": "Upload 500 в /api/upload",
+    "problem": "Устранить 500 в upload и дать понятный UX",
+    "fitness": [
+      "F1: % успешных загрузок",
+      "F2: среднее время загрузки",
+      "F3: число ошибок 5xx"
+    ],
+    "variants": [
+      "A: только исправить storage path",
+      "B: править auth flow + storage",
+      "C: добавить детальные ошибки + retries",
+      "D: B + C + ограничить типы/размеры на клиенте"
+    ],
+    "facts": [
+      "Upload использует Next.js route и проверяет /api/auth/me",
+      "В smoke было 500 по upload",
+      "Файлы сохраняются в web-next/public/uploads"
+    ],
+    "scenarios": {
+      "S1": { "F1": 8, "F2": 7, "F3": 8 },
+      "S2": { "F1": 7, "F2": 6, "F3": 7 },
+      "S3": { "F1": 6, "F2": 5, "F3": 6 }
+    },
+    "selection": { "winner": "D", "runnerUp": "B" },
+    "crossover": "D + минимизировать UI шум",
+    "result": "Починить auth+storage и добавить ясный error UX"
+  },
+  {
+    "id": "analytics-noise",
+    "title": "Analytics quality/noise",
+    "problem": "Снизить шум в аналитике без потери полезных данных",
+    "fitness": [
+      "F1: доля noise lines",
+      "F2: покрытие временного окна",
+      "F3: скорость ответа summary"
+    ],
+    "variants": [
+      "A: оставить текущие фильтры",
+      "B: расширить noise paths",
+      "C: усилить dedup window",
+      "D: B + C + debug режим"
+    ],
+    "facts": [
+      "Есть dedup/filters в ANALYTICS_*",
+      "Шум портит summary",
+      "Debug режим уже предусмотрен"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 7 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 6, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "B" },
+    "crossover": "D + валидация noise paths",
+    "result": "Расширить шумовые пути и dedup, оставить debug"
+  },
+  {
+    "id": "stats-usage-cache",
+    "title": "Stats/Usage cache",
+    "problem": "Снизить latency stats/usage endpoints",
+    "fitness": [
+      "F1: combined median (ms)",
+      "F2: combined p95 (ms)",
+      "F3: usage median (ms)"
+    ],
+    "variants": [
+      "A: STATS=250, USAGE=2000",
+      "B: STATS=5000, USAGE=2000",
+      "C: STATS=100, USAGE=250",
+      "D: STATS=5000, USAGE=5000"
+    ],
+    "facts": [
+      "GA-погоны есть в ops/ga/results-stats.json",
+      "Лучший combinedMedian у D",
+      "statsP95 у B лучше"
+    ],
+    "scenarios": {
+      "S1": { "F1": 8, "F2": 7, "F3": 8 },
+      "S2": { "F1": 7, "F2": 6, "F3": 7 },
+      "S3": { "F1": 6, "F2": 5, "F3": 6 }
+    },
+    "selection": { "winner": "D", "runnerUp": "B" },
+    "crossover": "D + проверка statsP95 на B",
+    "result": "Выбрать D, перепроверить statsP95"
+  },
+  {
+    "id": "auth-login-register",
+    "title": "Auth login/register стабильность",
+    "problem": "Снизить ошибки входа и регистрации без ломки UX",
+    "fitness": [
+      "F1: % успешных входов",
+      "F2: p95 latency login/register",
+      "F3: число 4xx/5xx"
+    ],
+    "variants": [
+      "A: только увеличить лимиты",
+      "B: улучшить валидацию + ясные ошибки",
+      "C: B + ограничить повторные попытки",
+      "D: C + наблюдаемость (лог меток отказа)"
+    ],
+    "facts": [
+      "Есть rate limit на auth",
+      "Ответы уже возвращают ok/error",
+      "Сессии создаются в SQLite"
+    ],
+    "scenarios": {
+      "S1": { "F1": 8, "F2": 7, "F3": 7 },
+      "S2": { "F1": 7, "F2": 6, "F3": 6 },
+      "S3": { "F1": 6, "F2": 5, "F3": 6 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + минимизировать число проверок",
+    "result": "Валидация + лимиты + лог причин отказа"
+  },
+  {
+    "id": "tenant-switch",
+    "title": "Tenant switch",
+    "problem": "Снизить ошибки переключения тенанта",
+    "fitness": [
+      "F1: % успешных переключений",
+      "F2: число 403/404",
+      "F3: время до активного тенанта"
+    ],
+    "variants": [
+      "A: оставить как есть",
+      "B: проверять membership на каждом запросе",
+      "C: B + кеш активного тенанта",
+      "D: C + явная синхронизация на клиенте"
+    ],
+    "facts": [
+      "TenantId должен быть из auth/session",
+      "Есть endpoint активного тенанта",
+      "UI хранит tenantId локально"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 7 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 5, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + строгость в server-side проверке",
+    "result": "Держать tenant в sync и проверять членство"
+  },
+  {
+    "id": "tenant-invite-approve",
+    "title": "Tenant invite/approve",
+    "problem": "Снизить ошибки приглашений и одобрений",
+    "fitness": [
+      "F1: % успешных приглашений",
+      "F2: число конфликтов статуса",
+      "F3: время завершения"
+    ],
+    "variants": [
+      "A: оставить как есть",
+      "B: идемпотентность по email+tenant",
+      "C: B + явная проверка ролей",
+      "D: C + аудит/лог событий"
+    ],
+    "facts": [
+      "Есть endpoints для приглашений и одобрений",
+      "Роли управляют доступом",
+      "Статусы участников хранятся в БД"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 7 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 6, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + минимальные изменения API",
+    "result": "Идемпотентность + строгие роли + аудит"
+  },
+  {
+    "id": "agent-dispatch-actions",
+    "title": "Agent dispatch/actions",
+    "problem": "Снизить ошибки в dispatch и выполнении actions",
+    "fitness": [
+      "F1: % успешных dispatch",
+      "F2: % успешных actions execute",
+      "F3: число ошибок прав доступа"
+    ],
+    "variants": [
+      "A: только логирование",
+      "B: строгая валидация event_type",
+      "C: B + дедупликация по correlationId",
+      "D: C + явная allowlist action types"
+    ],
+    "facts": [
+      "Dispatch создает agent_messages/actions",
+      "Action execute зависит от ролей",
+      "correlationId используется как thread"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 7 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 6, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + минимизировать влияние на UX",
+    "result": "Валидация + дедуп + allowlist"
+  },
+  {
+    "id": "autopilot-offers-leads",
+    "title": "Autopilot offers/leads",
+    "problem": "Снизить шум и ошибки при генерации офферов/лидов",
+    "fitness": [
+      "F1: % валидных записей",
+      "F2: число дубликатов",
+      "F3: время цикла"
+    ],
+    "variants": [
+      "A: оставить как есть",
+      "B: валидировать входные данные",
+      "C: B + дедуп по ключам",
+      "D: C + лимит действий за цикл"
+    ],
+    "facts": [
+      "Autopilot пишет в agent_messages",
+      "Есть endpoints offers/leads",
+      "Цикл может повторяться по расписанию"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 7 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 6, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + минимизировать ограничения при ручном запуске",
+    "result": "Валидация + дедуп + лимиты на цикл"
+  },
+  {
+    "id": "autopilot-metrics",
+    "title": "Autopilot metrics",
+    "problem": "Снизить задержки и ошибки метрик автопилота",
+    "fitness": [
+      "F1: p95 latency metrics",
+      "F2: % успешных ответов",
+      "F3: точность данных"
+    ],
+    "variants": [
+      "A: без кеша",
+      "B: короткий кеш",
+      "C: кеш + лимит размера",
+      "D: C + фоновое обновление"
+    ],
+    "facts": [
+      "Есть endpoint /api/autopilot/metrics",
+      "Данные зависят от последних циклов",
+      "Ошибки метрик влияют на UI"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 6 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 6, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + ограничить TTL кеша",
+    "result": "Кеш + фоновые обновления"
+  },
+  {
+    "id": "analytics-summary-perf",
+    "title": "Analytics summary performance",
+    "problem": "Ускорить /api/admin/analytics/summary",
+    "fitness": [
+      "F1: p95 latency",
+      "F2: объем обрабатываемых строк",
+      "F3: точность summary"
+    ],
+    "variants": [
+      "A: без оптимизаций",
+      "B: уменьшить окно",
+      "C: чанки + лимит строк",
+      "D: C + кэш результата"
+    ],
+    "facts": [
+      "Summary читает analytics.ndjson",
+      "Есть параметры окна и лимиты",
+      "Debug режим уже есть"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 6 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 6, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + оставить debug доступным",
+    "result": "Чанки + лимиты + кеш"
+  },
+  {
+    "id": "health-endpoint",
+    "title": "Health endpoint",
+    "problem": "Снизить latency /api/health",
+    "fitness": [
+      "F1: median latency",
+      "F2: p95 latency",
+      "F3: db latency"
+    ],
+    "variants": [
+      "A: HEALTH_CACHE_TTL_MS=0",
+      "B: HEALTH_CACHE_TTL_MS=50",
+      "C: HEALTH_CACHE_TTL_MS=250",
+      "D: HEALTH_CACHE_TTL_MS=2000"
+    ],
+    "facts": [
+      "Есть health cache и окна",
+      "GA-погоны есть для health",
+      "db latency учитывается"
+    ],
+    "scenarios": {
+      "S1": { "F1": 8, "F2": 7, "F3": 8 },
+      "S2": { "F1": 7, "F2": 6, "F3": 7 },
+      "S3": { "F1": 6, "F2": 5, "F3": 6 }
+    },
+    "selection": { "winner": "D", "runnerUp": "B" },
+    "crossover": "D + проверка p95 на B",
+    "result": "Выбрать 2000ms, контролировать p95"
+  },
+  {
+    "id": "exports-projects-orders",
+    "title": "Projects/Orders export",
+    "problem": "Снизить ошибки и таймауты экспорта",
+    "fitness": [
+      "F1: % успешных экспортов",
+      "F2: среднее время экспорта",
+      "F3: число таймаутов"
+    ],
+    "variants": [
+      "A: без ограничений",
+      "B: лимит размера + пагинация",
+      "C: B + фоновые задания",
+      "D: C + ретраи с backoff"
+    ],
+    "facts": [
+      "Есть endpoints /api/projects/export и /api/orders/export",
+      "Экспорт может быть тяжёлым",
+      "Таймауты ухудшают UX"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 7 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 5, "F3": 6 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + минимизировать фоновые зависимости",
+    "result": "Пагинация + фоновые задания + ретраи"
+  },
+  {
+    "id": "feedback-flow",
+    "title": "Feedback flow",
+    "problem": "Снизить потери feedback и ошибки отправки",
+    "fitness": [
+      "F1: % успешных feedback",
+      "F2: число 4xx/5xx",
+      "F3: время ответа"
+    ],
+    "variants": [
+      "A: оставить как есть",
+      "B: улучшить валидацию",
+      "C: B + лимиты",
+      "D: C + логирование отказов"
+    ],
+    "facts": [
+      "Есть endpoints /api/feedback и /api/feedback/me",
+      "Есть лимиты на feedback",
+      "Ошибки блокируют сбор обратной связи"
+    ],
+    "scenarios": {
+      "S1": { "F1": 7, "F2": 7, "F3": 7 },
+      "S2": { "F1": 6, "F2": 6, "F3": 6 },
+      "S3": { "F1": 5, "F2": 5, "F3": 5 }
+    },
+    "selection": { "winner": "D", "runnerUp": "C" },
+    "crossover": "D + простота UX",
+    "result": "Валидация + лимиты + логирование"
+  }
+]

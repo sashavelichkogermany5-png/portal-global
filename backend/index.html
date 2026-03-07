@@ -10,17 +10,24 @@
   <link rel="manifest" href="/static/manifest.webmanifest">
   <meta name="theme-color" content="#0b0f19">
   <style>
-    :root{--bg:#0b0f19;--card:#11182a;--text:#e9eefc;--muted:#9fb0d0;--btn:#2b6cff;}
+    :root{--bg:#0b0f19;--card:#11182a;--text:#e9eefc;--muted:#9fb0d0;--btn:#2b6cff;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;}
     *{box-sizing:border-box} body{margin:0;font-family:"Space Grotesk",system-ui;background:var(--bg);color:var(--text)}
     .wrap{max-width:980px;margin:0 auto;padding:48px 18px}
     .hero{padding:36px 22px;background:linear-gradient(180deg,rgba(43,108,255,.18),transparent);border:1px solid rgba(255,255,255,.08);border-radius:18px}
     h1{margin:0 0 10px;font-size:44px;letter-spacing:-.02em}
     p{margin:0 0 18px;color:var(--muted);font-size:16px;line-height:1.5}
-    .btns{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    .btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:18px}
     a.btn{display:block;text-decoration:none;padding:16px 14px;border-radius:14px;background:var(--card);border:1px solid rgba(255,255,255,.08);color:var(--text);text-align:center;font-weight:600}
     a.btn:hover{border-color:rgba(43,108,255,.6)}
+    .status-card{margin-top:16px;padding:16px 14px;background:rgba(17,24,42,.7);border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .status-row{display:flex;align-items:center;gap:10px}
+    .status-dot{width:10px;height:10px;border-radius:999px;background:var(--warn);box-shadow:0 0 0 4px rgba(251,191,36,.2)}
+    .status-dot.ok{background:var(--ok);box-shadow:0 0 0 4px rgba(52,211,153,.2)}
+    .status-dot.bad{background:var(--bad);box-shadow:0 0 0 4px rgba(248,113,113,.2)}
+    .status-title{font-weight:600}
+    .status-meta{color:var(--muted);font-size:13px}
     footer{margin-top:16px;color:var(--muted);font-size:12px}
-    @media (max-width:820px){.btns{grid-template-columns:1fr}}
+    @media (max-width:820px){.btns{grid-template-columns:1fr}.status-card{align-items:flex-start}}
     .install-banner{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:rgba(17,24,42,.95);border:1px solid rgba(255,255,255,.12);color:#e9eefc;padding:10px 14px;border-radius:14px;display:none;gap:10px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.35);font-size:13px;z-index:20}
     .install-banner button{border:1px solid rgba(255,255,255,.18);background:transparent;color:#e9eefc;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:12px}
   </style>
@@ -29,14 +36,27 @@
   <div class="wrap">
     <div class="hero">
       <h1>PORTAL Global</h1>
-      <p>Unified operations workspace. Dashboard, pricing, docs — all in one place.</p>
+      <p>Unified operations workspace. App, docs, pricing, and status in one place.</p>
       <div class="btns">
-        <a class="btn" href="/app">Open Dashboard</a>
-        <a class="btn" href="/pricing">View Pricing</a>
-        <a class="btn" href="/docs">Read Docs</a>
+        <a class="btn" href="/app">Open App</a>
+        <a class="btn" href="/docs">Open Docs</a>
+        <a class="btn" href="/pricing">Open Pricing</a>
+        <a class="btn" href="/status">Open Status</a>
+        <a class="btn" href="/login">Open Login</a>
+      </div>
+      <div class="status-card" role="status" aria-live="polite">
+        <div class="status-row">
+          <span class="status-dot" id="statusDot"></span>
+          <div>
+            <div class="status-title">System status</div>
+            <div class="status-meta" id="statusMeta">Checking /api/health...</div>
+          </div>
+        </div>
+        <div class="status-meta" id="statusDetail">Last check: --</div>
       </div>
       <footer>Tip: Install PORTAL as an app (Chrome menu -> Install app).</footer>
     </div>
+    <!-- SUPPORT_BLOCK -->
   </div>
   <div class="install-banner" id="installBanner">
     <span>Install PORTAL for faster access.</span>
@@ -45,6 +65,42 @@
   </div>
 
   <script>
+    const statusDot = document.getElementById("statusDot");
+    const statusMeta = document.getElementById("statusMeta");
+    const statusDetail = document.getElementById("statusDetail");
+
+    const setStatus = (state, meta, detail) => {
+      statusDot.classList.remove("ok", "bad");
+      if (state === "ok") statusDot.classList.add("ok");
+      if (state === "bad") statusDot.classList.add("bad");
+      statusMeta.textContent = meta;
+      statusDetail.textContent = detail;
+    };
+
+    const checkStatus = async () => {
+      const started = Date.now();
+      try {
+        const resp = await fetch("/api/health", { cache: "no-store" });
+        const elapsed = Date.now() - started;
+        if (resp.ok) {
+          let data = null;
+          try {
+            data = await resp.json();
+          } catch (e) {
+          }
+          const timestamp = data && data.ts ? new Date(data.ts) : new Date();
+          setStatus("ok", `Healthy - ${elapsed}ms`, `Last check: ${timestamp.toLocaleString()}`);
+        } else {
+          setStatus("bad", `Unhealthy (HTTP ${resp.status})`, `Last check: ${new Date().toLocaleString()}`);
+        }
+      } catch (e) {
+        setStatus("bad", "Offline", `Last check: ${new Date().toLocaleString()}`);
+      }
+    };
+
+    checkStatus();
+    setInterval(checkStatus, 30000);
+
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/static/sw.js", { scope: "/" }).catch(()=>{});
     }

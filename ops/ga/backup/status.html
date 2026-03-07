@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PORTAL Global - Status</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0b0f19;--card:#11182a;--text:#e9eefc;--muted:#9fb0d0;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;}
+    *{box-sizing:border-box} body{margin:0;font-family:"Space Grotesk",system-ui;background:var(--bg);color:var(--text)}
+    .wrap{max-width:980px;margin:0 auto;padding:48px 18px}
+    .back{display:inline-block;margin-bottom:18px;color:var(--muted);text-decoration:none}
+    .card{padding:32px 22px;background:linear-gradient(180deg,rgba(43,108,255,.16),transparent);border:1px solid rgba(255,255,255,.08);border-radius:18px}
+    h1{margin:0 0 10px;font-size:36px;letter-spacing:-.02em}
+    p{margin:0 0 18px;color:var(--muted);font-size:16px;line-height:1.5}
+    code{font-family:"Source Code Pro",monospace;color:var(--text)}
+    .status-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .status-dot{width:10px;height:10px;border-radius:999px;background:var(--warn);box-shadow:0 0 0 4px rgba(251,191,36,.2)}
+    .status-dot.ok{background:var(--ok);box-shadow:0 0 0 4px rgba(52,211,153,.2)}
+    .status-dot.bad{background:var(--bad);box-shadow:0 0 0 4px rgba(248,113,113,.2)}
+    .status-title{font-weight:600}
+    .status-meta{color:var(--muted);font-size:13px}
+    pre{margin:0;background:rgba(17,24,42,.75);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;color:var(--text);font-size:13px;line-height:1.5;overflow:auto;max-height:360px;font-family:"Source Code Pro",monospace}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    a.btn{display:inline-block;text-decoration:none;padding:12px 16px;border-radius:12px;background:var(--card);border:1px solid rgba(255,255,255,.08);color:var(--text);font-weight:600}
+    a.btn:hover{border-color:rgba(43,108,255,.6)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="/"><- Back to Hub</a>
+    <div class="card">
+      <h1>System Status</h1>
+      <p>Live health from <code>/api/health</code>.</p>
+      <div class="status-row" role="status" aria-live="polite">
+        <span class="status-dot" id="statusDot"></span>
+        <div>
+          <div class="status-title">Portal API</div>
+          <div class="status-meta" id="statusMeta">Checking /api/health...</div>
+        </div>
+      </div>
+      <pre id="statusJson">Loading...</pre>
+      <div class="actions">
+        <a class="btn" href="/app">Open App</a>
+        <a class="btn" href="/docs">Open Docs</a>
+        <a class="btn" href="/login">Open Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const statusDot = document.getElementById("statusDot");
+    const statusMeta = document.getElementById("statusMeta");
+    const statusJson = document.getElementById("statusJson");
+
+    const setStatus = (state, meta) => {
+      statusDot.classList.remove("ok", "bad");
+      if (state === "ok") statusDot.classList.add("ok");
+      if (state === "bad") statusDot.classList.add("bad");
+      statusMeta.textContent = meta;
+    };
+
+    const checkStatus = async () => {
+      const started = Date.now();
+      try {
+        const resp = await fetch("/api/health", { cache: "no-store" });
+        const elapsed = Date.now() - started;
+        const body = await resp.text();
+        let pretty = body;
+        try {
+          pretty = JSON.stringify(JSON.parse(body), null, 2);
+        } catch (e) {
+        }
+        statusJson.textContent = pretty || "{}";
+        if (resp.ok) {
+          setStatus("ok", `Healthy - ${elapsed}ms`);
+        } else {
+          setStatus("bad", `Unhealthy (HTTP ${resp.status})`);
+        }
+      } catch (e) {
+        statusJson.textContent = e && e.message ? e.message : "Offline";
+        setStatus("bad", "Offline");
+      }
+    };
+
+    checkStatus();
+    setInterval(checkStatus, 30000);
+  </script>
+</body>
+</html>

@@ -1,3 +1,8 @@
+# Short summary
+- Smoke testing steps for health, login, agent events, and actions.
+- Includes lead create/list/update examples.
+- Revenue/email pipeline test commands and notes.
+- Results include SMTP failure example.
 # Testing (Smoke)
 
 Prereqs:
@@ -96,3 +101,8 @@ Results:
 - `npm run test:financial-event` succeeded (created event #2). Email was not queued because `OWNER_EMAIL` was not set on the running API process.
 - `npm run daily-report` queued an outbox email (id #2).
 - `npm run worker` failed to send due to `SMTP_HOST=localhost` connection refused; outbox status moved to `failed` after retries.
+
+Topics: testing, smoke, auth, agent, email
+People: none
+Decision type: runbook
+Status: active

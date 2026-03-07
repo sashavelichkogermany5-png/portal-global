@@ -1,9 +1,40 @@
+const { timingSafeEqualString } = require('../lib/keys');
+
 const COMMUNITY_MODE = process.env.COMMUNITY_MODE === '1' || process.env.COMMUNITY_MODE === 'true';
 const AUTOPILOT_ENABLED = process.env.AUTOPILOT_ENABLED === '1' || process.env.AUTOPILOT_ENABLED === 'true';
 const HIDE_STACKTRACES = process.env.HIDE_STACKTRACES !== '0' && process.env.HIDE_STACKTRACES !== 'false';
 
+const getHeaderValue = (value) => (Array.isArray(value) ? value[0] : value);
+
+const getAdminToken = (req) => {
+    const headerToken = String(getHeaderValue(req.headers['x-admin-token']) || '').trim();
+    if (headerToken) return headerToken;
+
+    const queryToken = String(getHeaderValue(req.query?.token) || '').trim();
+    if (queryToken) return queryToken;
+
+    const authHeader = getHeaderValue(req.headers.authorization || req.headers.Authorization);
+    if (typeof authHeader === 'string') {
+        const match = authHeader.match(/^Bearer\s+(.+)$/i);
+        if (match) {
+            return String(match[1] || '').trim();
+        }
+    }
+
+    return '';
+};
+
+const isAdminTokenValid = (token) => {
+    const expected = String(process.env.DEV_ADMIN_TOKEN || '').trim();
+    if (!expected) return false;
+    const candidate = String(token || '').trim();
+    if (!candidate) return false;
+    return timingSafeEqualString(expected, candidate);
+};
+
 const ALLOWED_PUBLIC_PATHS = [
     '/api/health',
+    '/api/health/local',
     '/api/feature-flags',
     '/api/auth/login',
     '/api/auth/register',
@@ -47,6 +78,12 @@ const communityGuard = (req, res, next) => {
             error: 'Service Unavailable',
             message: 'Autopilot is disabled. Set AUTOPILOT_ENABLED=1 to enable.'
         });
+    }
+
+    const adminToken = getAdminToken(req);
+    if (isAdminTokenValid(adminToken)) {
+        req.isDevAdminToken = true;
+        return next();
     }
 
     if (isPublicPath(path)) {
@@ -136,6 +173,8 @@ module.exports = {
     communityGuard,
     errorHandler,
     requestLogger,
+    getAdminToken,
+    isAdminTokenValid,
     isCommunityMode: () => COMMUNITY_MODE,
     isAutopilotEnabled: () => AUTOPILOT_ENABLED
 };

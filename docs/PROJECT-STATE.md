@@ -1,3 +1,8 @@
+# Short summary
+- Project summary: monorepo with Express backend and web-next UI.
+- Canonical state: PROJECT-STATE + AGENTS; CURRENT-STATE missing.
+- Mission status with last pass and next action.
+- Pointers to dev, architecture, autopilot, and risks.
 # PROJECT-STATE
 
 ## A) Summary
@@ -100,29 +105,7 @@ curl.exe "http://localhost:<BACKEND_PORT>/api/autopilot/status" -b .cookies.txt
 - Multiple UI surfaces exist; web-next is the single source of truth for new work.
 - `frontend/` is deprecated due to mismatched API endpoints and missing imports.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Topics: project-state, mission, dev, architecture, autopilot
+People: none
+Decision type: status
+Status: active

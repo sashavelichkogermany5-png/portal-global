@@ -8,6 +8,15 @@ const TENANT_ID_KEY = "portal.active.tenant";
 
 const isBrowser = typeof window !== "undefined";
 
+let authMeInflight: Promise<any> | null = null;
+let authMeLastOk: any = null;
+let authMeLastOkAt = 0;
+const AUTH_ME_CLIENT_MIN_INTERVAL_MS = 1200;
+const AUTH_ME_CLIENT_MAX_RETRIES = 2;
+const AUTH_ME_CLIENT_MAX_BACKOFF_MS = 2000;
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const readStorage = (key: string) => (isBrowser ? window.localStorage.getItem(key) : null);
 const writeStorage = (key: string, value: string | null) => {
   if (!isBrowser) return;
@@ -134,12 +143,55 @@ export const register = async (email: string, password: string) => {
 };
 
 export const authMe = async () => {
-  const payload = await apiJson("/api/auth/me", { method: "GET" });
-  const tenantId = extractTenantId(payload?.data || payload);
-  if (tenantId) {
-    setStoredTenantId(tenantId);
+  const now = Date.now();
+  if (authMeLastOk && (now - authMeLastOkAt) < AUTH_ME_CLIENT_MIN_INTERVAL_MS) {
+    return authMeLastOk;
   }
-  return payload;
+
+  if (authMeInflight) {
+    return authMeInflight;
+  }
+
+  authMeInflight = (async () => {
+    let attempt = 0;
+    while (true) {
+      attempt += 1;
+      const response = await apiRequest("/api/auth/me", { method: "GET" });
+      const data = await parseJson(response);
+
+      if (response.status === 429) {
+        const wait = Math.min(AUTH_ME_CLIENT_MAX_BACKOFF_MS, 300 * Math.pow(2, attempt - 1));
+        await sleep(wait);
+        continue;
+      }
+
+      if (!response.ok) {
+        if (attempt >= AUTH_ME_CLIENT_MAX_RETRIES) {
+          const message = (data as any)?.message || (data as any)?.error || response.statusText;
+          const error = new Error(message);
+          (error as Error & { status?: number; data?: unknown }).status = response.status;
+          (error as Error & { status?: number; data?: unknown }).data = data;
+          throw error;
+        }
+        await sleep(200);
+        continue;
+      }
+
+      const tenantId = extractTenantId((data as any)?.data || data);
+      if (tenantId) {
+        setStoredTenantId(tenantId);
+      }
+      authMeLastOk = data;
+      authMeLastOkAt = Date.now();
+      return data;
+    }
+  })();
+
+  try {
+    return await authMeInflight;
+  } finally {
+    authMeInflight = null;
+  }
 };
 
 export { API_BASE_URL };

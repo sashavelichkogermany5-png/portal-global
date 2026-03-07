@@ -1,0 +1,932 @@
+{
+  "baseline": {
+    "STATS_CACHE_TTL_MS": 250,
+    "USAGE_CACHE_TTL_MS": 2000
+  },
+  "best": {
+    "generation": 1,
+    "candidate": {
+      "STATS_CACHE_TTL_MS": 5000,
+      "USAGE_CACHE_TTL_MS": 5000
+    },
+    "statsMedian": 1.0345,
+    "statsP95": 2.4144,
+    "usageMedian": 0.917,
+    "usageP95": 1.4371,
+    "combinedMedian": 0.97575,
+    "combinedP95": 1.92575,
+    "baselineData": {
+      "stats": {
+        "ok": true,
+        "data": {
+          "totalProjects": 0,
+          "totalOrders": 0,
+          "activeOrders": 0,
+          "totalLeads": 0,
+          "clients": 0,
+          "providers": 0,
+          "aiRequests": 0,
+          "totalMRR": 0,
+          "avgProviderPayout": 0,
+          "netRevenue": 0
+        }
+      },
+      "usage": {
+        "ok": true,
+        "data": {
+          "period": {
+            "start": "2026-03-01T00:00:00.000Z",
+            "end": "2026-04-01T00:00:00.000Z",
+            "label": "current_month"
+          },
+          "ai_calls": 0,
+          "exports": 0,
+          "autopilot_cycles": 0,
+          "imports": 0
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 250,
+        "USAGE_CACHE_TTL_MS": 2000
+      },
+      "statsMedian": 1.2578,
+      "statsP95": 2.3706,
+      "usageMedian": 1.2975,
+      "usageP95": 1.9753,
+      "combinedMedian": 1.27765,
+      "combinedP95": 2.17295,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 5000,
+        "USAGE_CACHE_TTL_MS": 2000
+      },
+      "statsMedian": 1.3068,
+      "statsP95": 1.9287,
+      "usageMedian": 1.0447,
+      "usageP95": 1.832,
+      "combinedMedian": 1.1757499999999999,
+      "combinedP95": 1.88035,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 100,
+        "USAGE_CACHE_TTL_MS": 250
+      },
+      "statsMedian": 1.2114,
+      "statsP95": 2.7125,
+      "usageMedian": 1.0947,
+      "usageP95": 1.7183,
+      "combinedMedian": 1.15305,
+      "combinedP95": 2.2154,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 0,
+        "USAGE_CACHE_TTL_MS": 0
+      },
+      "statsMedian": 1.4449,
+      "statsP95": 2.4178,
+      "usageMedian": 1.3816,
+      "usageP95": 2.6445,
+      "combinedMedian": 1.4132500000000001,
+      "combinedP95": 2.5311500000000002,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 250,
+        "USAGE_CACHE_TTL_MS": 5000
+      },
+      "statsMedian": 1.1167,
+      "statsP95": 2.2129,
+      "usageMedian": 1.0805,
+      "usageP95": 1.8201,
+      "combinedMedian": 1.0986,
+      "combinedP95": 2.0164999999999997,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 100,
+        "USAGE_CACHE_TTL_MS": 1000
+      },
+      "statsMedian": 1.1348,
+      "statsP95": 1.9985,
+      "usageMedian": 1.0722,
+      "usageP95": 2.1917,
+      "combinedMedian": 1.1035,
+      "combinedP95": 2.0951,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 5000,
+        "USAGE_CACHE_TTL_MS": 0
+      },
+      "statsMedian": 1.1511,
+      "statsP95": 1.798,
+      "usageMedian": 1.3445,
+      "usageP95": 1.8389,
+      "combinedMedian": 1.2478,
+      "combinedP95": 1.81845,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 0,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 500,
+        "USAGE_CACHE_TTL_MS": 250
+      },
+      "statsMedian": 1.0493,
+      "statsP95": 1.7276,
+      "usageMedian": 1.0464,
+      "usageP95": 1.7113,
+      "combinedMedian": 1.04785,
+      "combinedP95": 1.7194500000000001,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 500,
+        "USAGE_CACHE_TTL_MS": 250
+      },
+      "statsMedian": 1.1882,
+      "statsP95": 2.6151,
+      "usageMedian": 1.045,
+      "usageP95": 1.668,
+      "combinedMedian": 1.1166,
+      "combinedP95": 2.14155,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 250,
+        "USAGE_CACHE_TTL_MS": 5000
+      },
+      "statsMedian": 1.1155,
+      "statsP95": 1.6968,
+      "usageMedian": 0.9875,
+      "usageP95": 1.756,
+      "combinedMedian": 1.0514999999999999,
+      "combinedP95": 1.7264,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 250,
+        "USAGE_CACHE_TTL_MS": 2000
+      },
+      "statsMedian": 1.0504,
+      "statsP95": 1.7172,
+      "usageMedian": 1.0125,
+      "usageP95": 1.6454,
+      "combinedMedian": 1.03145,
+      "combinedP95": 1.6813,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 100,
+        "USAGE_CACHE_TTL_MS": 250
+      },
+      "statsMedian": 1.0497,
+      "statsP95": 2.215,
+      "usageMedian": 0.9256,
+      "usageP95": 1.2616,
+      "combinedMedian": 0.98765,
+      "combinedP95": 1.7383,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 500,
+        "USAGE_CACHE_TTL_MS": 0
+      },
+      "statsMedian": 1.0933,
+      "statsP95": 1.7111,
+      "usageMedian": 1.1813,
+      "usageP95": 2.1939,
+      "combinedMedian": 1.1373,
+      "combinedP95": 1.9525000000000001,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 1,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 5000,
+        "USAGE_CACHE_TTL_MS": 5000
+      },
+      "statsMedian": 1.0345,
+      "statsP95": 2.4144,
+      "usageMedian": 0.917,
+      "usageP95": 1.4371,
+      "combinedMedian": 0.97575,
+      "combinedP95": 1.92575,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 2,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 5000,
+        "USAGE_CACHE_TTL_MS": 5000
+      },
+      "statsMedian": 1.0473,
+      "statsP95": 1.8595,
+      "usageMedian": 0.9121,
+      "usageP95": 1.3699,
+      "combinedMedian": 0.9797,
+      "combinedP95": 1.6147,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 2,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 100,
+        "USAGE_CACHE_TTL_MS": 250
+      },
+      "statsMedian": 1.0359,
+      "statsP95": 1.9435,
+      "usageMedian": 0.9886,
+      "usageP95": 1.3907,
+      "combinedMedian": 1.01225,
+      "combinedP95": 1.6671,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 2,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 5000,
+        "USAGE_CACHE_TTL_MS": 2000
+      },
+      "statsMedian": 1.0313,
+      "statsP95": 1.6157,
+      "usageMedian": 0.9546,
+      "usageP95": 1.3907,
+      "combinedMedian": 0.99295,
+      "combinedP95": 1.5032,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 2,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 5000,
+        "USAGE_CACHE_TTL_MS": 0
+      },
+      "statsMedian": 1.0643,
+      "statsP95": 1.6672,
+      "usageMedian": 1.2254,
+      "usageP95": 1.6391,
+      "combinedMedian": 1.14485,
+      "combinedP95": 1.6531500000000001,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 2,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 250,
+        "USAGE_CACHE_TTL_MS": 250
+      },
+      "statsMedian": 1.0826,
+      "statsP95": 2.2109,
+      "usageMedian": 0.9897,
+      "usageP95": 1.4094,
+      "combinedMedian": 1.0361500000000001,
+      "combinedP95": 1.8101500000000001,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    },
+    {
+      "generation": 2,
+      "candidate": {
+        "STATS_CACHE_TTL_MS": 100,
+        "USAGE_CACHE_TTL_MS": 1000
+      },
+      "statsMedian": 1.0951,
+      "statsP95": 1.6418,
+      "usageMedian": 0.9598,
+      "usageP95": 1.4414,
+      "combinedMedian": 1.02745,
+      "combinedP95": 1.5415999999999999,
+      "baselineData": {
+        "stats": {
+          "ok": true,
+          "data": {
+            "totalProjects": 0,
+            "totalOrders": 0,
+            "activeOrders": 0,
+            "totalLeads": 0,
+            "clients": 0,
+            "providers": 0,
+            "aiRequests": 0,
+            "totalMRR": 0,
+            "avgProviderPayout": 0,
+            "netRevenue": 0
+          }
+        },
+        "usage": {
+          "ok": true,
+          "data": {
+            "period": {
+              "start": "2026-03-01T00:00:00.000Z",
+              "end": "2026-04-01T00:00:00.000Z",
+              "label": "current_month"
+            },
+            "ai_calls": 0,
+            "exports": 0,
+            "autopilot_cycles": 0,
+            "imports": 0
+          }
+        }
+      }
+    }
+  ]
+}

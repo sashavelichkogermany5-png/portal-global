@@ -1,3 +1,9 @@
+# Short summary
+- Windows dev loop via ops/autopilot-loop.ps1 and ops/run-dev.ps1.
+- Ports default 3000/3001 with auto fallback to 3100/3101.
+- Health check via npm run health or /api/health.
+- UI URLs for register/login/app; legacy backend login noted.
+- Notes on lockfiles and admin bootstrap token.
 # DEV-RUN
 
 ## Zero-hands loop (Windows)
@@ -39,3 +45,8 @@
 ## Admin bootstrap (dev-only)
 - Optional: set `ADMIN_BOOTSTRAP_CODE` (or legacy `ADMIN_BOOTSTRAP_TOKEN`) in `.env` for local admin promotion.
 - Endpoint: `POST /api/admin/bootstrap` (local only, non-production).
+
+Topics: dev, windows, scripts, ports, health, bootstrap
+People: none
+Decision type: runbook
+Status: active
