@@ -8,6 +8,7 @@ pnpm-debug.log*
 # Runtime / logs
 logs/
 *.log
+server.pid
 
 # Environment
 .env
