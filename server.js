@@ -24,9 +24,7 @@ const {
 const {
     normalizeTenantRole,
     hasMinimumRole,
-    isAdminRole,
-    isOwnerRole,
-    isMemberRole
+    isAdminRole
 } = require('./backend/lib/rbac');
 const {
     PLAN_DEFINITIONS,
@@ -42,13 +40,6 @@ const { runCrewEngine } = require('./backend/lib/crewaiClient');
 const { createAutopilotStorage } = require('./backend/autopilot/storage');
 const { createAutopilotEngine } = require('./backend/autopilot/engine');
 const { createAutopilotRouter } = require('./backend/autopilot/routes');
-const { createIntakeRouter } = require('./backend/intake/routes');
-const intakeStorage = require('./backend/intake/storage');
-const localRunnerStorage = require('./backend/local-runner/storage');
-const { computePricing, pricingConfig } = require('./backend/local-runner/pricing');
-const { createLocalRunnerEngine } = require('./backend/local-runner/engine');
-const { createLocalRunnerRouter } = require('./backend/local-runner/routes');
-const metricsStorage = require('./backend/metrics/storage');
 const {
     communityGuard,
     errorHandler,
@@ -279,7 +270,6 @@ const SOCKET_MAX_CONNECTIONS_PER_IP = Number(process.env.SOCKET_MAX_CONNECTIONS_
 const SOCKET_PING_TIMEOUT = Number(process.env.SOCKET_PING_TIMEOUT || 20000);
 const SOCKET_PING_INTERVAL = Number(process.env.SOCKET_PING_INTERVAL || 25000);
 const DEMO_ORIGIN = process.env.DEMO_ORIGIN || '*';
-const AI_CALL_TIMEOUT_MS = Number(process.env.AI_CALL_TIMEOUT_MS || 30000);
 const BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '512kb';
 const FEEDBACK_RATE_LIMIT_MAX = Number(process.env.FEEDBACK_RATE_LIMIT_MAX || 5);
 const DEV_ADMIN_TOKEN = String(process.env.DEV_ADMIN_TOKEN || '').trim();
@@ -320,7 +310,6 @@ const db = new sqlite3.Database(DB_PATH);
 const { dbRun, dbGet, dbAll } = createDbHelpers(db);
 
 const authCache = new Map();
-const authCacheInFlight = new Map();
 const authMeCache = new Map();
 const authMeInFlight = new Map();
 const authMeStorm = new Map();
@@ -346,15 +335,6 @@ const setAuthCache = (userId, data) => {
         authCache.delete(oldestKey);
     }
     authCache.set(userId, { data, timestamp: Date.now() });
-};
-
-const getAuthInFlight = (userId) => {
-    return authCacheInFlight.get(userId);
-};
-
-const setAuthInFlight = (userId, promise) => {
-    authCacheInFlight.set(userId, promise);
-    promise.finally(() => authCacheInFlight.delete(userId));
 };
 
 const getShortHash = (value) => {
@@ -496,21 +476,6 @@ const normalizeTags = (value) => {
             return Array.from(new Set(trimmed.split(',').map((item) => item.trim()).filter(Boolean)));
         }
         return Array.from(new Set(trimmed.split(',').map((item) => item.trim()).filter(Boolean)));
-    }
-    return [];
-};
-
-const parseTagsValue = (value) => {
-    if (!value) return [];
-    if (Array.isArray(value)) return normalizeTags(value);
-    if (typeof value === 'string') {
-        try {
-            const parsed = JSON.parse(value);
-            if (Array.isArray(parsed)) return normalizeTags(parsed);
-        } catch (error) {
-            return normalizeTags(value);
-        }
-        return normalizeTags(value);
     }
     return [];
 };
@@ -1052,11 +1017,6 @@ const loadFeedbackFallback = (limit) => {
     return items;
 };
 
-const toSqlTimestamp = (date) => {
-    if (!(date instanceof Date)) return null;
-    return date.toISOString().replace('T', ' ').slice(0, 19);
-};
-
 const parseLimits = (value) => {
     if (!value) return {};
     try {
@@ -1076,12 +1036,6 @@ const parseCookies = (cookieHeader = '') => {
         acc[key] = decodeURIComponent(rest.join('=') || '');
         return acc;
     }, {});
-};
-
-const ensureDataDir = () => {
-    if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
 };
 
 const ensureAnalyticsDir = () => {
@@ -2768,23 +2722,6 @@ const resolveSupportAssigneeId = async (tenantId) => {
     return row?.user_id || null;
 };
 
-const checkTenantLimit = async ({ tenantId, plan, key, table }) => {
-    const limitValue = getLimitValue(plan, key);
-    if (!limitValue) return { ok: true };
-    const row = await dbGet(`SELECT COUNT(*) as count FROM ${table} WHERE tenant_id = ? AND deleted_at IS NULL`, [tenantId]);
-    const current = row?.count || 0;
-    if (current >= limitValue) {
-        return {
-            ok: false,
-            error: 'Upgrade required',
-            message: 'Upgrade required',
-            limit: limitValue,
-            current
-        };
-    }
-    return { ok: true };
-};
-
 const executeCreateOrder = async ({ tenantId, userId, plan }, payload = {}) => {
     const title = toSafeString(payload.title);
     if (!title) {
@@ -3948,42 +3885,6 @@ const ensureSubscriptions = async () => {
                 [user.id]
             );
         }
-    }
-};
-
-const ensureWorkspaceForUser = async (user) => {
-    if (!user?.id) return null;
-    if (user.workspace_id) {
-        const existingMembership = await dbGet(
-            'SELECT id FROM workspace_members WHERE user_id = ? AND workspace_id = ? LIMIT 1',
-            [user.id, user.workspace_id]
-        );
-        if (!existingMembership) {
-            await dbRun(
-                'INSERT INTO workspace_members (workspace_id, user_id, role) VALUES (?, ?, ?)',
-                [user.workspace_id, user.id, 'owner']
-            );
-        }
-        return user.workspace_id;
-    }
-
-    const workspaceName = `${user.email} Workspace`;
-    const workspaceResult = await dbRun(
-        'INSERT INTO workspaces (name) VALUES (?)',
-        [workspaceName]
-    );
-    await dbRun('UPDATE users SET workspace_id = ? WHERE id = ?', [workspaceResult.id, user.id]);
-    await dbRun(
-        'INSERT INTO workspace_members (workspace_id, user_id, role) VALUES (?, ?, ?)',
-        [workspaceResult.id, user.id, 'owner']
-    );
-    return workspaceResult.id;
-};
-
-const ensureWorkspaces = async () => {
-    const users = await dbAll('SELECT id, email, workspace_id FROM users');
-    for (const user of users) {
-        await ensureWorkspaceForUser(user);
     }
 };
 
@@ -5711,7 +5612,7 @@ apiRoutes.post('/ai-project', requireRole('member'), requirePlan('ai_calls', 1),
 // Chat API
 apiRoutes.post('/chat', requireRole('member'), requirePlan('ai_calls', 1), async (req, res) => {
     try {
-        const { message, context } = req.body || {};
+        const { message } = req.body || {};
         
         // Validation
         if (!message || message.trim().length === 0) {
@@ -6921,6 +6822,7 @@ apiRoutes.post('/kb/articles', requireRole('admin'), async (req, res) => {
     try {
         const { title, summary, content, tags, status } = req.body || {};
         const safeTitle = toSafeString(title);
+        const safeSummary = toSafeString(summary);
         const safeContent = toSafeString(content);
         if (!safeTitle || !safeContent) {
             return sendError(res, 400, 'Invalid input', 'Title and content are required');
