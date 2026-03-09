@@ -67,6 +67,15 @@ function Normalize-RelPath([string]$path) {
     return ($path -replace '\\', '/')
 }
 
+function Is-IgnoredVirtualEnvSegment([string[]]$segments) {
+    foreach ($segment in $segments) {
+        if ($segment -like '.venv*') {
+            return $true
+        }
+    }
+    return $false
+}
+
 function Is-UnderPath([string]$path, [string]$root) {
     $p = $path.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
     $r = $root.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
@@ -95,6 +104,9 @@ function Is-ProtectedPath([string]$path) {
         return $true
     }
     if ($protectedRootNames -contains $segments[0]) {
+        return $true
+    }
+    if (Is-IgnoredVirtualEnvSegment $segments) {
         return $true
     }
     if ($segments -contains 'node_modules') {
@@ -439,6 +451,12 @@ function Get-TopLevelTree() {
     $items = Get-ChildItem -LiteralPath $RepoRoot -Force -ErrorAction SilentlyContinue
     $lines = @()
     foreach ($item in ($items | Sort-Object { -not $_.PSIsContainer }, Name)) {
+        if (Is-ProtectedPath $item.FullName) {
+            continue
+        }
+        if (Test-GitIgnored $item.FullName) {
+            continue
+        }
         $name = $item.Name
         if ($item.PSIsContainer) {
             $name = "$name/"

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { CheckIcon, XMarkIcon, ClockIcon } from "lucide-react";
+import { Check, Clock3, X } from "lucide-react";
 import { FileItem } from "./types";
 
 interface FileListProps {
@@ -13,32 +12,17 @@ export function FileList({ files, onRemove }: FileListProps) {
   const getStatusIcon = (status: FileItem["status"]) => {
     switch (status) {
       case "pending":
-        return <ClockIcon className="w-4 h-4 text-yellow-400" />;
+        return <Clock3 className="w-4 h-4 text-yellow-400" />;
       case "uploading":
         return (
-          <div className="w-4 h-4 border-2 border-gray-600 border-t-blue-500 rounded-full animate-spin" />>
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-600 border-t-blue-500" />
         );
       case "success":
-        return <CheckIcon className="w-4 h-4 text-green-400" />;
+        return <Check className="w-4 h-4 text-green-400" />;
       case "error":
-        return <XMarkIcon className="w-4 h-4 text-red-400" />;
+        return <X className="w-4 h-4 text-red-400" />;
       default:
         return null;
-    }
-  };
-
-  const getStatusColor = (status: FileItem["status"]) => {
-    switch (status) {
-      case "pending":
-        return "text-yellow-400";
-      case "uploading":
-        return "text-blue-400";
-      case "success":
-        return "text-green-400";
-      case "error":
-        return "text-red-400";
-      default:
-        return "";
     }
   };
 
@@ -46,7 +30,7 @@ export function FileList({ files, onRemove }: FileListProps) {
     <div className="space-y-3">
       {files.map((fileItem, index) => (
         <div
-          key={fileItem.file.name}
+          key={`${fileItem.file.name}-${index}`}
           className="bg-gray-900 border border-gray-700 rounded-lg p-3 flex items-center justify-between"
         >
           <div className="flex items-center space-x-3">
@@ -75,7 +59,7 @@ export function FileList({ files, onRemove }: FileListProps) {
               onClick={() => onRemove(index)}
               className="p-1 text-gray-400 hover:text-white transition"
             >
-              <XMarkIcon className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </button>
           )}
         </div>

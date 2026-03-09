@@ -30,7 +30,7 @@ const hasBackendSession = async (request: NextRequest) => {
     if (!response.ok) return false;
     const payload = await response.json();
     return !(payload && payload.ok === false);
-  } catch (error) {
+  } catch {
     return false;
   }
 };

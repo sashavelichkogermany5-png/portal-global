@@ -10,21 +10,6 @@ function normalizeSlug(s){
   return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
 }
 
-function guessKeyFromText(txt){
-  const t = normalizeSlug(txt);
-  if (t.includes("dashboard")) return "dashboard";
-  if (t.includes("project")) return "projects";
-  if (t.includes("ai")) return "ai";
-  if (t.includes("order")) return "orders";
-  if (t.includes("pricing") || t.includes("price")) return "pricing";
-  if (t.includes("client")) return "clients";
-  if (t.includes("provider")) return "providers";
-  if (t.includes("compliance") || t.includes("legal")) return "compliance";
-  if (t.includes("account")) return "account";
-  if (t.includes("cabinet") || t.includes("admin")) return "cabinet";
-  return null;
-}
-
 function ensureContainer(targetDoc){
   let main = targetDoc.querySelector("main");
   if (!main){

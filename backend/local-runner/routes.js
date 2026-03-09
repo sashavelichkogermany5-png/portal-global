@@ -14,10 +14,10 @@ const createLocalRunnerRouter = ({
   logAudit,
   recordMessage,
   recordAction,
-  requireRole,
-  normalizeEmail
+  requireRole
 }) => {
   const router = express.Router();
+  const paypalLink = String(process.env.PAYPAL_ME_LINK || '').trim().replace(/\/$/, '');
 
   const findOrder = async (tenantId, orderId) => {
     const orders = await storage.listOrders(tenantId);

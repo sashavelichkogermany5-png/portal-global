@@ -1,4 +1,4 @@
-const ensureBusinessSchema = async ({ dbRun, dbAll, dbGet, ensureColumn }) => {
+const ensureBusinessSchema = async ({ dbRun, dbAll, ensureColumn }) => {
   await dbRun(`
     CREATE TABLE IF NOT EXISTS workspaces (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

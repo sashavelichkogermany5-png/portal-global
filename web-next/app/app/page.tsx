@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   apiJson,
   authMe,
   clearAuth,
+  createProject,
+  generateAiProject,
   getStoredTenantId,
+  submitFeedback,
   setStoredTenantId
 } from "../lib/api-client";
+import { captureEvent } from "../lib/analytics";
 
 type HealthSnapshot = {
   ts?: string;
@@ -29,9 +33,45 @@ type AuthData = {
   communityMode?: boolean;
   autopilotEnabled?: boolean;
   isGuest?: boolean;
+  userId?: number | string | null;
   activeTenantId?: number | string | null;
   tenantRole?: string;
   user?: { role?: string };
+};
+
+type ProjectDraft = {
+  name: string;
+  category: string;
+  notes: string;
+};
+
+type AiProjectDraft = {
+  idea: string;
+};
+
+type FeedbackDraft = {
+  email: string;
+  message: string;
+};
+
+type AiProjectResult = {
+  projectName?: string;
+  timeline?: string;
+  teamSize?: string;
+  budget?: string;
+  techStack?: string;
+  risk?: string;
+  recommendations?: string[];
+};
+
+type ApiEnvelope<T> = T & { data?: T };
+
+const unwrapData = <T extends object>(payload: unknown): T => {
+  const record = (payload && typeof payload === "object") ? payload as ApiEnvelope<T> : {} as ApiEnvelope<T>;
+  if (record.data && typeof record.data === "object") {
+    return record.data;
+  }
+  return record;
 };
 
 export default function AppPage() {
@@ -47,10 +87,23 @@ export default function AppPage() {
   const [actionStatus, setActionStatus] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isWorking, setIsWorking] = useState(false);
+  const [projectDraft, setProjectDraft] = useState<ProjectDraft>({ name: "", category: "general", notes: "" });
+  const [projectStatus, setProjectStatus] = useState("");
+  const [projectError, setProjectError] = useState("");
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [aiDraft, setAiDraft] = useState<AiProjectDraft>({ idea: "" });
+  const [aiStatus, setAiStatus] = useState("");
+  const [aiError, setAiError] = useState("");
+  const [aiResult, setAiResult] = useState<AiProjectResult | null>(null);
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+  const [feedbackDraft, setFeedbackDraft] = useState<FeedbackDraft>({ email: "", message: "" });
+  const [feedbackStatus, setFeedbackStatus] = useState("");
+  const [feedbackError, setFeedbackError] = useState("");
+  const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
   const refreshHealth = async () => {
     const payload = await apiJson("/api/health");
-    const data = payload?.data || payload;
+    const data = unwrapData<HealthSnapshot>(payload);
     setHealth({
       ts: data?.ts,
       uptime: data?.uptime,
@@ -61,7 +114,7 @@ export default function AppPage() {
   const refreshSession = async () => {
     try {
       const payload = await authMe();
-      const data = payload?.data || payload as AuthData;
+      const data = unwrapData<AuthData>(payload);
       const activeTenantId = data?.activeTenantId || null;
       const roleValue = data?.tenantRole || data?.user?.role || null;
       const isCommunity = data?.communityMode || false;
@@ -95,7 +148,7 @@ export default function AppPage() {
   const refreshAutopilot = async () => {
     try {
       const payload = await apiJson("/api/autopilot/status");
-      const data = payload?.data || payload;
+      const data = unwrapData<AutopilotSnapshot>(payload);
       setAutopilotAvailable(true);
       setAutopilot({
         tenantId: data?.tenantId,
@@ -117,7 +170,7 @@ export default function AppPage() {
     }
   };
 
-  const loadAll = async () => {
+  const loadAll = useCallback(async () => {
     setIsLoading(true);
     setPageStatus("");
     try {
@@ -136,11 +189,11 @@ export default function AppPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadAll().catch(() => {});
-  }, []);
+  }, [loadAll]);
 
   const handleEnable = async () => {
     setIsWorking(true);
@@ -175,6 +228,84 @@ export default function AppPage() {
       setActionStatus(message);
     } finally {
       setIsWorking(false);
+    }
+  };
+
+  const handleProjectCreate = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsCreatingProject(true);
+    setProjectStatus("Creating project...");
+    setProjectError("");
+
+    try {
+      const payload = await createProject(projectDraft);
+      const project = unwrapData<{ id?: number | string; name?: string }>(payload);
+
+      captureEvent("project_created", {
+        project_id: project?.id,
+        category: projectDraft.category
+      });
+
+      setProjectStatus(`Project ready: ${project?.name || projectDraft.name}`);
+      setProjectDraft({ name: "", category: "general", notes: "" });
+    } catch (err) {
+      setProjectStatus("");
+      setProjectError(err instanceof Error ? err.message : "Project creation failed");
+    } finally {
+      setIsCreatingProject(false);
+    }
+  };
+
+  const handleAiGenerate = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsGeneratingAi(true);
+    setAiStatus("Generating project plan...");
+    setAiError("");
+
+    try {
+      const payload = await generateAiProject(aiDraft.idea);
+      const result = unwrapData<AiProjectResult>(payload);
+
+      captureEvent("ai_project_generated", {
+        idea_length: aiDraft.idea.trim().length,
+        tech_stack: result?.techStack || null
+      });
+
+      setAiResult(result);
+      setAiStatus("AI project plan generated.");
+    } catch (err) {
+      setAiStatus("");
+      setAiError(err instanceof Error ? err.message : "AI generation failed");
+    } finally {
+      setIsGeneratingAi(false);
+    }
+  };
+
+  const handleFeedbackSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSendingFeedback(true);
+    setFeedbackStatus("Sending feedback...");
+    setFeedbackError("");
+
+    try {
+      await submitFeedback({
+        email: feedbackDraft.email.trim() || undefined,
+        message: feedbackDraft.message.trim(),
+        page: "/app"
+      });
+
+      captureEvent("feedback_submitted", {
+        page: "/app",
+        has_email: Boolean(feedbackDraft.email.trim())
+      });
+
+      setFeedbackStatus("Feedback received. Thank you.");
+      setFeedbackDraft({ email: "", message: "" });
+    } catch (err) {
+      setFeedbackStatus("");
+      setFeedbackError(err instanceof Error ? err.message : "Feedback failed");
+    } finally {
+      setIsSendingFeedback(false);
     }
   };
 
@@ -276,6 +407,10 @@ export default function AppPage() {
                 <span>Auth</span>
                 <span className="text-slate-100">Cookie + Bearer</span>
               </div>
+              <div className="flex items-center justify-between">
+                <span>Mode</span>
+                <span className="text-slate-100">{communityMode ? "Community" : "Standard"}</span>
+              </div>
             </div>
           </div>
 
@@ -335,6 +470,119 @@ export default function AppPage() {
           ) : actionStatus ? (
             <p className="mt-4 text-sm text-cyan-200">{actionStatus}</p>
           ) : null}
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-3">
+          <form onSubmit={handleProjectCreate} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-emerald-200">Demo flow</p>
+              <h2 className="mt-2 text-xl font-semibold">Create a project</h2>
+              <p className="mt-2 text-sm text-slate-400">Fast path for tonight: create one project and confirm the event fires.</p>
+            </div>
+            <div className="mt-5 grid gap-3">
+              <input
+                value={projectDraft.name}
+                onChange={(event) => setProjectDraft((current) => ({ ...current, name: event.target.value }))}
+                placeholder="Launch campaign workspace"
+                required
+                className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-emerald-300/60"
+              />
+              <input
+                value={projectDraft.category}
+                onChange={(event) => setProjectDraft((current) => ({ ...current, category: event.target.value }))}
+                placeholder="Category"
+                className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-emerald-300/60"
+              />
+              <textarea
+                value={projectDraft.notes}
+                onChange={(event) => setProjectDraft((current) => ({ ...current, notes: event.target.value }))}
+                rows={4}
+                placeholder="Notes for the first customer demo"
+                className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-emerald-300/60"
+              />
+              <button
+                type="submit"
+                disabled={!isAuthenticated || isCreatingProject}
+                className="rounded-2xl bg-emerald-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isCreatingProject ? "Creating..." : "Create project"}
+              </button>
+            </div>
+            {projectStatus ? <p className="mt-4 text-sm text-emerald-200">{projectStatus}</p> : null}
+            {projectError ? <p className="mt-4 text-sm text-rose-300">{projectError}</p> : null}
+          </form>
+
+          <form onSubmit={handleAiGenerate} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-amber-200">AI generator</p>
+              <h2 className="mt-2 text-xl font-semibold">Generate a draft plan</h2>
+              <p className="mt-2 text-sm text-slate-400">Capture one AI event and keep the result ready for the demo call.</p>
+            </div>
+            <div className="mt-5 grid gap-3">
+              <textarea
+                value={aiDraft.idea}
+                onChange={(event) => setAiDraft({ idea: event.target.value })}
+                rows={5}
+                placeholder="AI hub for project operations across tenants"
+                required
+                className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-amber-200/60"
+              />
+              <button
+                type="submit"
+                disabled={!isAuthenticated || isGeneratingAi}
+                className="rounded-2xl bg-amber-200 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isGeneratingAi ? "Generating..." : "Generate AI project"}
+              </button>
+            </div>
+            {aiStatus ? <p className="mt-4 text-sm text-amber-100">{aiStatus}</p> : null}
+            {aiError ? <p className="mt-4 text-sm text-rose-300">{aiError}</p> : null}
+            {aiResult ? (
+              <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/60 p-4 text-sm text-slate-300">
+                <p className="text-base font-semibold text-white">{aiResult.projectName || "Suggested project"}</p>
+                <p className="mt-2">Timeline: {aiResult.timeline || "-"}</p>
+                <p>Team: {aiResult.teamSize || "-"}</p>
+                <p>Budget: {aiResult.budget || "-"}</p>
+                <p>Stack: {aiResult.techStack || "-"}</p>
+                <p>Risk: {aiResult.risk || "-"}</p>
+              </div>
+            ) : null}
+          </form>
+
+          <form onSubmit={handleFeedbackSubmit} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-cyan-200">User feedback</p>
+              <h2 className="mt-2 text-xl font-semibold">Collect tonight&apos;s notes</h2>
+              <p className="mt-2 text-sm text-slate-400">SQLite keeps the messages, PostHog tracks the submit event.</p>
+            </div>
+            <div className="mt-5 grid gap-3">
+              <input
+                type="email"
+                value={feedbackDraft.email}
+                onChange={(event) => setFeedbackDraft((current) => ({ ...current, email: event.target.value }))}
+                placeholder="Email (optional)"
+                className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-cyan-300/60"
+              />
+              <textarea
+                value={feedbackDraft.message}
+                onChange={(event) => setFeedbackDraft((current) => ({ ...current, message: event.target.value }))}
+                rows={5}
+                placeholder="What worked? What broke? What should change tomorrow?"
+                minLength={3}
+                required
+                className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-cyan-300/60"
+              />
+              <button
+                type="submit"
+                disabled={isSendingFeedback}
+                className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isSendingFeedback ? "Sending..." : "Submit feedback"}
+              </button>
+            </div>
+            {feedbackStatus ? <p className="mt-4 text-sm text-cyan-200">{feedbackStatus}</p> : null}
+            {feedbackError ? <p className="mt-4 text-sm text-rose-300">{feedbackError}</p> : null}
+          </form>
         </section>
 
         {!isAdmin && isAuthenticated ? (

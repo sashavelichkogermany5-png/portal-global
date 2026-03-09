@@ -1,7 +1,6 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { authenticateToken } from './middleware/auth';

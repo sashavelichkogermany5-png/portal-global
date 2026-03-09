@@ -1,43 +1,8 @@
 import { Router } from 'express';
-import jwt from 'jsonwebtoken';
-import { User, Order, File, Permission } from '../models';
+import { User, Permission } from '../models';
 import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
-
-// Permission middleware
-const checkPermission = (requiredPermission) => {
-  return async (req, res, next) => {
-    try {
-      const token = req.headers['authorization']?.split(' ')[1];
-      if (!token) {
-        return res.status(401).json({ error: 'Access token required' });
-      }
-
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const userId = decoded.id;
-      const userRole = decoded.role;
-
-      // Check if user has the required permission
-      const hasPermission = await Permission.findOne({
-        where: {
-          user_id: userId,
-          permission: requiredPermission
-        }
-      });
-
-      if (!hasPermission && userRole !== 'owner') {
-        return res.status(403).json({ error: 'Insufficient permissions' });
-      }
-
-      req.user = { id: userId, role: userRole };
-      next();
-    } catch (error) {
-      console.error('Permission check error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  };
-};
 
 // Get user permissions
 router.get('/permissions', authenticateToken, async (req, res) => {

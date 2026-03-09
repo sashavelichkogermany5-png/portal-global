@@ -38,18 +38,29 @@ type AuditEntry = {
   payload?: unknown;
 };
 
+type RolePayload = {
+  data?: {
+    role?: string;
+    userRole?: string;
+    user?: { role?: string };
+  };
+  role?: string;
+  user?: { role?: string };
+};
+
 const normalizeRole = (value?: string) => {
   if (!value) return "user";
   return value.toLowerCase();
 };
 
-const extractRole = (payload: any) => {
+const extractRole = (payload: unknown) => {
+  const record = (payload && typeof payload === "object") ? payload as RolePayload : {};
   return (
-    payload?.data?.role
-    || payload?.data?.user?.role
-    || payload?.data?.userRole
-    || payload?.role
-    || payload?.user?.role
+    record.data?.role
+    || record.data?.user?.role
+    || record.data?.userRole
+    || record.role
+    || record.user?.role
     || "user"
   );
 };

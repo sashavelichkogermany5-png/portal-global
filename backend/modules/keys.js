@@ -32,7 +32,6 @@ const createApiKeyResolver = ({ dbGet, dbRun }) => {
 
 const createKeysRouter = ({
   dbRun,
-  dbGet,
   dbAll,
   sendOk,
   sendError,

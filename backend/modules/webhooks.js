@@ -24,7 +24,7 @@ const parseEvents = (value) => {
   return [];
 };
 
-const createWebhookDispatcher = ({ dbAll, safeJsonParse, logAudit }) => {
+const createWebhookDispatcher = ({ dbAll, logAudit }) => {
   const sendWebhook = async (url, payload) => {
     const response = await fetch(url, {
       method: 'POST',
@@ -75,7 +75,6 @@ const createWebhooksRouter = ({
   dbAll,
   dbGet,
   dbRun,
-  safeJsonParse,
   safeJsonStringify,
   sendOk,
   sendError,

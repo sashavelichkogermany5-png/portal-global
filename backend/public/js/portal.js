@@ -349,10 +349,10 @@ const Portal = {
         this.listeners[event] = [];
       }
       this.listeners[event].push(callback);
-(event, callback) {
-      if (!    },
-
-    offthis.listeners[event]) return;
+    },
+    
+    off(event, callback) {
+      if (!this.listeners[event]) return;
       this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
     },
 
@@ -410,7 +410,7 @@ const Portal = {
       this.toast.info('Projekt aktualisiert', `Projekt "${project.name}" wurde aktualisiert`);
     });
     
-    this.realtime.on('projectDeleted', (data) => {
+    this.realtime.on('projectDeleted', () => {
       this.toast.warning('Projekt gelöscht', 'Ein Projekt wurde gelöscht');
     });
   }

@@ -8,8 +8,10 @@ const TENANT_ID_KEY = "portal.active.tenant";
 
 const isBrowser = typeof window !== "undefined";
 
-let authMeInflight: Promise<any> | null = null;
-let authMeLastOk: any = null;
+type ApiRecord = Record<string, unknown>;
+
+let authMeInflight: Promise<ApiRecord | null> | null = null;
+let authMeLastOk: ApiRecord | null = null;
 let authMeLastOkAt = 0;
 const AUTH_ME_CLIENT_MIN_INTERVAL_MS = 1200;
 const AUTH_ME_CLIENT_MAX_RETRIES = 2;
@@ -27,23 +29,53 @@ const writeStorage = (key: string, value: string | null) => {
   window.localStorage.setItem(key, value);
 };
 
-const extractToken = (payload: any) => (
-  payload?.token
-  || payload?.accessToken
-  || payload?.access_token
-  || payload?.data?.token
-  || payload?.data?.accessToken
-  || payload?.data?.access_token
-  || null
-);
+const asRecord = (value: unknown): ApiRecord | null => {
+  if (!value || typeof value !== "object") return null;
+  return value as ApiRecord;
+};
 
-const extractTenantId = (payload: any) => (
-  payload?.activeTenantId
-  || payload?.data?.activeTenantId
-  || payload?.tenantId
-  || payload?.data?.tenantId
-  || null
-);
+const extractDataRecord = (payload: unknown) => asRecord(asRecord(payload)?.data);
+
+const extractToken = (payload: unknown): string | null => {
+  const record = asRecord(payload);
+  const data = extractDataRecord(payload);
+  const token = (
+    record?.token
+    || record?.accessToken
+    || record?.access_token
+    || data?.token
+    || data?.accessToken
+    || data?.access_token
+    || null
+  );
+
+  return typeof token === "string" ? token : null;
+};
+
+const extractTenantId = (payload: unknown): string | number | null => {
+  const record = asRecord(payload);
+  const data = extractDataRecord(payload);
+  const tenantId = (
+    record?.activeTenantId
+    || data?.activeTenantId
+    || record?.tenantId
+    || data?.tenantId
+    || null
+  );
+
+  if (typeof tenantId === "string" || typeof tenantId === "number") {
+    return tenantId;
+  }
+  return null;
+};
+
+const extractErrorMessage = (payload: unknown, fallback: string) => {
+  const record = asRecord(payload);
+
+  if (typeof record?.message === "string" && record.message) return record.message;
+  if (typeof record?.error === "string" && record.error) return record.error;
+  return fallback;
+};
 
 const buildUrl = (path: string) => {
   const normalized = path.startsWith("/") ? path : `/${path}`;
@@ -55,7 +87,7 @@ const parseJson = async (response: Response) => {
   if (!text) return null;
   try {
     return JSON.parse(text);
-  } catch (error) {
+  } catch {
     return text;
   }
 };
@@ -101,7 +133,7 @@ export const apiJson = async (path: string, options: RequestInit = {}) => {
   const response = await apiRequest(path, options);
   const data = await parseJson(response);
   if (!response.ok) {
-    const message = (data as any)?.message || (data as any)?.error || response.statusText;
+    const message = extractErrorMessage(data, response.statusText);
     const error = new Error(message);
     (error as Error & { status?: number; data?: unknown }).status = response.status;
     (error as Error & { status?: number; data?: unknown }).data = data;
@@ -142,7 +174,7 @@ export const register = async (email: string, password: string) => {
   return payload;
 };
 
-export const authMe = async () => {
+export const authMe = async (): Promise<ApiRecord | null> => {
   const now = Date.now();
   if (authMeLastOk && (now - authMeLastOkAt) < AUTH_ME_CLIENT_MIN_INTERVAL_MS) {
     return authMeLastOk;
@@ -157,7 +189,7 @@ export const authMe = async () => {
     while (true) {
       attempt += 1;
       const response = await apiRequest("/api/auth/me", { method: "GET" });
-      const data = await parseJson(response);
+      const data = asRecord(await parseJson(response));
 
       if (response.status === 429) {
         const wait = Math.min(AUTH_ME_CLIENT_MAX_BACKOFF_MS, 300 * Math.pow(2, attempt - 1));
@@ -167,7 +199,7 @@ export const authMe = async () => {
 
       if (!response.ok) {
         if (attempt >= AUTH_ME_CLIENT_MAX_RETRIES) {
-          const message = (data as any)?.message || (data as any)?.error || response.statusText;
+          const message = extractErrorMessage(data, response.statusText);
           const error = new Error(message);
           (error as Error & { status?: number; data?: unknown }).status = response.status;
           (error as Error & { status?: number; data?: unknown }).data = data;
@@ -177,7 +209,7 @@ export const authMe = async () => {
         continue;
       }
 
-      const tenantId = extractTenantId((data as any)?.data || data);
+      const tenantId = extractTenantId(extractDataRecord(data) || data);
       if (tenantId) {
         setStoredTenantId(tenantId);
       }
@@ -193,5 +225,34 @@ export const authMe = async () => {
     authMeInflight = null;
   }
 };
+
+export const createProject = async (input: {
+  name: string;
+  category?: string;
+  notes?: string;
+}) => apiJson("/api/projects", {
+  method: "POST",
+  body: JSON.stringify({
+    name: input.name,
+    category: input.category || "general",
+    notes: input.notes || "",
+    status: "Planning",
+    progress: 0
+  })
+});
+
+export const generateAiProject = async (idea: string) => apiJson("/api/ai-project", {
+  method: "POST",
+  body: JSON.stringify({ idea })
+});
+
+export const submitFeedback = async (input: {
+  email?: string;
+  message: string;
+  page?: string;
+}) => apiJson("/api/feedback", {
+  method: "POST",
+  body: JSON.stringify(input)
+});
 
 export { API_BASE_URL };

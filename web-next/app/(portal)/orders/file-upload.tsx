@@ -1,51 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { CheckIcon, UploadIcon, XMarkIcon } from "lucide-react";
+import { useRef, useState } from "react";
+import { Upload, X } from "lucide-react";
 import { FileUploadProps } from "./types";
 
-export function FileUpload({ 
-  onFileSelect, 
-  maxFileSize = 50 * 1024 * 1024, // 50MB by default
+export function FileUpload({
+  onFileSelect,
+  maxFileSize = 50 * 1024 * 1024,
   acceptedTypes = [],
   multiple = true
 }: FileUploadProps) {
-
-export function FileUpload({ 
-  onFileSelect, 
-  maxFileSize = 50 * 1024 * 1024, // 50MB by default
-  acceptedTypes = []
-}: FileUploadProps) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragActive, setDragActive] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(false);
-    
-    const files = Array.from(e.dataTransfer.files);
-    handleFiles(files);
-  };
-
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    handleFiles(files);
-  };
+  const [error, setError] = useState("");
 
   const handleFiles = (files: File[]) => {
-    setError('');
+    setError("");
 
-    // Validate files
     for (const file of files) {
       if (file.size > maxFileSize) {
         setError(`File '${file.name}' exceeds size limit (${maxFileSize / (1024 * 1024)}MB)`);
@@ -61,52 +32,72 @@ export function FileUpload({
     onFileSelect(files);
   };
 
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setDragActive(false);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setDragActive(false);
+    handleFiles(Array.from(event.dataTransfer.files));
+  };
+
+  const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleFiles(Array.from(event.target.files || []));
+  };
+
+  const openPicker = () => {
+    inputRef.current?.click();
+  };
+
+  const acceptedLabel = acceptedTypes.length > 0
+    ? acceptedTypes.map((type) => type.split("/")[1] || type).join(", ")
+    : "Any file type";
+
   return (
-    <div className="border-2 border-gray-700 rounded-lg p-6 text-center transition-all"
-         style={{ borderColor: dragActive ? '#4F46E5' : '#374151' }}
-         onDragOver={handleDragOver}
-         onDragLeave={handleDragLeave}
-         onDrop={handleDrop}
+    <div
+      className="border-2 border-gray-700 rounded-lg p-6 text-center transition-all"
+      style={{ borderColor: dragActive ? "#4F46E5" : "#374151" }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       <div className="space-y-4">
         <div className="text-gray-400">
-          {dragActive ? (
-            <UploadIcon className="w-12 h-12 mx-auto mb-2 text-blue-500" />
-          ) : (
-            <UploadIcon className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-          )}
+          <Upload className={`mx-auto mb-2 h-12 w-12 ${dragActive ? "text-blue-500" : "text-gray-400"}`} />
           <p className="text-sm font-medium">
-            {dragActive ? "Drop files here" : "Drag & drop files here or click to browse"}
+            {dragActive ? "Drop files here" : "Drag and drop files here or click to browse"}
           </p>
-          <p className="text-xs text-gray-500">
-            {acceptedTypes.length > 0 
-              ? `Supported: ${acceptedTypes.map(t >> t.split('/')[1]).join(", ")}`
-              : "Any file type"}
-          </p>
-          <p className="text-xs text-gray-500">
-            Max size: {maxFileSize / (1024 * 1024)}MB
-          </p>
+          <p className="text-xs text-gray-500">Supported: {acceptedLabel}</p>
+          <p className="text-xs text-gray-500">Max size: {maxFileSize / (1024 * 1024)}MB</p>
         </div>
 
         <input
+          ref={inputRef}
           type="file"
-          multiple
+          multiple={multiple}
           onChange={handleFileInput}
           className="hidden"
           accept={acceptedTypes.join(",")}
         />
 
         {error ? (
-          <div className="bg-red-900/20 border border-red-900/30 rounded-lg p-3 text-red-400 text-sm">
-            <XMarkIcon className="w-4 h-4 mr-2 inline" />
+          <div className="rounded-lg border border-red-900/30 bg-red-900/20 p-3 text-sm text-red-400">
+            <X className="mr-2 inline h-4 w-4" />
             {error}
           </div>
         ) : null}
 
         <button
           type="button"
-          onClick={() => document.querySelector('input[type="file"]')?.click()}
-          className="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white hover:bg-gray-800 transition"
+          onClick={openPicker}
+          className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-white transition hover:bg-gray-800"
         >
           Browse files
         </button>

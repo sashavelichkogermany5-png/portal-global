@@ -2,7 +2,6 @@ const express = require('express');
 
 const createAgentRouter = ({
     dbAll,
-    dbGet,
     dbRun,
     sendOk,
     sendError,

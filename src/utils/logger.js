@@ -4,7 +4,7 @@ const winston = require('winston');
 
 class Logger {
     constructor() {
-        this.logDir = path.join(__dirname, '..\..\logs');
+        this.logDir = path.join(__dirname, '..', '..', 'logs');
         this.ensureLogDirectory();
         this.initLogger();
     }

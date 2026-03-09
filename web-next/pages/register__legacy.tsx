@@ -1,6 +1,14 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { apiClient } from '../lib/api-client';
+
+type ApiError = Error & {
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
+};
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -12,9 +20,10 @@ export default function Register() {
     e.preventDefault();
     try {
       await apiClient.post('/api/auth/register', { email, password });
-      router.push('/login?registered=1');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Registration failed');
+      await router.push('/login?registered=1');
+    } catch (error) {
+      const apiError = error as ApiError;
+      setError(apiError.response?.data?.error || 'Registration failed');
     }
   };
 

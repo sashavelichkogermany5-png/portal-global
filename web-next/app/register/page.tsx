@@ -1,14 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { register } from "../lib/api-client";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnUrl = useMemo(() => {
-    const value = searchParams.get("returnUrl") || "/app";
+    const value = searchParams?.get("returnUrl") || "/app";
     return value.startsWith("/") ? value : "/app";
   }, [searchParams]);
   const [email, setEmail] = useState("");
@@ -147,5 +147,13 @@ export default function RegisterPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-black" />}>
+      <RegisterPageContent />
+    </Suspense>
   );
 }

@@ -159,7 +159,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ========== HTML PAGES ==========
 // Helper function to read and send HTML with proper encoding
-async function sendHTML(res, filename, title = "PORTAL GLOBAL") {
+async function sendHTML(res, filename) {
     try {
         const html = await fs.readFile(filename, "utf-8");
 

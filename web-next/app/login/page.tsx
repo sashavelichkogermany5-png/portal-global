@@ -1,14 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authMe, login } from "../lib/api-client";
+import { captureEvent } from "../lib/analytics";
 
-export default function LoginPage() {
+const DEMO_EMAIL = "demo@local";
+const DEMO_PASSWORD = "demo12345";
+
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnUrl = useMemo(() => {
-    const value = searchParams.get("returnUrl") || "/app";
+    const value = searchParams?.get("returnUrl") || "/app";
     return value.startsWith("/") ? value : "/app";
   }, [searchParams]);
   const [email, setEmail] = useState("");
@@ -31,12 +35,21 @@ export default function LoginPage() {
     };
   }, [router, returnUrl]);
 
+  useEffect(() => {
+    if (searchParams?.get("demo") !== "1") return;
+    setEmail(DEMO_EMAIL);
+    setPassword(DEMO_PASSWORD);
+  }, [searchParams]);
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsBusy(true);
     setStatus("Signing in...");
     setError("");
     try {
+      if (email.trim().toLowerCase() === DEMO_EMAIL) {
+        captureEvent("demo_login_clicked", { source: "login_form_submit" });
+      }
       await login(email.trim(), password);
       setStatus("Signed in. Redirecting...");
       router.replace(returnUrl);
@@ -96,6 +109,17 @@ export default function LoginPage() {
               <p className="text-sm text-slate-400">Use your portal credentials to continue.</p>
             </div>
             <div className="mt-6 grid gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail(DEMO_EMAIL);
+                  setPassword(DEMO_PASSWORD);
+                  captureEvent("demo_login_clicked", { source: "login_quick_fill" });
+                }}
+                className="rounded-xl border border-cyan-300/30 bg-cyan-300/10 px-4 py-3 text-left text-sm text-cyan-100 transition hover:border-cyan-200/60 hover:bg-cyan-300/15"
+              >
+                Use demo account: {DEMO_EMAIL} / {DEMO_PASSWORD}
+              </button>
               <label className="grid gap-2 text-sm">
                 Email
                 <input
@@ -140,5 +164,13 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-black" />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

@@ -1,4 +1,3 @@
-const CACHE_NAME = 'portal-global-v1';
 const STATIC_CACHE = 'portal-static-v1';
 const DYNAMIC_CACHE = 'portal-dynamic-v1';
 
@@ -9,8 +8,6 @@ const STATIC_ASSETS = [
   '/static/portal-working.html',
   '/static/manifest.json'
 ];
-
-const API_CACHE_DURATION = 5 * 60 * 1000;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -64,7 +61,7 @@ async function cacheFirst(request) {
       cache.put(request, response.clone());
     }
     return response;
-  } catch (error) {
+  } catch {
     return new Response('Offline', { status: 503 });
   }
 }
@@ -77,7 +74,7 @@ async function networkFirst(request) {
       cache.put(request, response.clone());
     }
     return response;
-  } catch (error) {
+  } catch {
     const cached = await caches.match(request);
     if (cached) return cached;
     return new Response(

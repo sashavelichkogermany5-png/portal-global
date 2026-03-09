@@ -4,7 +4,6 @@ const hashToken = (token) => crypto.createHash('sha256').update(String(token)).d
 
 const createShareRouter = ({
   dbAll,
-  dbGet,
   dbRun,
   sendOk,
   sendError,

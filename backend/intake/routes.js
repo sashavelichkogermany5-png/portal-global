@@ -2,7 +2,6 @@ const express = require('express');
 const crypto = require('crypto');
 
 const createIntakeRouter = ({
-  storage,
   ordersStorage,
   localRunnerEngine,
   pricing,

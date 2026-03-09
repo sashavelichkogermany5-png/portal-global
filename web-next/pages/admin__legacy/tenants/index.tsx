@@ -8,20 +8,41 @@ interface Tenant {
   slug: string;
 }
 
+type ApiError = Error & {
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
+};
+
 export default function TenantsManagement() {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [newName, setNewName] = useState('');
   const [newSlug, setNewSlug] = useState('');
   const router = useRouter();
 
-  useEffect(() => {
-    fetchTenants();
-  }, []);
+  const loadTenants = async () => {
+    const response = await apiClient.get<Tenant[]>('/api/tenants');
+    return response.data;
+  };
 
   const fetchTenants = async () => {
-    const res = await apiClient.get('/api/tenants');
-    setTenants(res.data);
+    setTenants(await loadTenants());
   };
+
+  useEffect(() => {
+    let active = true;
+    loadTenants().then((nextTenants) => {
+      if (active) {
+        setTenants(nextTenants);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const createTenant = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,9 +50,10 @@ export default function TenantsManagement() {
       await apiClient.post('/api/tenants', { name: newName, slug: newSlug });
       setNewName('');
       setNewSlug('');
-      fetchTenants();
-    } catch (err: any) {
-      alert(err.response?.data?.error || 'Creation failed');
+      await fetchTenants();
+    } catch (error) {
+      const apiError = error as ApiError;
+      alert(apiError.response?.data?.error || 'Creation failed');
     }
   };
 

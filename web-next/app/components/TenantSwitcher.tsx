@@ -15,19 +15,32 @@ type TenantsPayload = {
   activeTenantId?: number | null;
 };
 
+type RolePayload = {
+  data?: {
+    role?: string;
+    userRole?: string;
+    user?: { role?: string };
+  };
+  role?: string;
+  user?: { role?: string };
+};
+
 const normalizeRole = (value?: string) => {
   if (!value) return "user";
   return value.toLowerCase();
 };
 
-const extractRole = (payload: any) => (
-  payload?.data?.role
-  || payload?.data?.user?.role
-  || payload?.data?.userRole
-  || payload?.role
-  || payload?.user?.role
+const extractRole = (payload: unknown) => {
+  const record = (payload && typeof payload === "object") ? payload as RolePayload : {};
+  return (
+  record.data?.role
+  || record.data?.user?.role
+  || record.data?.userRole
+  || record.role
+  || record.user?.role
   || "user"
-);
+  );
+};
 
 export default function TenantSwitcher() {
   const [memberships, setMemberships] = useState<Membership[]>([]);
@@ -57,7 +70,7 @@ export default function TenantSwitcher() {
           return;
         }
         await loadTenants();
-      } catch (error) {
+      } catch {
         // ignore unauthenticated state
       } finally {
         if (active) {

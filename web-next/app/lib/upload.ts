@@ -37,24 +37,37 @@ const resolveMimeType = (file: UploadFileLike) => {
 };
 
 const writeFromArrayBuffer = async (filePath: string, file: UploadFileLike) => {
-  const buffer = Buffer.from(await file.arrayBuffer());
+  if (typeof file.arrayBuffer !== "function") {
+    throw new Error("arrayBuffer is not available");
+  }
+  const arrayBuffer = file.arrayBuffer;
+  const buffer = Buffer.from(await arrayBuffer());
   await fsPromises.writeFile(filePath, buffer);
 };
 
 const writeFromPipe = async (filePath: string, file: UploadFileLike) => {
-  await new Promise((resolve, reject) => {
+  if (typeof file.pipe !== "function") {
+    throw new Error("pipe is not available");
+  }
+  const pipe = file.pipe;
+  await new Promise<void>((resolve, reject) => {
     const dest = fs.createWriteStream(filePath);
-    dest.on("finish", resolve);
-    dest.on("error", reject);
-    file.pipe(dest);
+    dest.on("finish", () => resolve());
+    dest.on("error", (error) => reject(error));
+    pipe(dest);
   });
 };
 
 const writeFromStream = async (filePath: string, file: UploadFileLike) => {
+  if (typeof file.stream !== "function") {
+    throw new Error("stream is not available");
+  }
+  const stream = file.stream;
   if (typeof Readable.fromWeb !== "function") {
     throw new Error("Readable.fromWeb is not available");
   }
-  const readable = Readable.fromWeb(file.stream());
+  const webStream = stream() as unknown as Parameters<typeof Readable.fromWeb>[0];
+  const readable = Readable.fromWeb(webStream);
   const dest = fs.createWriteStream(filePath);
   await pipeline(readable, dest);
 };

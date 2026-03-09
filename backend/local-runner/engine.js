@@ -1,5 +1,3 @@
-const crypto = require('crypto');
-const path = require('path');
 const { computePricing } = require('./pricing');
 
 const buildCorrelationId = (orderId) => `order-${orderId}`;

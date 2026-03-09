@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiJson } from "./lib/api-client";
+import { captureEvent } from "./lib/analytics";
 
 type HealthSnapshot = {
   ts?: string;
@@ -16,6 +17,16 @@ type PortsSnapshot = {
   backendUrl?: string;
   webUrl?: string;
   ts?: string;
+};
+
+type ApiEnvelope<T> = T & { data?: T };
+
+const unwrapData = <T extends object>(payload: unknown): T => {
+  const record = (payload && typeof payload === "object") ? payload as ApiEnvelope<T> : {} as ApiEnvelope<T>;
+  if (record.data && typeof record.data === "object") {
+    return record.data;
+  }
+  return record;
 };
 
 const formatUptime = (value?: number) => {
@@ -49,7 +60,7 @@ export default function Home() {
       try {
         const payload = await apiJson("/api/health");
         if (!active) return;
-        const data = payload?.data || payload;
+        const data = unwrapData<HealthSnapshot>(payload);
         setHealth({
           ts: data?.ts,
           uptime: data?.uptime,
@@ -80,7 +91,7 @@ export default function Home() {
           throw new Error(`ports status ${response.status}`);
         }
         const payload = await response.json();
-        const data = payload?.data || payload;
+        const data = unwrapData<PortsSnapshot>(payload);
         setPorts(data);
         setPortsStatus("ready");
       } catch (err) {
@@ -152,9 +163,17 @@ export default function Home() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/login"
+              onClick={() => captureEvent("demo_login_clicked", { source: "landing_login" })}
               className="rounded-xl border border-white/10 bg-white/10 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-amber-200/60 hover:bg-white/15"
             >
               Login
+            </Link>
+            <Link
+              href="/login?demo=1"
+              onClick={() => captureEvent("demo_login_clicked", { source: "landing_try_demo" })}
+              className="rounded-xl border border-cyan-300/30 bg-cyan-300/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:border-cyan-200/60 hover:bg-cyan-300/15"
+            >
+              Try demo
             </Link>
             <Link
               href="/app"
@@ -183,6 +202,10 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <span className="h-2 w-2 rounded-full bg-sky-300"></span>
                 Health and port telemetry update in real time.
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="h-2 w-2 rounded-full bg-cyan-300"></span>
+                PostHog captures visits, clicks, forms, and launch events.
               </div>
             </div>
           </div>

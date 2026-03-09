@@ -1,0 +1,96 @@
+{
+  "root": true,
+  "env": {
+    "es2022": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "script"
+  },
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^next$"
+      }
+    ],
+    "no-empty": [
+      "error",
+      {
+        "allowEmptyCatch": true
+      }
+    ],
+    "no-constant-condition": [
+      "error",
+      {
+        "checkLoops": false
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "web-next/",
+    "backend/src/",
+    "node_modules/",
+    "coverage/",
+    "dist/",
+    "build/",
+    ".next/"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "backend/public/**/*.js"
+      ],
+      "env": {
+        "browser": true,
+        "es2022": true
+      }
+    },
+    {
+      "files": [
+        "backend/public/sw.js"
+      ],
+      "env": {
+        "browser": true,
+        "serviceworker": true,
+        "es2022": true
+      }
+    },
+    {
+      "files": [
+        "backend/routes/**/*.js",
+        "backend/socket.js"
+      ],
+      "parserOptions": {
+        "sourceType": "module"
+      }
+    },
+    {
+      "files": [
+        "backend/server.js"
+      ],
+      "env": {
+        "node": true,
+        "es2022": true
+      }
+    },
+    {
+      "files": [
+        "test/**/*.js"
+      ],
+      "parserOptions": {
+        "sourceType": "module"
+      },
+      "globals": {
+        "describe": "readonly",
+        "it": "readonly",
+        "expect": "readonly",
+        "beforeEach": "readonly"
+      }
+    }
+  ]
+}

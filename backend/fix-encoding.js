@@ -2,7 +2,7 @@ const fs = require("fs");
 
 function scoreUtfText(s) {
   // чем больше “нормальных” символов и эмодзи — тем лучше
-  const good = (s.match(/[A-Za-zА-Яа-я0-9\s.,:;!?()\[\]'"—–\-_/\\]/g) || []).length;
+  const good = (s.match(/[A-Za-zА-Яа-я0-9\s.,:;!?()[\]'"—–/_\\-]/g) || []).length;
   const bad = (s.match(/[�]/g) || []).length * 50; // штраф за replacement char
   const weird = (s.match(/[СЂСџ]/g) || []).length * 10; // штраф за “СЂСџ…”
   return good - bad - weird;
