@@ -8,6 +8,22 @@ import { captureEvent } from "../lib/analytics";
 const DEMO_EMAIL = "demo@local";
 const DEMO_PASSWORD = "demo12345";
 
+type AuthMePayload = {
+  userId?: number | string | null;
+  isGuest?: boolean;
+};
+
+type AuthMeEnvelope = AuthMePayload & {
+  data?: AuthMePayload | null;
+};
+
+export const hasAuthenticatedSession = (payload: unknown) => {
+  const envelope = payload && typeof payload === "object" ? payload as AuthMeEnvelope : null;
+  const data = envelope?.data && typeof envelope.data === "object" ? envelope.data : envelope;
+
+  return Boolean(data?.userId) && !data?.isGuest;
+};
+
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,8 +40,8 @@ function LoginPageContent() {
   useEffect(() => {
     let active = true;
     authMe()
-      .then(() => {
-        if (active) {
+      .then((payload) => {
+        if (active && hasAuthenticatedSession(payload)) {
           router.replace(returnUrl);
         }
       })
