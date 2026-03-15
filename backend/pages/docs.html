@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORTAL Global | Docs</title>
+    <title>PORTAL Global | Master Overview</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
@@ -154,9 +154,9 @@
         <a class="brand" href="/">PORTAL</a>
         <nav class="nav">
           <a href="/">Home</a>
-          <a href="/app">Dashboard</a>
+          <a href="/app">Workspace</a>
           <a href="/pricing">Pricing</a>
-          <a href="/docs">Docs</a>
+          <a href="/master-overview">Overview</a>
           <a href="/help">Help</a>
           <a href="/cabinet" id="navAccount">Cabinet</a>
           <a href="/admin" id="navAdmin" style="display:none">Admin</a>
@@ -174,91 +174,55 @@
 
     <div class="page">
         <section class="hero">
-            <h1>Quick Start and Architecture</h1>
-            <p>Use this guide to launch the demo in under a minute and understand the UI, API, and database layout.</p>
+            <h1>Master overview</h1>
+            <p>Use this page to understand the current release runtime, the main public routes, and the deployment posture of PORTAL Global.</p>
         </section>
 
         <section class="grid">
             <div class="card">
-                <h2>Quick Start (1 minute)</h2>
+                <h2>Quick start</h2>
                 <ol>
-                    <li>Open the dashboard at <strong>/app</strong>.</li>
-                    <li>Create a project, client, provider, and order.</li>
-                    <li>Refresh stats to see live totals.</li>
-                    <li>Try the AI tools with a short prompt.</li>
+                    <li>Open <strong>/register</strong> or <strong>/login</strong>.</li>
+                    <li>Enter the main workspace at <strong>/app</strong>.</li>
+                    <li>Use <strong>/orders</strong> when you need a real order record.</li>
+                    <li>Use <strong>/help</strong> and <strong>/pricing</strong> for rollout support and plan context.</li>
                 </ol>
             </div>
             <div class="card">
-                <h2>Architecture overview</h2>
-                <p><strong>UI routes</strong></p>
-                <p>UI pages are static HTML served by Express routes.</p>
+                <h2>Release runtime</h2>
+                <p><strong>Primary runtime</strong></p>
+                <p>The current release candidate is the unified <strong>server.js</strong> runtime on one main public port behind a reverse proxy.</p>
                 <ul>
                     <li>/ (landing)</li>
-                    <li>/app (dashboard)</li>
+                    <li>/app (workspace)</li>
+                    <li>/orders</li>
                     <li>/pricing</li>
-                    <li>/docs</li>
+                    <li>/master-overview</li>
                     <li>/help</li>
-                    <li>/cabinet</li>
                 </ul>
-                <p><strong>API</strong></p>
-                <p>CRUD + AI requests are under <strong>/api/*</strong>.</p>
-                <p><strong>Database</strong></p>
-                <div class="code-block">SQLite DB file (default): database/portal.db</div>
+                <p><strong>API and data</strong></p>
+                <p>Public pages and authenticated API requests stay on the same origin under <strong>/api/*</strong>. The default database is SQLite.</p>
+                <div class="code-block">Primary runtime: server.js on port 3000
+API: same origin under /api/*
+Database (default): database/portal.db</div>
             </div>
         </section>
 
         <section class="section">
             <div class="card">
-                <h2>API endpoints</h2>
+                <h2>Key runtime endpoints</h2>
                 <div class="code-block">POST /api/auth/register
 POST /api/auth/login
 POST /api/auth/logout
 GET /api/auth/me
-GET /api/subscription/me
-POST /api/subscription/upgrade
-POST /api/subscription/downgrade
-GET /api/audit/recent
-GET /api/admin/stats
-POST /api/admin/bootstrap (dev-only)
-GET /api/admin/bootstrap/status
-GET /api/user/onboarding
-POST /api/user/onboarding
-POST /api/demo/seed
-GET /api/workspace/me
-GET /api/workspace/members
-POST /api/workspace/rename
-POST /api/workspace/invite
-POST /api/feedback
-GET /api/feedback/me
-POST /api/billing/create-checkout-session
 GET /api/health
 GET /api/stats
-POST /api/ai-project
-POST /api/chat
-GET /api/projects
-GET /api/projects?q=keyword
-GET /api/projects/export
-POST /api/projects
-PUT /api/projects/:id
-DELETE /api/projects/:id
-POST /api/projects/:id/restore
-GET /api/clients
-POST /api/clients
-PUT /api/clients/:id
-DELETE /api/clients/:id
-POST /api/clients/:id/restore
-GET /api/providers
-POST /api/providers
-PUT /api/providers/:id
-DELETE /api/providers/:id
-POST /api/providers/:id/restore
 GET /api/orders
-GET /api/orders/export
 POST /api/orders
-PUT /api/orders/:id
-DELETE /api/orders/:id
-POST /api/orders/:id/restore</div>
-                <p>Auth endpoints are demo-only. Plan upgrades are demo-only and enforce limits on create actions.</p>
+GET /api/usage
+POST /api/feedback
+POST /api/billing/create-checkout-session</div>
+                <p>Operator-only and environment-specific endpoints are intentionally omitted from the public overview.</p>
             </div>
         </section>
 
@@ -266,11 +230,11 @@ POST /api/orders/:id/restore</div>
             <div class="card">
                 <h2>Production checklist</h2>
                 <ul>
-                    <li>Set <strong>NODE_ENV=production</strong> and configure <strong>PORT</strong>.</li>
+                    <li>Set <strong>NODE_ENV=production</strong> and configure <strong>PORT=3000</strong>.</li>
                     <li>Use HTTPS end-to-end; secure cookies require TLS.</li>
-                    <li>Set <strong>ALLOWED_ORIGINS</strong> for your frontend domains.</li>
+                    <li>Set <strong>APP_ORIGIN</strong> and <strong>ALLOWED_ORIGINS</strong> to the public domain.</li>
                     <li>Review rate limits via <strong>RATE_LIMIT_WINDOW_MS</strong> and <strong>RATE_LIMIT_MAX</strong>.</li>
-                    <li>Store secrets in a <strong>.env</strong> file or host environment.</li>
+                    <li>Store secrets in <strong>.env.production</strong> or host environment variables.</li>
                 </ul>
                 <p><strong>HTTPS requirement</strong></p>
                 <p>Sessions use secure cookies in production, so HTTPS is required for login and API access.</p>
@@ -290,8 +254,8 @@ POST /api/orders/:id/restore</div>
         </section>
         <section class="section">
             <div class="card">
-                <h2>Dev-only admin bootstrap</h2>
-                <p>Use <strong>/api/admin/bootstrap</strong> only on localhost with <strong>NODE_ENV != production</strong> and <strong>ADMIN_BOOTSTRAP_TOKEN</strong> set.</p>
+                <h2>Operator-only surfaces</h2>
+                <p>Administrative and control routes remain access-controlled. The main public product flow should stay on landing, auth, workspace, pricing, help, and the master overview.</p>
             </div>
         </section>
 
@@ -299,15 +263,25 @@ POST /api/orders/:id/restore</div>
             <div class="card">
                 <h2>Recommended next actions</h2>
                 <ul>
-                    <li>Review the dashboard workflow and confirm the data model.</li>
-                    <li>Draft API validation rules for production readiness.</li>
-                    <li>Decide on authentication and role access strategy.</li>
-                    <li>Plan hosting and deployment targets.</li>
+                    <li>Review the workspace flow at <strong>/app</strong>.</li>
+                    <li>Confirm order creation and first-run auth behavior.</li>
+                    <li>Validate pricing, support, and deployment configuration.</li>
+                    <li>Run the health check before rollout.</li>
                 </ul>
                 <div class="link-row">
-                    <a class="pill-link" href="/app">Open dashboard</a>
+                    <a class="pill-link" href="/app">Open workspace</a>
                     <a class="pill-link" href="/pricing">Review pricing</a>
-                    <a class="pill-link" href="#">Roadmap placeholder</a>
+                    <a class="pill-link" href="/help">Open help</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="master-doc">
+            <div class="card">
+                <h2>Master Version Documentation</h2>
+                <p>Complete technical documentation including mission, vision, legal foundation, technical architecture, monetization, marketing, and operations.</p>
+                <div class="link-row">
+                    <a class="pill-link" href="/master-doc" style="background:var(--accent);color:var(--bg);font-weight:600">Open Master Doc</a>
                 </div>
             </div>
         </section>
@@ -315,7 +289,7 @@ POST /api/orders/:id/restore</div>
         <section class="section" id="video-guide">
             <div class="card">
                 <h2>Video Guide</h2>
-                <p>Watch the walkthrough to learn where to click and how analytics work.</p>
+                <p>Watch the walkthrough to learn the current runtime flow and the first recommended steps.</p>
                 <p>
                     <a href="{{VIDEO_GUIDE_URL}}" target="_blank" rel="noreferrer"
                        style="display:inline-block; padding:10px 14px; border:1px solid rgba(255,255,255,.18); border-radius:10px; text-decoration:none;">
