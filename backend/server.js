@@ -9,6 +9,12 @@ const rateLimit = require("express-rate-limit");
 
 const app = express();
 
+const statsCache = { data: null, timestamp: 0 };
+const STATS_CACHE_TTL = 5000;
+
+const htmlCache = new Map();
+const HTML_CACHE_TTL = 60000;
+
 // ========== MIDDLEWARE ==========
 app.use(helmet({
     contentSecurityPolicy: false // Упрощаем для локальной разработки
@@ -26,6 +32,13 @@ const apiLimiter = rateLimit({
     max: 100, // Limit each IP to 100 requests per windowMs
     message: "Too many requests from this IP, please try again later."
 });
+
+const uploadLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    message: "Too many upload requests, please try again later."
+});
+
 app.use("/legacy", express.static(path.join(__dirname, "html")));
 
 // ========== API ROUTES ==========
@@ -127,6 +140,11 @@ apiRoutes.post("/chat", async (req, res) => {
 
 // System Statistics
 apiRoutes.get("/stats", (req, res) => {
+    const now = Date.now();
+    if (statsCache.data && (now - statsCache.timestamp) < STATS_CACHE_TTL) {
+        return res.json(statsCache.data);
+    }
+    
     const stats = {
         totalProjects: Math.floor(Math.random() * 50) + 20,
         activeOrders: Math.floor(Math.random() * 15) + 5,
@@ -136,8 +154,11 @@ apiRoutes.get("/stats", (req, res) => {
         uptime: process.uptime(),
         memoryUsage: process.memoryUsage()
     };
-
-    res.json({ success: true, ...stats });
+    
+    statsCache.data = { success: true, ...stats };
+    statsCache.timestamp = now;
+    
+    res.json(statsCache.data);
 });
 
 // Mount API routes with rate limiting
@@ -160,13 +181,19 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // ========== HTML PAGES ==========
 // Helper function to read and send HTML with proper encoding
 async function sendHTML(res, filename) {
+    const now = Date.now();
+    const cached = htmlCache.get(filename);
+    
+    if (cached && (now - cached.timestamp) < HTML_CACHE_TTL) {
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        return res.send(cached.content);
+    }
+    
     try {
         const html = await fs.readFile(filename, "utf-8");
 
-        // Ensure UTF-8 encoding
         res.setHeader("Content-Type", "text/html; charset=utf-8");
 
-        // Inject meta charset if missing
         let finalHtml = html;
         if (!html.includes('charset="utf-8"') && !html.includes("charset=utf-8")) {
             finalHtml = html.replace(
@@ -175,6 +202,13 @@ async function sendHTML(res, filename) {
             );
         }
 
+        htmlCache.set(filename, { content: finalHtml, timestamp: now });
+        
+        if (htmlCache.size > 10) {
+            const oldest = htmlCache.keys().next().value;
+            htmlCache.delete(oldest);
+        }
+        
         res.send(finalHtml);
     } catch (error) {
         console.error(`Error reading ${filename}:`, error);

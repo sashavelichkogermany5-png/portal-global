@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PORTAL Global — Master Version</title>
+  <style>
+    :root{
+      --bg:#0b0f19; --card:#11182a; --text:#e8eefc; --muted:#a9b4d0;
+      --line:#23304b; --link:#8ab4ff; --code:#0a1224;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial; background:var(--bg); color:var(--text)}
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 18px 60px}
+    header{background:linear-gradient(180deg, rgba(138,180,255,.12), rgba(17,24,42,0)); border:1px solid var(--line); border-radius:16px; padding:18px 18px}
+    header h1{margin:0 0 6px; font-size:28px}
+    header .meta{color:var(--muted); font-size:14px}
+    .grid{display:grid; grid-template-columns: 340px 1fr; gap:18px; margin-top:18px}
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr} }
+    nav{position:sticky; top:16px; align-self:start; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 14px}
+    nav h2{margin:0 0 10px; font-size:16px; color:var(--muted)}
+    nav ol{margin:0; padding-left:18px}
+    nav li{margin:6px 0}
+    main{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px}
+    h2{margin:26px 0 10px; font-size:22px}
+    h3{margin:18px 0 8px; font-size:18px}
+    hr{border:0; border-top:1px solid var(--line); margin:18px 0}
+    ul{margin:8px 0 8px 20px}
+    ol{margin:8px 0 8px 22px}
+    .note{color:var(--muted)}
+    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    pre{background:var(--code); border:1px solid var(--line); border-radius:12px; padding:12px; overflow:auto; margin:10px 0}
+    table{width:100%; border-collapse:collapse; margin:10px 0}
+    th,td{border:1px solid var(--line); padding:10px; vertical-align:top}
+    th{background:#0f1730; text-align:left}
+    .pill{display:inline-block; padding:2px 10px; border:1px solid var(--line); border-radius:999px; font-size:12px; color:var(--muted)}
+    .impressum{background:#0f1730; border:1px solid var(--line); border-radius:12px; padding:12px; margin:10px 0}
+    footer{margin-top:16px; color:var(--muted); font-size:13px; text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>PORTAL Global — Master Version</h1>
+      <div class="meta">
+        <div><strong>Document version:</strong> {DOC_VERSION}</div>
+        <div><strong>Last updated:</strong> 15 March 2026</div>
+        <div><strong>Contact:</strong> {FOUNDER_EMAIL}</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <nav aria-label="Table of contents">
+        <h2>Contents</h2>
+        <ol>
+          <li><a href="#1-about-the-project">About the Project</a>
+            <ol>
+              <li><a href="#11-mission-vision-values">Mission, Vision, Values</a></li>
+              <li><a href="#12-problem-and-solution">Problem and Solution</a></li>
+              <li><a href="#13-core-capabilities">Core Capabilities</a></li>
+              <li><a href="#14-current-status-project-snapshot">Current Status (Project Snapshot)</a></li>
+              <li><a href="#15-current-limitations">Current Limitations</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#2-legal-foundation-germany">Legal Foundation (Germany)</a>
+            <ol>
+              <li><a href="#21-impressum">Legal Notice / Impressum</a></li>
+              <li><a href="#22-privacy-policy">Privacy Policy</a></li>
+              <li><a href="#23-terms-of-service">Terms of Service</a></li>
+              <li><a href="#24-data-processing-agreement">Data Processing Agreement (DPA)</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#3-technical-architecture-and-security">Technical Architecture and Security</a>
+            <ol>
+              <li><a href="#31-production-architecture">Production Architecture</a></li>
+              <li><a href="#32-multi-tenancy-data-isolation">Multi-Tenancy and Data Isolation</a></li>
+              <li><a href="#33-api-versioning-and-documentation">API Versioning and Documentation</a></li>
+              <li><a href="#34-rate-limiting">Rate Limiting</a></li>
+              <li><a href="#35-security-checklist">Security Checklist</a></li>
+              <li><a href="#36-backups-and-restore">Backups and Restore</a></li>
+              <li><a href="#37-monitoring-and-alerting">Monitoring and Alerting</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#4-monetization-and-billing">Monetization and Billing</a>
+            <ol>
+              <li><a href="#41-monetization-model">Monetization Model</a></li>
+              <li><a href="#42-pricing-structure">Pricing Structure</a></li>
+              <li><a href="#43-payment-provider">Payment Provider</a></li>
+              <li><a href="#44-subscription-flow">Subscription Flow</a></li>
+              <li><a href="#45-partner-program">Partner Program</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#5-marketing-and-customer-acquisition">Marketing and Customer Acquisition</a>
+            <ol>
+              <li><a href="#51-website-landing-structure">Website / Landing Structure</a></li>
+              <li><a href="#52-content-marketing-blog">Content Marketing</a></li>
+              <li><a href="#53-linkedin-strategy">LinkedIn Strategy</a></li>
+              <li><a href="#54-integrator-partnerships">Integrator Partnerships</a></li>
+              <li><a href="#55-early-adopter-program">Early Adopter Program</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#6-operations">Operations</a>
+            <ol>
+              <li><a href="#61-customer-support">Customer Support</a></li>
+              <li><a href="#62-customer-onboarding">Customer Onboarding</a></li>
+              <li><a href="#63-feedback-collection">Feedback Collection</a></li>
+              <li><a href="#64-security-and-compliance-operations">Security and Compliance Operations</a></li>
+            </ol>
+          </li>
+
+          <li><a href="#7-status-and-roadmap">Status and Roadmap</a></li>
+
+          <li><a href="#8-appendices">Appendices</a>
+            <ol>
+              <li><a href="#81-impressum-html-block">Legal Notice HTML Block</a></li>
+              <li><a href="#82-privacy-structure">Privacy Policy Structure</a></li>
+              <li><a href="#83-short-dpa-acceptance-form">Short DPA Acceptance Form</a></li>
+              <li><a href="#84-welcome-email-template">Welcome Email Template</a></li>
+              <li><a href="#85-pre-launch-checklist">Pre-Launch Checklist</a></li>
+              <li><a href="#86-legal-placeholders">Legal Placeholders</a></li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+
+      <main>
+        <div class="pill">PORTAL_Global_Master_EN.html</div>
+
+        <h2 id="1-about-the-project">1. About the Project</h2>
+
+        <h3 id="11-mission-vision-values">1.1. Mission, Vision, Values</h3>
+        <p><strong>Mission</strong><br>
+          To give teams and operators a single operational hub for workspaces, projects, access control, and integrations, so they can run operations from one place with less fragmentation and better visibility.
+        </p>
+        <p><strong>Vision</strong><br>
+          To build a practical, API-first operational platform for modern businesses that need structured collaboration, automation, and tenant-aware access control without stitching together too many separate tools.
+        </p>
+        <p><strong>Values</strong></p>
+        <ul>
+          <li>Security first: tenant-aware architecture, least-privilege access, and clear operational controls.</li>
+          <li>Practical automation: APIs and integrations should reduce manual work, not add complexity.</li>
+          <li>Product honesty: public-facing pages should reflect what is live now, what is in testing, and what is still planned.</li>
+          <li>Customer feedback as product input: priorities should be shaped by real usage, not only by roadmap theory.</li>
+        </ul>
+
+        <h3 id="12-problem-and-solution">1.2. Problem and Solution</h3>
+        <p><strong>Problem</strong><br>
+          Many teams run operations across disconnected tools for tasks, communication, knowledge, permissions, and reporting. This creates duplicated data, broken context, access-control risks, and slow onboarding.
+        </p>
+        <p><strong>Solution</strong><br>
+          PORTAL Global is a tenant-aware B2B operations platform that brings together workspace structure, role management, project flows, dashboards, and integration endpoints in one system. The current product should be described as a live public prototype / early product release rather than a fully mature enterprise suite.
+        </p>
+
+        <h3 id="13-core-capabilities">1.3. Core Capabilities</h3>
+        <ul>
+          <li>Workspaces and project areas</li>
+          <li>User roles and tenant-aware access</li>
+          <li>Dashboard and health/status surfaces</li>
+          <li>REST-style API endpoints for integrations</li>
+          <li>Foundations for automation and future agent workflows</li>
+          <li>Security-oriented product direction with auditability and controlled access</li>
+        </ul>
+
+        <h3 id="14-current-status-project-snapshot">1.4. Current Status (Project Snapshot)</h3>
+        <ul>
+          <li><strong>Product stage:</strong> live public build / active prototype under continued development.</li>
+          <li><strong>Current runtime:</strong> unified application server handling landing pages, login, app shell, and API from a single deployment path.</li>
+          <li><strong>What is real today:</strong> public access, app shell, authentication flow, tenant-oriented structure, dashboard surfaces, and core API routes.</li>
+          <li><strong>What should be treated as in progress:</strong> live billing completion, polished documentation, advanced automations, Telegram flows, and some marketing/intro surfaces.</li>
+          <li><strong>Recommended public wording:</strong> "PORTAL Global is live and available for testing and early adoption. Some modules are production-ready, while others are still being finalized."</li>
+        </ul>
+
+        <h3 id="15-current-limitations">1.5. Current Limitations</h3>
+        <ul>
+          <li>Current deployment is still relatively monolithic.</li>
+          <li>Not every planned module is consistently available in the public build.</li>
+          <li>Rate limiting exists, but plan-based differentiation may still be incomplete.</li>
+          <li>Billing should only be marketed as live after full end-to-end verification in production.</li>
+          <li>Legal templates still require final operator details and, ideally, legal review.</li>
+          <li>Customer-facing content should avoid implying that every roadmap module already exists.</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="2-legal-foundation-germany">2. Legal Foundation (Germany)</h2>
+
+        <h3 id="21-impressum">2.1. Legal Notice / Impressum</h3>
+        <p class="note">Required for commercial websites in Germany. It should be easy to find, directly accessible, and permanently available.</p>
+
+        <div class="impressum">
+          <h1>Legal Notice (Impressum)</h1>
+          <p><strong>Information pursuant to § 5 DDG</strong></p>
+          <p>
+            {OWNER_FULL_NAME}<br>
+            {OWNER_STREET_ADDRESS}<br>
+            {OWNER_POSTAL_CODE_CITY}<br>
+            {OWNER_COUNTRY}
+          </p>
+          <p>
+            <strong>Contact:</strong><br>
+            Email: {CONTACT_EMAIL}<br>
+            Phone: {CONTACT_PHONE}
+          </p>
+          <p>
+            <strong>Responsible for editorial content pursuant to § 18(2) MStV:</strong><br>
+            {OWNER_FULL_NAME}, {OWNER_STREET_ADDRESS}, {OWNER_POSTAL_CODE_CITY}, {OWNER_COUNTRY}
+          </p>
+          <p>
+            <strong>Liability notice:</strong> Despite careful review of content, we assume no liability for the content of external links. The operators of linked pages are solely responsible for their content.
+          </p>
+        </div>
+
+        <h3 id="22-privacy-policy">2.2. Privacy Policy</h3>
+        <p><strong>Required sections</strong></p>
+        <ul>
+          <li>Controller / responsible party</li>
+          <li>What data we process</li>
+          <li>Purposes of processing</li>
+          <li>Legal bases under Article 6 GDPR</li>
+          <li>Recipients / processors / subprocessors</li>
+          <li>Retention periods</li>
+          <li>Data subject rights</li>
+          <li>Right to lodge a complaint with a supervisory authority</li>
+          <li>Cookies and similar technologies</li>
+          <li>Changes to this privacy policy</li>
+        </ul>
+        <p><strong>Minimum operational lines to include</strong></p>
+        <ul>
+          <li>Consent tool: {CONSENT_TOOL_NAME}, if analytics or marketing cookies are used.</li>
+          <li>Hosting provider and processor relationship: {HOSTING_PROVIDER}; server region: {HOSTING_REGION}.</li>
+          <li>Technical logs retained for security and service stability: IP address, user agent, timestamp, URL, and response status; retention period: {LOG_RETENTION_DAYS} days.</li>
+          <li>If third-country transfers occur, document the transfer mechanism and context clearly.</li>
+          <li>If local-device access or cookie consent is referenced by law, align wording with the current TDDDG-based terminology.</li>
+        </ul>
+
+        <h3 id="23-terms-of-service">2.3. Terms of Service</h3>
+        <p><strong>Key sections</strong></p>
+        <ul>
+          <li>Scope of the service and current product status</li>
+          <li>Registration, accounts, workspaces, and user roles</li>
+          <li>Pricing, subscription terms, trials, renewals, and cancellations</li>
+          <li>Acceptable use and security obligations of the customer</li>
+          <li>Intellectual property</li>
+          <li>Confidentiality and data handling</li>
+          <li>Service limitations and limitation of liability</li>
+          <li>Term, suspension, and termination</li>
+          <li>Applicable law and dispute resolution</li>
+        </ul>
+
+        <h3 id="24-data-processing-agreement">2.4. Data Processing Agreement (DPA)</h3>
+        <p><strong>Data Processing Agreement (Short Form)</strong></p>
+        <p><strong>Between</strong><br>
+          {CUSTOMER_NAME} (Controller)<br>
+          {OPERATOR_LEGAL_NAME} (Processor)
+        </p>
+        <p><strong>Subject matter</strong><br>
+          Processing of personal data in connection with the use of the PORTAL Global service.
+        </p>
+        <p><strong>Duration</strong><br>
+          For the duration of the main service agreement.
+        </p>
+        <p><strong>Nature and purpose</strong><br>
+          Provision of workspace, project, operational, and integration-related service functionality.
+        </p>
+        <p><strong>Categories of data</strong></p>
+        <ul>
+          <li>Name</li>
+          <li>Email address</li>
+          <li>Job title (optional)</li>
+          <li>IP address and technical logs</li>
+          <li>Usage and account activity data</li>
+        </ul>
+        <p><strong>Categories of data subjects</strong></p>
+        <ul>
+          <li>Customer employees, contractors, and end users authorized by the customer</li>
+        </ul>
+        <p><strong>Processor obligations</strong></p>
+        <ul>
+          <li>Process data only on documented instructions.</li>
+          <li>Ensure confidentiality and role-based access control.</li>
+          <li>Implement appropriate technical and organizational measures.</li>
+          <li>Assist the controller where legally required.</li>
+          <li>Notify the controller of personal data breaches without undue delay.</li>
+          <li>Delete or return data after termination, subject to legal retention obligations.</li>
+        </ul>
+        <p><strong>TOMs (Technical and Organisational Measures — summary)</strong></p>
+        <ul>
+          <li>Access control and least privilege</li>
+          <li>Encryption in transit (TLS) and secure session handling</li>
+          <li>Audit logging for critical actions</li>
+          <li>Backups with restricted access and restore testing</li>
+          <li>Incident response and breach notification workflow</li>
+        </ul>
+        <p><strong>Subprocessors</strong><br>
+          {SUBPROCESSORS_URL}
+        </p>
+        <p><strong>Governing law</strong><br>
+          Germany.
+        </p>
+
+        <hr>
+
+        <h2 id="3-technical-architecture-and-security">3. Technical Architecture and Security</h2>
+
+        <h3 id="31-production-architecture">3.1. Production Architecture</h3>
+        <p class="note">Note: the current live version may still run as a unified server deployment. The diagram below describes the target architecture for scale, reliability, and cleaner separation of concerns.</p>
+
+        <pre><code>[Static Delivery / CDN]
+        |
+        v
+[Edge / Reverse Proxy / API Gateway]
+        |
+        v
+[Application Runtime]
+        |
+        +------------------+
+        |                  |
+        v                  v
+   [Cache / Queue]     [Background Jobs]
+        |
+        v
+[Primary Database]</code></pre>
+
+        <p><strong>The gateway / edge layer should handle</strong></p>
+        <ul>
+          <li>Rate limiting by IP, token, and user context</li>
+          <li>Authentication and request validation</li>
+          <li>Routing and header policy</li>
+          <li>Request logging and metrics</li>
+          <li>Separation of public traffic from internal/admin traffic</li>
+        </ul>
+
+        <h3 id="32-multi-tenancy-data-isolation">3.2. Multi-Tenancy and Data Isolation</h3>
+        <p><strong>Recommended product wording</strong></p>
+        <ul>
+          <li>Tenant isolation is a core design requirement.</li>
+          <li>Every request that touches protected data must resolve tenant context explicitly.</li>
+          <li>Authorization must verify both identity and tenant/resource ownership.</li>
+          <li>Implementation details may evolve over time without changing the promise of tenant isolation.</li>
+        </ul>
+
+        <p><strong>Example middleware concept</strong></p>
+        <pre><code>// Resolve tenant context from session, token, or host mapping
+// Validate membership / role
+// Apply tenant-aware query filters before reading or writing data</code></pre>
+
+        <p><strong>Practical note</strong><br>
+          Avoid claiming a specific database strategy publicly unless that strategy is stable and verified in production. Promise the outcome (tenant isolation), not an implementation detail that may still change.
+        </p>
+
+        <h3 id="33-api-versioning-and-documentation">3.3. API Versioning and Documentation</h3>
+        <ul>
+          <li>Use explicit versioning where appropriate, such as <code>/api/v1/...</code>.</li>
+          <li>Publish API documentation only for endpoints that are actually available in the deployed environment.</li>
+          <li>Mark experimental endpoints clearly.</li>
+          <li>Provide a changelog for breaking changes.</li>
+        </ul>
+
+        <h3 id="34-rate-limiting">3.4. Rate Limiting</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Endpoint class</th>
+              <th>Indicative limit</th>
+              <th>Key</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Public read endpoints</td>
+              <td style="text-align:right">1000 req/min</td>
+              <td>IP + token where available</td>
+            </tr>
+            <tr>
+              <td>Authenticated write endpoints</td>
+              <td style="text-align:right">100 req/min</td>
+              <td>User / token</td>
+            </tr>
+            <tr>
+              <td>Login</td>
+              <td style="text-align:right">5 attempts/min</td>
+              <td>IP</td>
+            </tr>
+            <tr>
+              <td>Registration</td>
+              <td style="text-align:right">3 attempts/min</td>
+              <td>IP</td>
+            </tr>
+            <tr>
+              <td>Dashboards / charts / overview</td>
+              <td style="text-align:right">60 req/min</td>
+              <td>User / session</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Client rules for handling 429 (Too Many Requests)</strong></p>
+        <ul>
+          <li>Use exponential backoff.</li>
+          <li>Do not retry forever; maximum retry attempts: {MAX_RETRY_ATTEMPTS}.</li>
+          <li>Stop automated retries on 401/403 for identity-sensitive endpoints until user action occurs.</li>
+          <li>Prevent request storms in app boot flows and auth checks.</li>
+        </ul>
+
+        <h3 id="35-security-checklist">3.5. Security Checklist</h3>
+        <ul>
+          <li>TLS enabled on all public domains and subdomains</li>
+          <li>Security headers configured: CSP, X-Content-Type-Options, Referrer-Policy, and frame restrictions where applicable</li>
+          <li>Brute-force protection on login and account-creation routes</li>
+          <li>Audit logging for critical actions</li>
+          <li>Dependency scanning and update process</li>
+          <li>Secrets kept out of client bundles and public repos</li>
+          <li>Tenant ownership checks enforced in backend logic</li>
+          <li>Production claims limited to controls that are actually enabled</li>
+        </ul>
+
+        <h3 id="36-backups-and-restore">3.6. Backups and Restore</h3>
+        <p><strong>Target approach</strong></p>
+        <ul>
+          <li>Database backups with scheduled snapshots / dumps</li>
+          <li>File backups where user-generated files or uploads exist</li>
+          <li>Restricted access to backup material</li>
+          <li>Regular restore tests</li>
+        </ul>
+        <p><strong>Policy example</strong></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Backup type</th>
+              <th>Frequency</th>
+              <th>Retention</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Database snapshot</td><td>Every 6 hours</td><td>30 days</td></tr>
+            <tr><td>Incremental file backup</td><td>Hourly</td><td>30 days</td></tr>
+            <tr><td>Monthly archive</td><td>Monthly</td><td>12-36 months</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="37-monitoring-and-alerting">3.7. Monitoring and Alerting</h3>
+        <ul>
+          <li>Availability monitoring for landing, login, app, and API routes</li>
+          <li>Error-rate and latency tracking</li>
+          <li>Structured logs with alertable signals for 5xx spikes, auth failures, and rate-limit storms</li>
+          <li>Notifications through email, Telegram, or another incident channel</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="4-monetization-and-billing">4. Monetization and Billing</h2>
+
+        <h3 id="41-monetization-model">4.1. Monetization Model</h3>
+        <ul>
+          <li>SaaS subscription as the primary model</li>
+          <li>Value metrics may include users, tenants, integrations, usage volume, or support level</li>
+          <li>Additional revenue may come from enterprise onboarding, customization, implementation, or premium support</li>
+        </ul>
+        <p><strong>Value drivers</strong></p>
+        <ul>
+          <li>Centralized operational visibility</li>
+          <li>Controlled access and tenant-aware structure</li>
+          <li>Integration readiness and workflow simplification</li>
+        </ul>
+
+        <h3 id="42-pricing-structure">4.2. Pricing Structure</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Start</th>
+              <th>Pro</th>
+              <th>Business</th>
+              <th>Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Monthly price</td><td style="text-align:right">€29</td><td style="text-align:right">€99</td><td style="text-align:right">€299</td><td>Custom</td></tr>
+            <tr><td>Users</td><td style="text-align:right">5</td><td style="text-align:right">20</td><td style="text-align:right">100</td><td>Custom</td></tr>
+            <tr><td>Tenants / workspaces</td><td style="text-align:right">1</td><td style="text-align:right">5</td><td style="text-align:right">20</td><td>Custom</td></tr>
+            <tr><td>API usage / day</td><td style="text-align:right">1,000</td><td style="text-align:right">10,000</td><td style="text-align:right">100,000</td><td>Custom</td></tr>
+            <tr><td>Integrations</td><td style="text-align:right">2</td><td style="text-align:right">10</td><td>Expanded</td><td>Custom</td></tr>
+            <tr><td>Support</td><td>Email</td><td>Priority email</td><td>Priority + chat</td><td>Premium</td></tr>
+          </tbody>
+        </table>
+        <p class="note">Only publish pricing that matches what the live system can actually provision and support operationally.</p>
+
+        <h3 id="43-payment-provider">4.3. Payment Provider</h3>
+        <p>Practical recommendation: start with Stripe for subscription handling. Describe billing publicly as "available" only after a complete production payment flow, invoice handling, and failure handling have been tested end to end.</p>
+
+        <h3 id="44-subscription-flow">4.4. Subscription Flow</h3>
+        <ul>
+          <li>User selects a plan.</li>
+          <li>User creates an account or continues from a registration flow.</li>
+          <li>Payment details are collected through the payment provider.</li>
+          <li>On successful activation, the customer gets an admin account and initial workspace / tenant context.</li>
+          <li>Confirmation email and onboarding materials are sent.</li>
+        </ul>
+
+        <h3 id="45-partner-program">4.5. Partner Program</h3>
+        <ul>
+          <li>Referral-based commercial partnerships</li>
+          <li>Optional revenue share for referred customers</li>
+          <li>Separate partner terms and compliance review recommended before launch</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="5-marketing-and-customer-acquisition">5. Marketing and Customer Acquisition</h2>
+
+        <h3 id="51-website-landing-structure">5.1. Website / Landing Structure</h3>
+        <ul>
+          <li>Homepage</li>
+          <li>Product overview</li>
+          <li>Workspaces and project flows</li>
+          <li>Roles and access control</li>
+          <li>Dashboards and operational visibility</li>
+          <li>API and integrations</li>
+          <li>Pricing</li>
+          <li>Documentation</li>
+          <li>Contact / legal pages</li>
+          <li>Login / registration</li>
+        </ul>
+        <p class="note">Do not link to intro, docs, billing, or integrations unless those routes and assets are actually live on the public deployment.</p>
+
+        <h3 id="52-content-marketing-blog">5.2. Content Marketing</h3>
+        <ul>
+          <li>How tenant-aware architecture improves operational safety</li>
+          <li>When a business needs an operations hub instead of another task tracker</li>
+          <li>How to connect internal workflows to an API-first workspace</li>
+          <li>Access control in SaaS: from simple roles to real operational governance</li>
+        </ul>
+
+        <h3 id="53-linkedin-strategy">5.3. LinkedIn Strategy</h3>
+        <ul>
+          <li>Consistent founder and company positioning</li>
+          <li>Product updates with honest status labels</li>
+          <li>Use-case posts, before/after workflow stories, and operator-focused demos</li>
+          <li>Targeted outreach to founders, operators, and technical leads</li>
+        </ul>
+
+        <h3 id="54-integrator-partnerships">5.4. Integrator Partnerships</h3>
+        <ul>
+          <li>Identify a short list of implementation and automation partners</li>
+          <li>Offer demos, pilot access, and technical walkthroughs</li>
+          <li>Create a dedicated partner information page</li>
+        </ul>
+
+        <h3 id="55-early-adopter-program">5.5. Early Adopter Program</h3>
+        <ul>
+          <li>Focus on a small number of serious pilot customers</li>
+          <li>Offer early pricing or onboarding support in exchange for structured feedback</li>
+          <li>Turn real usage into testimonials and case studies</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="6-operations">6. Operations</h2>
+
+        <h3 id="61-customer-support">6.1. Customer Support</h3>
+        <ul>
+          <li>Email: support@yourdomain.com</li>
+          <li>Site chat: only if actively staffed or clearly marked as async</li>
+          <li>Help center / docs / quick-start guides</li>
+          <li>Premium contact paths for higher-tier customers</li>
+        </ul>
+
+        <h3 id="62-customer-onboarding">6.2. Customer Onboarding</h3>
+        <ul>
+          <li>Day 0: welcome email and first-step links</li>
+          <li>Day 2: create first workspace or project area</li>
+          <li>Day 5: integration / API getting started guide</li>
+          <li>Day 10: access-control and security tips</li>
+          <li>End of trial: conversion prompt with clear plan comparison</li>
+        </ul>
+
+        <h3 id="63-feedback-collection">6.3. Feedback Collection</h3>
+        <ul>
+          <li>Short in-product feedback prompts</li>
+          <li>Pilot interviews</li>
+          <li>Support ticket review</li>
+          <li>Public roadmap / request board if actively maintained</li>
+        </ul>
+
+        <h3 id="64-security-and-compliance-operations">6.4. Security and Compliance Operations</h3>
+        <ul>
+          <li>Regular dependency review</li>
+          <li>Security checks before notable releases</li>
+          <li>Periodic review of privacy, terms, and DPA texts</li>
+          <li>Incident-response and rollback procedures documented internally</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="7-status-and-roadmap">7. Status and Roadmap</h2>
+        <p>As of <strong>15 March 2026</strong>, this should be presented as a status-based roadmap rather than a future-only launch plan.</p>
+
+        <h3>Completed / live in some form</h3>
+        <ul>
+          <li>Public domain and live deployment path</li>
+          <li>Core app shell and account access flow</li>
+          <li>Tenant-aware product direction and key backend routes</li>
+          <li>Basic dashboard / health surfaces</li>
+        </ul>
+
+        <h3>In progress / needs polish or verification</h3>
+        <ul>
+          <li>Documentation completeness</li>
+          <li>Intro / landing storytelling consistency</li>
+          <li>Billing activation and public pricing flow verification</li>
+          <li>Optional integrations such as Telegram and advanced automations</li>
+          <li>Production hardening and public trust surfaces</li>
+        </ul>
+
+        <h3>Next practical priorities</h3>
+        <ul>
+          <li>Align public landing with the real deployed feature set</li>
+          <li>Restore or publish only the documentation that is actually available</li>
+          <li>Finish payment flow verification before marketing paid plans aggressively</li>
+          <li>Add testimonials / feedback capture from real users</li>
+          <li>Finalize legal pages with real operator details</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="8-appendices">8. Appendices</h2>
+
+        <h3 id="81-impressum-html-block">8.1. Legal Notice HTML Block</h3>
+        <div class="impressum">
+          <div class="impressum-footer" style="font-size: 12px; color: #a9b4d0; text-align: center; margin-top: 10px;">
+            <p>
+              <strong>PORTAL Global</strong><br>
+              Operator: {OWNER_FULL_NAME}<br>
+              {OWNER_STREET_ADDRESS} · {OWNER_POSTAL_CODE_CITY} · {OWNER_COUNTRY}<br>
+              Email: {CONTACT_EMAIL} · Phone: {CONTACT_PHONE}<br>
+              Responsible pursuant to § 18(2) MStV: {OWNER_FULL_NAME}, {OWNER_STREET_ADDRESS}, {OWNER_POSTAL_CODE_CITY}, {OWNER_COUNTRY}<br>
+              <a href="/impressum">Legal Notice</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>
+            </p>
+          </div>
+        </div>
+
+        <h3 id="82-privacy-structure">8.2. Privacy Policy Structure</h3>
+        <ol>
+          <li>Controller / responsible party</li>
+          <li>What data we process</li>
+          <li>Purposes of processing</li>
+          <li>Legal bases</li>
+          <li>Recipients / processors</li>
+          <li>Retention periods</li>
+          <li>Your rights</li>
+          <li>Supervisory authority complaint right</li>
+          <li>Cookies and similar technologies</li>
+          <li>Changes to this privacy policy</li>
+        </ol>
+
+        <h3 id="83-short-dpa-acceptance-form">8.3. Short DPA Acceptance Form</h3>
+        <pre><code>Data Processing Agreement (Short Form)
+Controller: {CUSTOMER_NAME}
+Processor: {OPERATOR_LEGAL_NAME}
+Subject Matter: Processing of personal data in connection with PORTAL Global.
+Duration: Term of the main service agreement.
+Nature and Purpose: Provision of workspace, project, and operational software services.
+Categories of Data:
+- Name
+- Email
+- Job title (optional)
+- IP address / technical logs
+- Usage data
+Categories of Data Subjects:
+- Customer employees, contractors, and authorized users
+Obligations of Processor:
+- Process only on documented instructions.
+- Ensure confidentiality.
+- Implement appropriate technical and organizational measures.
+- Assist the controller where required.
+- Notify of personal data breaches.
+- Delete or return data after termination, unless retention is legally required.
+Subprocessors: {SUBPROCESSORS_URL}
+Governing Law: Germany.</code></pre>
+
+        <h3 id="84-welcome-email-template">8.4. Welcome Email Template</h3>
+        <div class="impressum">
+          <p>Hello {USER_FIRST_NAME},</p>
+          <p>Welcome to PORTAL Global. We're glad to have you here.</p>
+          <p><strong>Your first steps:</strong></p>
+          <ol>
+            <li><a href="{LINK_INTRO_VIDEO}">Watch the intro video</a>.</li>
+            <li><a href="{LINK_CREATE_PROJECT}">Create your first workspace or project</a>.</li>
+            <li><a href="{LINK_API_DOCS}">Review the API documentation</a> if you plan to connect integrations.</li>
+          </ol>
+          <p>Need help? Reply to this email and our team will get back to you.</p>
+          <p>Best regards,<br>The PORTAL Global Team</p>
+        </div>
+
+        <h3 id="85-pre-launch-checklist">8.5. Pre-Launch Checklist</h3>
+        <ul>
+          <li><input type="checkbox" disabled> TLS active on all public domains</li>
+          <li><input type="checkbox" disabled> Backups configured and restore-tested</li>
+          <li><input type="checkbox" disabled> Monitoring and alerts configured</li>
+          <li><input type="checkbox" disabled> Billing verified end to end in production</li>
+          <li><input type="checkbox" disabled> Core flows tested: sign-up, login, app entry, key actions</li>
+          <li><input type="checkbox" disabled> Legal pages live and complete</li>
+          <li><input type="checkbox" disabled> Consent tooling configured if non-essential cookies are used</li>
+          <li><input type="checkbox" disabled> Public docs and support links point to real pages</li>
+        </ul>
+
+        <h3 id="86-legal-placeholders">8.6. Legal Placeholders</h3>
+        <p><strong>Single source of truth</strong></p>
+        <table>
+          <thead>
+            <tr><th>Placeholder</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>{DOC_VERSION}</td><td>Document version</td></tr>
+            <tr><td>{FOUNDER_EMAIL}</td><td>Founder email</td></tr>
+            <tr><td>{OWNER_FULL_NAME}</td><td>Full operator name</td></tr>
+            <tr><td>{OWNER_STREET_ADDRESS}</td><td>Street and number</td></tr>
+            <tr><td>{OWNER_POSTAL_CODE_CITY}</td><td>Postal code and city</td></tr>
+            <tr><td>{OWNER_COUNTRY}</td><td>Country</td></tr>
+            <tr><td>{CONTACT_EMAIL}</td><td>Public contact email</td></tr>
+            <tr><td>{CONTACT_PHONE}</td><td>Public contact phone</td></tr>
+            <tr><td>{CUSTOMER_NAME}</td><td>Customer name (Controller)</td></tr>
+            <tr><td>{OPERATOR_LEGAL_NAME}</td><td>Operator legal name (Processor)</td></tr>
+            <tr><td>{SUBPROCESSORS_URL}</td><td>URL of subprocessors page</td></tr>
+            <tr><td>{CONSENT_TOOL_NAME}</td><td>Consent tool name</td></tr>
+            <tr><td>{HOSTING_PROVIDER}</td><td>Hosting provider</td></tr>
+            <tr><td>{HOSTING_REGION}</td><td>Hosting region</td></tr>
+            <tr><td>{LOG_RETENTION_DAYS}</td><td>Log retention in days</td></tr>
+            <tr><td>{MAX_RETRY_ATTEMPTS}</td><td>Maximum retry attempts for 429 handling</td></tr>
+            <tr><td>{USER_FIRST_NAME}</td><td>User first name</td></tr>
+            <tr><td>{LINK_INTRO_VIDEO}</td><td>Intro video URL</td></tr>
+            <tr><td>{LINK_CREATE_PROJECT}</td><td>Create-project URL</td></tr>
+            <tr><td>{LINK_API_DOCS}</td><td>API docs URL</td></tr>
+          </tbody>
+        </table>
+
+        <footer>
+          PORTAL Global • Master HTML • Updated 15 March 2026
+        </footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
